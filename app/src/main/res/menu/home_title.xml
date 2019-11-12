@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFB6C1"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        左边第一个按钮
+        <ImageButton
+        android:id="@+id/btn_Scan"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.17"
+        android:gravity="center"
+        />
+
+        <!--搜索框-->
+        <LinearLayout
+            android:id="@+id/phone_home_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/top_edit_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="3dp"
+                android:src="@drawable/coupon_search" />
+
+            <TextView
+                android:id="@+id/home_tv_search_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="查询"
+                android:textColor="#D4D4D4" />
+        </LinearLayout>
+
+        <!--<搜索文字-->
+        <LinearLayout
+            android:id="@+id/ll_home_search_name"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搜索"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

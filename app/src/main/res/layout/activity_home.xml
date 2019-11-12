@@ -1,0 +1,157 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/home_real_lay"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@menu/home_title"
+        android:id="@+id/title_home_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    </include>
+
+    <!--滑动视图-->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/id_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/llay_menu"
+        android:layout_marginTop="50dp">
+
+    </androidx.viewpager.widget.ViewPager>
+
+    <!--底部四大金刚-->
+    <LinearLayout
+        android:id="@+id/llay_menu"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:background="@drawable/top_back"
+        android:orientation="horizontal">
+        >
+
+        <LinearLayout
+            android:id="@+id/lay_update"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imgBtn_table_update"
+                android:layout_width="35dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingTop="0dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/tab_update_normal" />
+
+            <TextView
+                android:layout_width="35dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingLeft="7dp"
+                android:textSize="25px"
+                android:text="更新"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lay_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:scaleType="center">
+
+            <ImageButton
+                android:id="@+id/imgBtn_table_phone"
+                android:layout_width="35dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingTop="0dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/tab_phone_normal" />
+
+            <TextView
+                android:layout_width="35dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingLeft="7dp"
+                android:textSize="25px"
+                android:text="手机" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lay_soc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imgBtn_table_soc"
+                android:layout_width="35dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingTop="0dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/tab_soc_normal" />
+
+            <TextView
+                android:layout_width="45dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingLeft="7dp"
+                android:textSize="25px"
+                android:text="处理器" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lay_recommend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imgBtn_table_recommend"
+                android:layout_width="35dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingTop="0dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/tab_recommend_normal" />
+
+            <TextView
+                android:layout_width="35dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:paddingLeft="7dp"
+                android:textSize="25px"
+                android:text="推荐" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
+
