@@ -1,30 +1,22 @@
 package com.syt.cellphone;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import com.syt.cellphone.phone.PhoneFragment;
-import com.syt.cellphone.recommend.RecommendFragment;
-import com.syt.cellphone.soc.SocFragment;
-import com.syt.cellphone.update.UpdateFragment;
+import com.syt.cellphone.ui.phone.PhoneFragment;
+import com.syt.cellphone.ui.recommend.RecommendFragment;
+import com.syt.cellphone.ui.soc.SocFragment;
+import com.syt.cellphone.ui.update.UpdateFragment;
 import com.syt.cellphone.util.ActivityCollector;
 import com.syt.cellphone.util.FragmentAdapter;
-
-import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +101,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             @Override
             public void onPageScrollStateChanged(int arg0) {}
         });
+        // 设置缓存为4个界面
+        mViewPager.setOffscreenPageLimit(4);
     }
 
     /**

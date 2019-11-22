@@ -1,6 +1,5 @@
-package com.syt.cellphone.soc;
+package com.syt.cellphone.ui.soc;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.syt.cellphone.R;
 import com.syt.cellphone.SytMainActivity;
-import com.syt.cellphone.phone.PhoneFragment;
 import com.syt.cellphone.pojo.Soc;
 
 import java.util.List;

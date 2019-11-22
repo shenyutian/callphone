@@ -17,7 +17,7 @@ import okhttp3.Response;
 public class HttpUtil {
 
     // 服务器映射的 url
-    private static String url = "http://9jdtt6.natappfree.cc";
+    private static String url = "http://pwj3iw.natappfree.cc";
 
     /**
      * post 请求工具类

@@ -1,4 +1,4 @@
-package com.syt.cellphone.phone;
+package com.syt.cellphone.ui.phone;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,10 +1,9 @@
-package com.syt.cellphone.soc;
+package com.syt.cellphone.ui.soc;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,15 +15,9 @@ import com.syt.cellphone.pojo.Soc;
 import com.syt.cellphone.service.SocService;
 
 import org.litepal.LitePal;
-import org.litepal.LitePalBase;
-import org.litepal.crud.LitePalSupport;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
-
-import retrofit2.Call;
 
 /**
  * soc 处理器 列表

@@ -1,22 +1,23 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/home_real_lay"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <include layout="@menu/home_title"
+    <include
         android:id="@+id/title_home_title"
+        layout="@menu/home_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-    </include>
+        android:layout_height="50dp"></include>
 
-    <!--滑动视图-->
+    <!--    滑动视图-->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/id_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/llay_menu"
-        android:layout_marginTop="50dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.viewpager.widget.ViewPager>
 
@@ -25,12 +26,10 @@
         android:id="@+id/llay_menu"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="0dp"
         android:background="@drawable/top_back"
-        android:orientation="horizontal">
-        >
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/lay_update"
@@ -57,9 +56,8 @@
                 android:layout_gravity="center"
                 android:background="#00000000"
                 android:paddingLeft="7dp"
-                android:textSize="25px"
                 android:text="更新"
-                />
+                android:textSize="25px" />
         </LinearLayout>
 
         <LinearLayout
@@ -88,8 +86,8 @@
                 android:layout_gravity="center"
                 android:background="#00000000"
                 android:paddingLeft="7dp"
-                android:textSize="25px"
-                android:text="手机" />
+                android:text="手机"
+                android:textSize="25px" />
 
         </LinearLayout>
 
@@ -117,8 +115,8 @@
                 android:layout_gravity="center"
                 android:background="#00000000"
                 android:paddingLeft="7dp"
-                android:textSize="25px"
-                android:text="处理器" />
+                android:text="处理器"
+                android:textSize="25px" />
 
         </LinearLayout>
 
@@ -146,12 +144,12 @@
                 android:layout_gravity="center"
                 android:background="#00000000"
                 android:paddingLeft="7dp"
-                android:textSize="25px"
-                android:text="推荐" />
+                android:text="推荐"
+                android:textSize="25px" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -17,10 +17,13 @@ public class PhoneService {
         List<PhoneBase> phoneBaseList = new ArrayList<>();
         String body = "/basePhone/list/" + phoneListId;
         String responseBody = HttpUtil.getUrl(body);
+        if (responseBody == null) {
+            return phoneBaseList;
+        }
         // string -> Json
         JSONObject json = JSONObject.parseObject(responseBody);
         String liststr = json.getString("list");
-        phoneBaseList = JSONObject.parseArray(liststr, PhoneBase.class);
+        phoneBaseList.addAll(JSONObject.parseArray(liststr, PhoneBase.class));
         return phoneBaseList;
     }
 
@@ -30,6 +33,9 @@ public class PhoneService {
      */
     public static int getPageNum() {
         String responseBody = HttpUtil.getUrl("/basePhone/list/1");
+        if (responseBody == null) {
+            return 0;
+        }
         JSONObject json = JSONObject.parseObject(responseBody);
         return json.getInteger("pageNum");
     }

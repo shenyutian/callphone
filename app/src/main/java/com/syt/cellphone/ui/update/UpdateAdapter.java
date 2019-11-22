@@ -1,11 +1,10 @@
-package com.syt.cellphone.update;
+package com.syt.cellphone.ui.update;
 
 import android.graphics.Color;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -27,7 +26,7 @@ public class UpdateAdapter extends BaseQuickAdapter<PhoneBase, BaseViewHolder> {
         if (adapterPosition % 2 == 0) {
             helper.setBackgroundColor(R.id.phone_recycler_item, Color.WHITE);
         } else {
-            helper.setBackgroundColor(R.id.phone_recycler_item, Color.GRAY);
+            helper.setBackgroundColor(R.id.phone_recycler_item, Color.WHITE);
         }
         // 写入数据
         Glide.with(mContext).load(item.getBaseImage()).into((ImageView) helper.getView(R.id.phone_item_img));

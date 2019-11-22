@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".update.UpdateFragment"
+    tools:context=".ui.update.UpdateFragment"
     android:orientation="vertical">
 
     <!--SwipeRefreshLayout 提供下拉刷新 -->

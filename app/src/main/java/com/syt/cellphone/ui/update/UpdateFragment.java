@@ -1,10 +1,7 @@
-package com.syt.cellphone.update;
+package com.syt.cellphone.ui.update;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,27 +20,25 @@ import com.syt.cellphone.R;
 import com.syt.cellphone.pojo.PhoneBase;
 import com.syt.cellphone.pojo.PhoneRecommend;
 import com.syt.cellphone.service.PhoneService;
-import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
-import com.youth.banner.Transformer;
-import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import butterknife.BindView;
-
 /***
  * 主页，最近更新界面。
  */
 public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private volatile List<PhoneBase> phoneBaseList = new LinkedList<>(); // 链式列表，方便增加，修改数据 显示的数据
-    private volatile List<PhoneRecommend> phoneRecommendList = new ArrayList<>(); // 推荐栏，轮播图数据
-    private int count = 1; // 数据页号，加载了0以后，加载第2页数据。
-    private volatile static int pageNum; // 页数，记录最大加载数
+    //链式列表，方便增加，修改数据 显示的数据
+    private volatile List<PhoneBase> phoneBaseList = new LinkedList<>();
+    //推荐栏，轮播图数据
+    private volatile List<PhoneRecommend> phoneRecommendList = new ArrayList<>();
+    // 数据页号，加载了0以后，加载第2页数据
+    private int count = 1;
+    // 页数，记录最大加载数
+    private volatile static int pageNum;
     private UpdateAdapter updateAdapter; // 适配器
 
     // 布局
@@ -91,10 +86,10 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 if (count <= pageNum) {
                     getBaseList();
                     updateAdapter.setNewData(phoneBaseList);
-                    updateAdapter.loadMoreComplete();
+//                    updateAdapter.loadMoreComplete();
 //                    updateAdapter.loadMoreComplete(); //完全刷新布局
 //                    updateAdapter.loadMoreFail(); // 持续更新
-//                    updateAdapter.loadMoreEnd(); // 底部插入
+                    updateAdapter.loadMoreEnd(); // 底部插入
                 } else {
 //                    updateAdapter.addFooterView(); // 底部插入视图
                 }
@@ -105,7 +100,9 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
         onRefresh();
     }
 
-    // 下拉更新 数据操作
+    /**
+     * 下拉更新 数据操作
+      */
     @Override
     public void onRefresh() {
         phoneBaseList.clear();
@@ -116,7 +113,9 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    // 获取数据,从底部插入
+    /**
+     * 获取数据,从底部插入
+      */
     private void getBaseList() {
         Thread phoneThread = new phoneThread();
         phoneThread.start();
@@ -128,14 +127,13 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
         }
     }
 
-    // 自定义数据线程
+    /**
+     *   自定义数据线程
+      */
     public class phoneThread extends Thread {
         @Override
         public void run() {
-            List<PhoneBase> listBaseByid = PhoneService.getListBaseByid(count);
-            for (PhoneBase phoneBase : listBaseByid) {
-                phoneBaseList.add(phoneBase);
-            }
+            phoneBaseList.addAll(PhoneService.getListBaseByid(count));
             count++;
         }
     }
@@ -150,11 +148,6 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
             }
         });
         t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
