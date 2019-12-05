@@ -1,24 +1,26 @@
-package com.syt.cellphone;
+package com.syt.cellphone.base;
 
 import android.app.Application;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.syt.cellphone.pojo.PhoneUser;
-import com.syt.cellphone.pojo.Soc;
-import com.syt.cellphone.util.LogUtil;
 
 import org.litepal.LitePal;
 
 import java.util.concurrent.ThreadFactory;
 
+/**
+ * author：syt
+ * Date: 2019-12-05
+ * 作用:
+ */
 public class MyApp extends Application {
 
-    private static  MyApp myApp;
+    private static MyApp myApp;
     // 个人登录信息
     private static PhoneUser user;
 
-    // 单例模式来创建 获取myApp
+    /**
+     *     单例模式来创建 BaseApplication
+      */
     public static MyApp getInstance() {
         if (myApp == null) {
             synchronized (MyApp.class) {
@@ -30,13 +32,18 @@ public class MyApp extends Application {
         return myApp;
     }
 
+    /**
+     *     防止其他创建
+      */
+    public MyApp() {
+        throw new RuntimeException();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         // 建立SqLite
         LitePal.initialize(this);
     }
-
-    private ThreadFactory threadFactory;
 
 }
