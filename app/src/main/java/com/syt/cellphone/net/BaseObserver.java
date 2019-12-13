@@ -1,8 +1,8 @@
 package com.syt.cellphone.net;
 
 import android.net.ParseException;
+
 import com.google.gson.JsonParseException;
-import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseView;
 
 import org.json.JSONException;
@@ -40,21 +40,7 @@ public abstract class BaseObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onNext(T response) {
-        try {
-            BaseBean model = (BaseBean) response;
-            if (model.getRet().getCode().equals("200")) {
-                onSuccess(response);
-            } else {
-                if (view != null) {
-                    view.onErrorCode(model);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            onError(e.toString());
-        }
-
-
+        onSuccess(response);
     }
 
     @Override

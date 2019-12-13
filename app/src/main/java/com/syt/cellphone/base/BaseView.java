@@ -26,7 +26,7 @@ public interface BaseView {
     void onErrorCode(BaseBean model);
 
     /**
-     * 隐藏dialog
+     * 隐藏dialog 对话框
      */
     void hideLoading();
 }

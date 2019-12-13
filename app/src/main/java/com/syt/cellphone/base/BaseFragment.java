@@ -1,6 +1,7 @@
 package com.syt.cellphone.base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.syt.cellphone.util.LogUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -66,5 +69,22 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             fpresenter.detachView();
         }
         unbinder.unbind();
+    }
+
+    /**
+     * 启动
+     * 消息传递
+     * @param object 目标对象
+     * @param data 内容1
+     */
+    public void actionStart(Class<?> object, String data) {
+        Intent intent = new Intent(context, object);
+        intent.putExtra("param", data);
+        try {
+                context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.d("intent错误");
+        }
     }
 }

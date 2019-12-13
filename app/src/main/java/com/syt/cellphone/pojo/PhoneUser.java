@@ -1,13 +1,11 @@
 package com.syt.cellphone.pojo;
 
-import org.litepal.crud.LitePalSupport;
-
 /**
  * @author ：syt
  * @date ：Created in 2019-10-06 19:20
  * @description：用户类，用于保存登录
  */
-public class PhoneUser extends LitePalSupport {
+public class PhoneUser {
     private Integer userId;
 
     private String userName;

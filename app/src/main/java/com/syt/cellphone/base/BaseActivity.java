@@ -1,11 +1,12 @@
 package com.syt.cellphone.base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.ToastUtil;
 
 import butterknife.ButterKnife;
@@ -56,7 +57,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Override
     public void showMsg(String msg) {
-        ToastUtil.makeText(context, msg);
+        ToastUtil.makeText(msg);
     }
 
     @Override
@@ -69,4 +70,20 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     }
 
+    /**
+     * 启动
+     * 消息传递
+     * @param object 目标对象
+     * @param data 内容1
+     */
+    public void actionStart(Class<?> object, String data) {
+        Intent intent = new Intent(context, object);
+        intent.putExtra("param", data);
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.d("intent错误");
+        }
+    }
 }

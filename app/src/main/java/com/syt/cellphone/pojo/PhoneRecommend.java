@@ -1,11 +1,9 @@
 package com.syt.cellphone.pojo;
 
-import org.litepal.crud.LitePalSupport;
-
 /**
  * 品牌类
  */
-public class PhoneRecommend extends LitePalSupport {
+public class PhoneRecommend {
     private Integer recommendId;
 
     private Integer phoneId;

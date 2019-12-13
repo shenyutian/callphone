@@ -4,6 +4,7 @@ import android.util.Log;
 
 /**
  *  日志工具类
+ *  可以改造这里来实现 日志保存
  */
 public class LogUtil {
 

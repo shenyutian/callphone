@@ -1,10 +1,9 @@
 package com.syt.cellphone.util;
 
-import android.content.Context;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.syt.cellphone.base.Config;
+import com.syt.cellphone.base.MyApp;
 
 /**
  * author：syt
@@ -15,9 +14,9 @@ public class ToastUtil {
 
     private final static boolean SWITCH = Config.toastSwitch;
 
-    public static void makeText(Context context, String content) {
+    public static void makeText(String content) {
         if (SWITCH) {
-            Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyApp.getContext(), content, Toast.LENGTH_SHORT).show();
         }
     }
 }

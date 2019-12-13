@@ -2,9 +2,9 @@ package com.syt.cellphone.net;
 
 import android.util.Log;
 
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
+import com.syt.cellphone.base.Config;
+
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -13,13 +13,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * author：syt
@@ -27,9 +24,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * 作用:
  */
 public class ApiRetrofit {
-    public final String BASE_SERVER_URL = HttpUrls.BaseUrl;
 
-    private static ApiRetrofit apiRetrofit;
+    public final String BASE_SERVER_URL = Config.url;
+
     private Retrofit retrofit;
     private OkHttpClient client;
     private ApiServer apiServer;
@@ -40,38 +37,41 @@ public class ApiRetrofit {
      * 请求访问quest
      * response拦截器
      */
-    private Interceptor interceptor = new Interceptor() {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Request request = chain.request();
-            long startTime = System.currentTimeMillis();
-            Response response = chain.proceed(chain.request());
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            MediaType mediaType = response.body().contentType();
-            String content = response.body().string();
+    private Interceptor interceptor = chain -> {
+        //请求体
+        Request request = chain.request();
+        //启动时间
+        long startTime = System.currentTimeMillis();
+        //返回体
+        Response response = chain.proceed(chain.request());
+        //结束时间
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        MediaType mediaType = Objects.requireNonNull(response.body()).contentType();
+        String content = Objects.requireNonNull(response.body()).string();
 
-            Buffer buffer = new Buffer();
-            request.body().writeTo(buffer);
-            Charset charset = request.body().contentType().charset(UTF_8);
-            String params = buffer.readString(charset);
-            String decodeStr = URLDecoder.decode(params, "UTF-8");
+//        Buffer buffer = new Buffer();
+//        request.body().writeTo(buffer);
+//        Charset charset = Objects.requireNonNull(request.body().contentType().charset(UTF_8));
+//        String params = buffer.readString(charset);
+//        String decodeStr = URLDecoder.decode(params, "UTF-8");
 
-            String url = request.url().toString();
+        String url = request.url().toString();
 
-            Log.e(TAG, "----------Request Start----------------");
-            Log.e(TAG, "| " + request.toString() + request.headers().toString());
-            Log.e(TAG, "| Response:" + content);
-            Log.e(TAG, "| request:" + decodeStr);
-            Log.e(TAG, "----------Request End:" + duration + "毫秒----------");
-            return response.newBuilder()
-                    .body(ResponseBody.create(mediaType, content))
-                    .build();
-        }
+        Log.e(TAG, "----------  Request Start   ----------------");
+        Log.e(TAG, "| " + request.toString() + request.headers().toString());
+        Log.e(TAG, "| Response: " + content);
+//        Log.e(TAG, "| request:  " + decodeStr);
+        Log.e(TAG, "----------    Request End:" + duration + "毫秒----------");
+
+        //发送响应结果
+        return response.newBuilder()
+                .body(ResponseBody.create(content, mediaType))
+                .build();
     };
 
 
-    public ApiRetrofit() {
+    private ApiRetrofit() {
         OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS);
@@ -80,7 +80,6 @@ public class ApiRetrofit {
         //if (BuildConfig.DEBUG) {
         okhttpBuilder.addInterceptor(interceptor);
         //}
-
         client = okhttpBuilder.build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_SERVER_URL)
@@ -94,19 +93,17 @@ public class ApiRetrofit {
         apiServer = retrofit.create(ApiServer.class);
     }
 
+    //单例创建
     public static ApiRetrofit getInstance() {
-        if (apiRetrofit == null) {
-            synchronized (Object.class) {
-                if (apiRetrofit == null) {
-                    apiRetrofit = new ApiRetrofit();
-                }
-            }
-        }
-        return apiRetrofit;
+        return SingetonHolder.apiRetrofit;
     }
 
     public ApiServer getApiService() {
         return apiServer;
+    }
+
+    private static class SingetonHolder {
+        private static ApiRetrofit apiRetrofit = new ApiRetrofit();
     }
 }
 

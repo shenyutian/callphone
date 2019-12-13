@@ -1,36 +1,54 @@
 package com.syt.cellphone.pojo;
-import org.litepal.crud.LitePalSupport;
 
-import java.io.Serializable;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * @author syt
  * soc类
  */
-public class Soc extends LitePalSupport implements Serializable {
+@Entity
+public class Soc {
 
+    @Id
     private Integer socId;
 
-    // soc型号
+    /**
+     * socId : 534
+     * socName : MT6582M
+     * socTrademark : MTK联发科
+     * socProcess : 28nm
+     * socProperty : 单通道LPDDR2/3-533
+     * socBbx : HSPA+/TD-SCDMA
+     * socCpuSpecification : 四核A7'1.3GHz
+     * socGpuSpecification : Mali-400MP2400MHz
+     */
     private String socName;
-
-    // 品牌
     private String socTrademark;
-
-    // 制程 例如 14nm
     private String socProcess;
-
-    // 内存性能 例如 64位双通道LPDDR3-1600
     private String socProperty;
-
-    // 基带  例如 LTECat.9
     private String socBbx;
-
-    // Cpu规格 例如 四核A57+四核A53'2.1+1.5GHz
     private String socCpuSpecification;
-
-    // Gpu规格 例如 Mali-T720MP2668MHz
     private String socGpuSpecification;
+
+    @Generated(hash = 2038901048)
+    public Soc(Integer socId, String socName, String socTrademark,
+            String socProcess, String socProperty, String socBbx,
+            String socCpuSpecification, String socGpuSpecification) {
+        this.socId = socId;
+        this.socName = socName;
+        this.socTrademark = socTrademark;
+        this.socProcess = socProcess;
+        this.socProperty = socProperty;
+        this.socBbx = socBbx;
+        this.socCpuSpecification = socCpuSpecification;
+        this.socGpuSpecification = socGpuSpecification;
+    }
+
+    @Generated(hash = 1181664419)
+    public Soc() {
+    }
 
     public Integer getSocId() {
         return socId;

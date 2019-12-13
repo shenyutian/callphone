@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--白天模式-->
-    <!--主背景色调-->
-    <color name="bg_color">#fafafa</color>
+    <!--夜间模式的-->
+    <!--主背景颜色-->
+    <color name="bg_color">#000000</color>
     <color name="white_c">#ffffff</color>
-    <!--  主字体 颜色 -->
-    <color name="base_color">#505050</color>
+    <!--主字体 颜色 -->
+    <color name="base_color">#f1f1f1</color>
     <!--外边的背景-->
-    <color name="frame_background">#e1e1e1</color>
+    <color name="frame_background">#282828</color>
     <!-- 白色 -->
     <color name="ivory">#FFFFF0</color>
     <!-- 象牙色 -->

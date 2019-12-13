@@ -30,7 +30,7 @@ public class BasePresenter<V extends BaseView> {
     public V baseView;
     public Context context;
 
-    ApiServer apiServer = ApiRetrofit.getInstance().getApiService();
+    protected ApiServer apiServer = ApiRetrofit.getInstance().getApiService();
 
     public BasePresenter(V baseView) {
         this.baseView = baseView;
@@ -65,8 +65,9 @@ public class BasePresenter<V extends BaseView> {
 
         if (delaytime == 0) {
             // 新线程 + 主线程 + 作用对象(观察者)
-            compositeDisposable.add(observable.subscribeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+            compositeDisposable.add(
+                    observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(observer));
         } else {
             compositeDisposable.add(observable.repeatWhen(new Function<Observable<Object>, ObservableSource<?>>() {

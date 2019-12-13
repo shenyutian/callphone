@@ -9,6 +9,10 @@ import com.syt.cellphone.base.BaseView;
  */
 interface SytMainView extends BaseView {
 
-
+    /**
+     * 显示碎片
+     * @param menuNum 第一个碎片 1-4
+     */
+    void showFragment(int menuNum);
 
 }

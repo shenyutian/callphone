@@ -1,12 +1,9 @@
 package com.syt.cellphone.pojo;
 
-import org.litepal.LitePal;
-import org.litepal.crud.LitePalSupport;
-
 /**
  * 基础数据类
  */
-public class PhoneBase extends LitePalSupport {
+public class PhoneBase {
     private Integer baseId;
 
     private String baseName;

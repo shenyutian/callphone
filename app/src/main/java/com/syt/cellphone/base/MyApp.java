@@ -1,49 +1,39 @@
 package com.syt.cellphone.base;
 
 import android.app.Application;
+import android.content.Context;
+
 import com.syt.cellphone.pojo.PhoneUser;
-
-import org.litepal.LitePal;
-
-import java.util.concurrent.ThreadFactory;
+import com.syt.cellphone.util.SharedConfigUtil;
 
 /**
- * author：syt
+ * @author：syt
  * Date: 2019-12-05
  * 作用:
  */
 public class MyApp extends Application {
 
-    private static MyApp myApp;
-    // 个人登录信息
+    /**
+     * 个人登录信息 user
+     */
     private static PhoneUser user;
-
-    /**
-     *     单例模式来创建 BaseApplication
-      */
-    public static MyApp getInstance() {
-        if (myApp == null) {
-            synchronized (MyApp.class) {
-                if (myApp == null) {
-                    myApp = new MyApp();
-                }
-            }
-        }
-        return myApp;
-    }
-
-    /**
-     *     防止其他创建
-      */
-    public MyApp() {
-        throw new RuntimeException();
-    }
+    public  static Context   context;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // 建立SqLite
-        LitePal.initialize(this);
+        context = getApplicationContext();
+        // 配置保存初始化
+        SharedConfigUtil.init(context);
     }
+
+    /**
+     * 全局context
+     * @return 随时获取context
+     */
+    public static Context getContext() {
+        return context;
+    }
+
 
 }
