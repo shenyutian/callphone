@@ -77,7 +77,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
      * @param object 目标对象
      * @param data 内容1
      */
-    public void actionStart(Class<?> object, String data) {
+    protected void actionStart(Class<?> object, String data) {
         Intent intent = new Intent(context, object);
         intent.putExtra("param", data);
         try {
@@ -87,4 +87,5 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             LogUtil.d("intent错误");
         }
     }
+
 }

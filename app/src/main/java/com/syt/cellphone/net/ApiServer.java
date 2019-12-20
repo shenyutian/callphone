@@ -1,6 +1,7 @@
 package com.syt.cellphone.net;
 
 import com.syt.cellphone.pojo.PhoneRecommend;
+import com.syt.cellphone.pojo.Soc;
 import com.syt.cellphone.pojo.SocList;
 
 import java.util.List;
@@ -30,4 +31,15 @@ public interface ApiServer {
      */
     @GET("recommend/list")
     Observable<List<PhoneRecommend>> getRecommendList();
+
+    /**
+     * 获取soc详情
+     * @param socId 处理器id
+     * @return 处理器详情
+     */
+    @GET("soc/list/{socId}")
+    Observable<Soc> getSocById(@Path("socId") int socId);
+
+
+
 }

@@ -13,4 +13,8 @@ public interface SocView extends BaseView {
      */
     void refreshRv();
 
+    /**
+     * 显示没有数据 = 我也是有底线的。
+     */
+    void showNoData();
 }

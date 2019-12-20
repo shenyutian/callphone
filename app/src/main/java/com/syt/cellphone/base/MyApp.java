@@ -2,7 +2,10 @@ package com.syt.cellphone.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
+import com.syt.cellphone.greendao.DaoMaster;
+import com.syt.cellphone.greendao.DaoSession;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.util.SharedConfigUtil;
 
@@ -16,8 +19,9 @@ public class MyApp extends Application {
     /**
      * 个人登录信息 user
      */
-    private static PhoneUser user;
-    public  static Context   context;
+    public  static   PhoneUser    user;
+    public  static   Context      context;
+    private static   DaoSession   daoSession;
 
     @Override
     public void onCreate() {
@@ -25,6 +29,8 @@ public class MyApp extends Application {
         context = getApplicationContext();
         // 配置保存初始化
         SharedConfigUtil.init(context);
+        // greenDao 初始化
+        initGrennDao();
     }
 
     /**
@@ -35,5 +41,17 @@ public class MyApp extends Application {
         return context;
     }
 
+    /**
+     * greenDao初始化
+     */
+    private void initGrennDao() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "cellphone.db");
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+    }
 
+    public static DaoSession getDaoSession() {
+        return daoSession;
+    }
 }

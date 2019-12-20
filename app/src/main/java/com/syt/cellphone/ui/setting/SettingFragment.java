@@ -73,8 +73,9 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                 }
                 //重启activity, 设置第4个fragment
                 Config.setBottomMenu(4);
-                actionStart(SytMainActivity.class, "4");
                 Intent intent = new Intent(context, SytMainActivity.class);
+                intent.putExtra("param", 4);
+                startActivity(intent);
                 break;
             default:
                 break;

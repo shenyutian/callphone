@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Soc {
 
     @Id
-    private Integer socId;
+    private long socId;
 
     /**
      * socId : 534
@@ -32,10 +32,10 @@ public class Soc {
     private String socCpuSpecification;
     private String socGpuSpecification;
 
-    @Generated(hash = 2038901048)
-    public Soc(Integer socId, String socName, String socTrademark,
-            String socProcess, String socProperty, String socBbx,
-            String socCpuSpecification, String socGpuSpecification) {
+    @Generated(hash = 626981844)
+    public Soc(long socId, String socName, String socTrademark, String socProcess,
+            String socProperty, String socBbx, String socCpuSpecification,
+            String socGpuSpecification) {
         this.socId = socId;
         this.socName = socName;
         this.socTrademark = socTrademark;
@@ -50,7 +50,7 @@ public class Soc {
     public Soc() {
     }
 
-    public Integer getSocId() {
+    public long getSocId() {
         return socId;
     }
 
@@ -126,5 +126,9 @@ public class Soc {
                 ", socCpuSpecification='" + socCpuSpecification + '\'' +
                 ", socGpuSpecification='" + socGpuSpecification + '\'' +
                 '}';
+    }
+
+    public void setSocId(long socId) {
+        this.socId = socId;
     }
 }

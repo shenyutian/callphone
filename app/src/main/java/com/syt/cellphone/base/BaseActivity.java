@@ -28,11 +28,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
      */
     protected abstract P createPresenter();
     /**
-     * @return 当前演讲者 p
+     * @return 获取当前的布局id
      */
     protected abstract int getLayoutId();
     /**
-     * 当前演讲者 p
+     * 导入布局数据
      */
     protected abstract void initData();
 

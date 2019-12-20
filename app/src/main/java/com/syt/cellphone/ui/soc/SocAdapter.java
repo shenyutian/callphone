@@ -1,27 +1,31 @@
 package com.syt.cellphone.ui.soc;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.syt.cellphone.R;
 import com.syt.cellphone.pojo.Soc;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author shenyutian
  */
 public class SocAdapter extends RecyclerView.Adapter<SocAdapter.ViewHolder> {
 
-    public List<Soc> socList; // soc列表
-    static Context soc_context; // 内容
+    private List<Soc> socList; // soc列表
+    private Context soc_context; // 内容
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,7 +43,7 @@ public class SocAdapter extends RecyclerView.Adapter<SocAdapter.ViewHolder> {
 
     public SocAdapter(List<Soc> socList, Context context) {
         this.socList = socList;
-        SocAdapter.soc_context = context;
+        soc_context = context;
     }
 
     /**
@@ -59,6 +63,8 @@ public class SocAdapter extends RecyclerView.Adapter<SocAdapter.ViewHolder> {
                 int position = viewHolder.getAdapterPosition();
                 Soc soc = socList.get(position);
                 Toast.makeText(v.getContext(), "点击编号 " + soc.getSocId() + ",名称: " + soc.getSocName(), Toast.LENGTH_SHORT).show();
+                dialogSoc(soc.getSocId(), null);
+//                Blurry.with(soc_context).radius(10).sampling(2).onto();
                 // 为点击事件 跳转 并且传递参数socId。
 //                Intent intent = new Intent(SytMainActivity.ACTIVITY_SERVICE);
 //                intent.putExtra("socId", soc.getSocId());
@@ -88,4 +94,11 @@ public class SocAdapter extends RecyclerView.Adapter<SocAdapter.ViewHolder> {
     }
 
 
+    private void dialogSoc(long socId, final View view) {
+        // 弹窗创建
+        final AlertDialog toastDialog = new AlertDialog.Builder(soc_context, R.style.DialogStyle).create();
+        toastDialog.show();
+        Window window = toastDialog.getWindow();
+        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+    }
 }

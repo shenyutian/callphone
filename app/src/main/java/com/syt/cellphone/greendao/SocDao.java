@@ -15,7 +15,7 @@ import com.syt.cellphone.pojo.Soc;
 /** 
  * DAO for table "SOC".
 */
-public class SocDao extends AbstractDao<Soc, Integer> {
+public class SocDao extends AbstractDao<Soc, Long> {
 
     public static final String TABLENAME = "SOC";
 
@@ -24,7 +24,7 @@ public class SocDao extends AbstractDao<Soc, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property SocId = new Property(0, Integer.class, "socId", true, "SOC_ID");
+        public final static Property SocId = new Property(0, long.class, "socId", true, "_id");
         public final static Property SocName = new Property(1, String.class, "socName", false, "SOC_NAME");
         public final static Property SocTrademark = new Property(2, String.class, "socTrademark", false, "SOC_TRADEMARK");
         public final static Property SocProcess = new Property(3, String.class, "socProcess", false, "SOC_PROCESS");
@@ -47,7 +47,7 @@ public class SocDao extends AbstractDao<Soc, Integer> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SOC\" (" + //
-                "\"SOC_ID\" INTEGER PRIMARY KEY ," + // 0: socId
+                "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: socId
                 "\"SOC_NAME\" TEXT," + // 1: socName
                 "\"SOC_TRADEMARK\" TEXT," + // 2: socTrademark
                 "\"SOC_PROCESS\" TEXT," + // 3: socProcess
@@ -66,11 +66,7 @@ public class SocDao extends AbstractDao<Soc, Integer> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Soc entity) {
         stmt.clearBindings();
- 
-        Integer socId = entity.getSocId();
-        if (socId != null) {
-            stmt.bindLong(1, socId);
-        }
+        stmt.bindLong(1, entity.getSocId());
  
         String socName = entity.getSocName();
         if (socName != null) {
@@ -111,11 +107,7 @@ public class SocDao extends AbstractDao<Soc, Integer> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, Soc entity) {
         stmt.clearBindings();
- 
-        Integer socId = entity.getSocId();
-        if (socId != null) {
-            stmt.bindLong(1, socId);
-        }
+        stmt.bindLong(1, entity.getSocId());
  
         String socName = entity.getSocName();
         if (socName != null) {
@@ -154,14 +146,14 @@ public class SocDao extends AbstractDao<Soc, Integer> {
     }
 
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     @Override
     public Soc readEntity(Cursor cursor, int offset) {
         Soc entity = new Soc( //
-            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // socId
+            cursor.getLong(offset + 0), // socId
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // socName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // socTrademark
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // socProcess
@@ -175,7 +167,7 @@ public class SocDao extends AbstractDao<Soc, Integer> {
      
     @Override
     public void readEntity(Cursor cursor, Soc entity, int offset) {
-        entity.setSocId(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
+        entity.setSocId(cursor.getLong(offset + 0));
         entity.setSocName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setSocTrademark(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setSocProcess(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -186,12 +178,13 @@ public class SocDao extends AbstractDao<Soc, Integer> {
      }
     
     @Override
-    protected final Integer updateKeyAfterInsert(Soc entity, long rowId) {
-        return entity.getSocId();
+    protected final Long updateKeyAfterInsert(Soc entity, long rowId) {
+        entity.setSocId(rowId);
+        return rowId;
     }
     
     @Override
-    public Integer getKey(Soc entity) {
+    public Long getKey(Soc entity) {
         if(entity != null) {
             return entity.getSocId();
         } else {
@@ -201,7 +194,7 @@ public class SocDao extends AbstractDao<Soc, Integer> {
 
     @Override
     public boolean hasKey(Soc entity) {
-        return entity.getSocId() != null;
+        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
     }
 
     @Override

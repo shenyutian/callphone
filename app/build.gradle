@@ -74,11 +74,15 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.25.2'
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
+    //LeakCanary 分析内存
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
+    //模糊
+    implementation 'jp.wasabeef:blurry:3.0.0'
 }
 
 greendao {
     //数据库的schema版本，也可以理解为数据库版本号
-    schemaVersion 1
+    schemaVersion 3
     //设置DaoMaster、DaoSession、Dao包名，也就是要放置这些类的包的全路径。
     daoPackage 'com.syt.cellphone.greendao'
     //设置DaoMaster、DaoSession、Dao目录
