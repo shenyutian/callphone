@@ -32,7 +32,12 @@ import jp.wasabeef.blurry.Blurry;
  */
 public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
 
-
+    /**
+     * rvSocList soc列表
+     * srlSocHandle 控制下拉
+     * dlSocMsg 全局layout
+     * tvFotter 底部显示文字 = 我也是有底线的
+     */
     @BindView(R.id.rv_soc_list)
     RecyclerView rvSocList;
     @BindView(R.id.srl_soc_handle)
@@ -40,6 +45,7 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
     @BindView(R.id.dl_soc_msg)
     DrawerLayout dlSocMsg;
     private SocAdapterNew socAdapter;
+    private TextView tvFotter;
 
     @Override
     protected SocPresenter initPresenter() {
@@ -56,6 +62,11 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         fpresenter.getNetSocList(false);
         // Rv处理
         initRv();
+        // 底部数据
+        tvFotter = new TextView(context);
+        tvFotter.setGravity(Gravity.CENTER);
+        tvFotter.setText("我也是有底线的");
+        socAdapter.addFooterView(tvFotter);
     }
 
     /**
@@ -113,13 +124,16 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         srlSocHandle.setRefreshing(false);
     }
 
+
+
+    /**
+     * 显示到底了
+     */
     @Override
     public void showNoData() {
-        // 关闭下面的刷新
+        // 关闭下面的刷新 图案
         socAdapter.loadMoreComplete();
-        TextView tvFotter = new TextView(context);
-        tvFotter.setText("我也是有底线的");
-        socAdapter.addFooterView(tvFotter);
+        tvFotter.invalidate();
     }
 
     /**
