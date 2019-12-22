@@ -40,6 +40,7 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
     @BindView(R.id.dl_soc_msg)
     DrawerLayout dlSocMsg;
     private SocAdapterNew socAdapter;
+    private TextView tvFotter;
 
     @Override
     protected SocPresenter initPresenter() {
@@ -83,6 +84,11 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         srlSocHandle.setOnRefreshListener(() -> {
             fpresenter.getNetSocList(false);
         });
+        // 添加底部布局
+        tvFotter = new TextView(context);
+        tvFotter.setText("我也是有底线的");
+        tvFotter.setVisibility(View.GONE);
+        socAdapter.addFooterView(tvFotter);
     }
 
     @Override
@@ -113,13 +119,15 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         srlSocHandle.setRefreshing(false);
     }
 
+    /**
+     * 底部显示
+     */
     @Override
     public void showNoData() {
         // 关闭下面的刷新
         socAdapter.loadMoreComplete();
-        TextView tvFotter = new TextView(context);
-        tvFotter.setText("我也是有底线的");
-        socAdapter.addFooterView(tvFotter);
+        tvFotter.setVisibility(View.INVISIBLE);
+
     }
 
     /**

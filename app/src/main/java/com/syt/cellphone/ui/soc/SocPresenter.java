@@ -64,14 +64,16 @@ public class SocPresenter extends BasePresenter<SocView> {
                 Log.d(TAG, "onSuccess: Thread : " + Thread.currentThread().getName());
                 MyApp.getDaoSession().getSocDao().insertOrReplaceInTx(socList.getList());
 
-                if (socList.getPageNum() >= pageNum) {
-                    //显示到底了
-                    baseView.showNoData();
-                } else {
-                    // 记录页码 +1
+                if (socList.getPageSize() >= pageNum) {
+                    // 记录页码 +0
                     pageNum++;
                     //刷新主界面 的soc列表
                     baseView.refreshRv();
+                } else {
+                    //显示到底了
+                    baseView.showNoData();
+                    // 然后重新刷新
+                    pageNum = 1;
                 }
             }
 

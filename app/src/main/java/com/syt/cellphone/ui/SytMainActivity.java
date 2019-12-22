@@ -21,7 +21,7 @@ import com.syt.cellphone.ui.brank.BrandFragment;
 import com.syt.cellphone.ui.phone.PhoneFragment;
 import com.syt.cellphone.ui.setting.SettingFragment;
 import com.syt.cellphone.ui.soc.SocFragment;
-import com.syt.cellphone.util.LogUtil;
+import com.syt.cellphone.util.FileUtil;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
 
@@ -106,7 +106,8 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
         setTabDefaultColor();
         //设置默认主题
         setTheme();
-
+        //保存设备序列号
+        FileUtil.getStrial(getContext());
     }
 
     @Override
