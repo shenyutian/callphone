@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/phone_recycler_item"
+    android:layout_width="match_parent"
+    android:layout_height="108dp"
+    android:layout_marginTop="8dp"
+    android:background="@mipmap/shopp_car_back"
+    android:orientation="horizontal">
+
+    <!--头图标-->
+    <ImageView
+        android:id="@+id/iv_phone_item_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--标题文字-->
+    <TextView
+        android:id="@+id/tv_phone_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:text="标题xxxxxxxxxxx"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_phone_item_feature"
+        app:layout_constraintEnd_toStartOf="@id/tv_phone_item_price"
+        />
+
+    <!--卖点文字-->
+    <TextView
+        android:id="@+id/tv_phone_item_feature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:text="介绍xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_phone_item_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_phone_item_price"
+        />
+
+    <!--价格文字-->
+    <TextView
+        android:id="@+id/tv_phone_item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="优惠价"
+        android:textColor="@color/orangered"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

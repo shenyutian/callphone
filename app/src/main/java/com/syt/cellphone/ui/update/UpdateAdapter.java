@@ -29,10 +29,10 @@ public class UpdateAdapter extends BaseQuickAdapter<PhoneBase, BaseViewHolder> {
             helper.setBackgroundColor(R.id.phone_recycler_item, Color.WHITE);
         }
         // 写入数据
-        Glide.with(mContext).load(item.getBaseImage()).into((ImageView) helper.getView(R.id.phone_item_img));
-        helper.setText(R.id.phone_item_name, item.getBaseName());
-        helper.setText(R.id.phone_item_feature, item.getBaseFeature());
-        helper.setText(R.id.phone_item_price, item.getBasePrice());
+        Glide.with(mContext).load(item.getBaseImage()).into((ImageView) helper.getView(R.id.phone_recycler_item));
+        helper.setText(R.id.tv_phone_item_name, item.getBaseName());
+        helper.setText(R.id.tv_phone_item_feature, item.getBaseFeature());
+        helper.setText(R.id.tv_phone_item_price, item.getBasePrice());
     }
 
 }

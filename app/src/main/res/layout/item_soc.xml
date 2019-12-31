@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/soc_text_name"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="这是soc名称"
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/soc_text_trademark"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:text="这是soc的品牌序列"

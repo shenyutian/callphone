@@ -1,82 +1,111 @@
 package com.syt.cellphone.ui.phone;
 
-import android.content.Context;
-import android.os.Bundle;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Handler;
-import android.os.Message;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.syt.cellphone.R;
-import com.syt.cellphone.pojo.PhoneBase;
-import com.syt.cellphone.service.PhoneService;
+import com.syt.cellphone.base.BaseBean;
+import com.syt.cellphone.base.BaseFragment;
+import com.syt.cellphone.ui.phone.classifyPhone.ClassifyFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhoneFragment extends Fragment {
+import butterknife.BindView;
 
-    private List<PhoneBase> baseList = new ArrayList<>();
-    private Context mContext;
-    private static final int SUCCESS = 1;
-    private static RecyclerView recyclerView;
-    private PhoneAdapter baseAdapter;
+/**
+ * @author shenyutian
+ */
+public class PhoneFragment extends BaseFragment<PhonePresenter> implements PhoneView {
+
+    @BindView(R.id.sv_phone_search)
+    SearchView svPhoneSearch;
+    @BindView(R.id.id_phone_title_name)
+    TextView idPhoneTitleName;
+    @BindView(R.id.vp2_phone_fragment)
+    ViewPager2 vp2PhoneFragment;
+    @BindView(R.id.tabLayout_phone_top)
+    TabLayout tabLayoutPhoneTop;
+    private List<Fragment> fragments = new ArrayList<>();
+    private List<String> items = new ArrayList<>(6);
+    private PhonePagerAdapter phonePagerAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        getPhoneList();
-        return inflater.inflate(R.layout.fragment_phone, container, false);
+    protected PhonePresenter initPresenter() {
+        return new PhonePresenter(this);
     }
 
-    // recyclerView 使用插入
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mContext = getContext();
-        // 注册 RecyclerView
-        recyclerView= (RecyclerView) getActivity().findViewById(R.id.phone_recycler_view);
-        // 设置布局方式
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // 将数据 和环境context扔进去
-        baseAdapter = new PhoneAdapter(baseList, getContext());
-        // 执行适配器
-        recyclerView.setAdapter(baseAdapter);
+    protected int initLayout() {
+        return R.layout.fragment_phone;
+    }
+
+    @Override
+    protected void initData() {
+        phonePagerAdapter = new PhonePagerAdapter(this);
+        vp2PhoneFragment.setAdapter(phonePagerAdapter);
+
+        items.add("首页");
+        items.add("最近更新");
+        items.add("小米");
+        items.add("华为");
+        items.add("oppo");
+        items.add("vivo");
+
+        // 设置菜单列表
+//        for (String item : items) {
+//            tabLayoutPhoneTop.addTab(tabLayoutPhoneTop.newTab().setText(item));
+//        }
+        // 连接tabLayout和viewPage2
+        new TabLayoutMediator(tabLayoutPhoneTop, vp2PhoneFragment,(@NonNull TabLayout.Tab tab, int position) -> {
+            tab.setText(items.get(position));
+        }).attach();
+        //最大保存10个fragment界面
+        vp2PhoneFragment.setOffscreenPageLimit(10);
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+    }
+
+    @Override
+    public void onErrorCode(BaseBean model) {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
     }
 
     /**
-     * 获取数据
+     * @author shenyutian
+     * @data 2019-12-24 15:35
+     * 功能 tablayout 下面的fragment 适配器
      */
-    private void getPhoneList() {
-        new Thread(() -> {
-            baseList.addAll(PhoneService.getListBaseByid(1));
-            Message message = new Message();
-            message.what = SUCCESS;
-            handler.sendMessage(message);
-        }).start();
-    }
+    class PhonePagerAdapter extends FragmentStateAdapter {
 
-    /**
-     * 对ui操作的handle
-     */
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            switch (msg.what) {
-                case SUCCESS:
-                    baseAdapter.notifyDataSetChanged();
-                    break;
-            }
+        public PhonePagerAdapter(@NonNull Fragment fragment) {
+            super(fragment);
         }
-    };
 
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            return ClassifyFragment.newInstance(items.get(position), position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+    }
 }

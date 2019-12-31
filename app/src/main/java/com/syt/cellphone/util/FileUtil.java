@@ -19,6 +19,11 @@ public class FileUtil {
 
     private static final String TAG = "File";
 
+    /**
+     * 设备获取设备唯一id
+     * @param context 上下文
+     * @return 唯一id
+     */
     public static String getStrial(Context context) {
         String strial = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         File file = new File("sdcard/weixt/sequenceId.txt");

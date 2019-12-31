@@ -8,6 +8,8 @@ import com.syt.cellphone.greendao.DaoMaster;
 import com.syt.cellphone.greendao.DaoSession;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.util.SharedConfigUtil;
+import com.tencent.bugly.Bugly;
+import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * @author：syt
@@ -31,6 +33,9 @@ public class MyApp extends Application {
         SharedConfigUtil.init(context);
         // greenDao 初始化
         initGrennDao();
+        // 腾讯 Bugly 初始化 2参数 appId
+        CrashReport.initCrashReport(getApplicationContext(), "7d74b6a586", false);
+        Bugly.init(getApplicationContext(), "7d74b6a586", false);
     }
 
     /**
@@ -54,4 +59,5 @@ public class MyApp extends Application {
     public static DaoSession getDaoSession() {
         return daoSession;
     }
+
 }

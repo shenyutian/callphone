@@ -1,10 +1,12 @@
 package com.syt.cellphone.ui.soc;
 
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -32,15 +34,24 @@ import jp.wasabeef.blurry.Blurry;
  */
 public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
 
-
+    /**
+     * rvSocList 主要显示的列表
+     * srlSocHandle 下拉刷新
+     * dlSocMsg 当前的布局
+     * svSocSearch 标题栏的搜索
+     */
     @BindView(R.id.rv_soc_list)
     RecyclerView rvSocList;
     @BindView(R.id.srl_soc_handle)
     SwipeRefreshLayout srlSocHandle;
     @BindView(R.id.dl_soc_msg)
     DrawerLayout dlSocMsg;
+    @BindView(R.id.sv_soc_search)
+    SearchView svSocSearch;
+    @BindView(R.id.tv_soc_no_data)
+    TextView tvSocNoData;
     private SocAdapterNew socAdapter;
-    private TextView tvFotter;
+    private final static String TAG = "SocFragment";
 
     @Override
     protected SocPresenter initPresenter() {
@@ -57,6 +68,30 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         fpresenter.getNetSocList(false);
         // Rv处理
         initRv();
+        // 默认提示
+        svSocSearch.setQueryHint("输入需要查询的处理器...");
+        // 搜索框处理
+        svSocSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // 提交
+                Log.d(TAG, "onQueryTextSubmit: " + query);
+                fpresenter.setConditions(query);
+                fpresenter.getNetSocList(true);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // 修改搜索框
+                Log.d(TAG, "onQueryTextChange: " + newText);
+                fpresenter.setConditions(newText);
+                //刷新界面
+                fpresenter.getNetSocList(true);
+                return false;
+            }
+        });
+
     }
 
     /**
@@ -66,7 +101,7 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         // 设置布局方式
         rvSocList.setLayoutManager(new LinearLayoutManager(getContext()));
         // 将数据 和环境context扔进去
-        socAdapter = new SocAdapterNew(R.layout.soc_list_item, fpresenter.getSocList());
+        socAdapter = new SocAdapterNew(R.layout.item_soc, fpresenter.getScreenSocList());
         // 点击事件
         socAdapter.setOnItemChildClickListener((BaseQuickAdapter adapter, View view, int position) -> {
             Soc soc = socAdapter.getItem(position);
@@ -84,11 +119,8 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         srlSocHandle.setOnRefreshListener(() -> {
             fpresenter.getNetSocList(false);
         });
-        // 添加底部布局
-        tvFotter = new TextView(context);
-        tvFotter.setText("我也是有底线的");
-        tvFotter.setVisibility(View.GONE);
-        socAdapter.addFooterView(tvFotter);
+        //开启adapter动画 从左到右
+        socAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
     }
 
     @Override
@@ -124,10 +156,20 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
      */
     @Override
     public void showNoData() {
+        //刷新界面
+        socAdapter.notifyDataSetChanged();
         // 关闭下面的刷新
         socAdapter.loadMoreComplete();
-        tvFotter.setVisibility(View.INVISIBLE);
-
+        //关闭刷新
+        socAdapter.loadMoreEnd();
+        if (socAdapter.getItemCount() <= 0) {
+            tvSocNoData.setText("暂无数据");
+            tvSocNoData.setVisibility(View.VISIBLE);
+        } else {
+            // 暂无数据隐藏
+            tvSocNoData.setText("");
+            tvSocNoData.setVisibility(View.GONE);
+        }
     }
 
     /**

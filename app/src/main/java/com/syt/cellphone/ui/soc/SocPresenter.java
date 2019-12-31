@@ -10,6 +10,7 @@ import com.syt.cellphone.pojo.SocList;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author：syt Date: 2019-12-12
@@ -18,26 +19,23 @@ import java.util.List;
 public class SocPresenter extends BasePresenter<SocView> {
 
     /**
-     * socNum soc页号
+     * pageNum soc页号 线程安全
      * socLists 显示的数据
+     * conditions 查询条件 默认为空
+     * screenSocList 查询结果数据
      */
-    private volatile int pageNum = 1;
+    private AtomicInteger pageNum = new AtomicInteger(1);
     private List<Soc> socLists = new LinkedList<>();
+    private String conditions = "";
+    private List<Soc> screenSocList = new LinkedList<>();
     private final static String TAG = "SocPresenter";
 
     SocPresenter(SocView socView) {
         super(socView);
     }
 
-    /**
-     * 获取soc列表
-     * @return 全部soc
-     */
-    public List<Soc> getSocList() {
-
-        //查询数据库里面的soc数据
-
-        return socLists;
+    public void setConditions(String conditions) {
+        this.conditions = conditions;
     }
 
     /**
@@ -48,11 +46,11 @@ public class SocPresenter extends BasePresenter<SocView> {
 
         // 顶部 页码还原为1 内容清空
         if (!topOrBottom) {
-            pageNum = 1;
+            pageNum.set(1);
             socLists.clear();
         }
 
-        addDisposable(apiServer.getNetListSoc(pageNum), new BaseObserver<SocList>(baseView) {
+        addDisposable(apiServer.getNetListSoc(pageNum.get()), new BaseObserver<SocList>(baseView) {
 
             @Override
             public void onSuccess(SocList socList) {
@@ -60,20 +58,23 @@ public class SocPresenter extends BasePresenter<SocView> {
                 Log.d(TAG, "onSuccess: " + socList.getPageSize());
                 socLists.addAll(socList.getList());
 
-                //TODO dao层添加
-                Log.d(TAG, "onSuccess: Thread : " + Thread.currentThread().getName());
                 MyApp.getDaoSession().getSocDao().insertOrReplaceInTx(socList.getList());
-
-                if (socList.getPageSize() >= pageNum) {
+                // 结果筛选
+                SearchSocList();
+                // 没有内容就再一次请求
+                if (screenSocList.size() == 0) {
+                    getNetSocList(true);
+                }
+                if (socList.getPageSize() >= pageNum.get()) {
                     // 记录页码 +0
-                    pageNum++;
+                    pageNum.incrementAndGet();
                     //刷新主界面 的soc列表
                     baseView.refreshRv();
                 } else {
                     //显示到底了
                     baseView.showNoData();
                     // 然后重新刷新
-                    pageNum = 1;
+//                    pageNum = 1;
                 }
             }
 
@@ -83,5 +84,26 @@ public class SocPresenter extends BasePresenter<SocView> {
             }
         }, 0);
 
+    }
+
+    /**
+     * 按照条件查询结果
+     */
+    public void SearchSocList() {
+        screenSocList.clear();
+        for (Soc soc : socLists) {
+            if (soc.getSocName().indexOf(conditions) != -1
+                    || soc.getSocTrademark().indexOf(conditions) != -1 ) {
+                screenSocList.add(soc);
+            }
+        }
+    }
+
+    /**
+     * 获取筛选结果
+     * @return 查询结果soc列表
+     */
+    public List<Soc> getScreenSocList() {
+        return screenSocList;
     }
 }

@@ -56,8 +56,7 @@
             <!--顶部功能按钮界面 = 狗皮膏药-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                >
+                android:layout_height="40dp">
 
                 <TextView
                     android:id="@+id/tv_soc_top_name"
@@ -99,6 +98,19 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+        <TextView
+            android:id="@+id/tv_soc_no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="暂无数据"
+            android:textSize="36sp"
+            android:visibility="gone"
+            />
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

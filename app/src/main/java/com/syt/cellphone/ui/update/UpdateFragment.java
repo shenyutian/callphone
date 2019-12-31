@@ -67,7 +67,7 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         // 写入数据
-        updateAdapter = new UpdateAdapter(R.layout.phone_recycler_item, phoneBaseList);
+        updateAdapter = new UpdateAdapter(R.layout.item_phone, phoneBaseList);
         //设置RecyclerView条目点击事件
         updateAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

@@ -8,6 +8,8 @@
     <color name="base_color">#505050</color>
     <!--外边的背景-->
     <color name="frame_background">#e1e1e1</color>
+    <!--选中状态的颜色-->
+    <color name="select_underline">#FF4500</color>
     <!-- 白色 -->
     <color name="ivory">#FFFFF0</color>
     <!-- 象牙色 -->

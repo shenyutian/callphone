@@ -38,10 +38,10 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
         TextView price; // base 价格
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            img = itemView.findViewById(R.id.phone_item_img);
-            name = itemView.findViewById(R.id.phone_item_name);
-            feature = itemView.findViewById(R.id.phone_item_feature);
-            price = itemView.findViewById(R.id.phone_item_price);
+            img = itemView.findViewById(R.id.iv_phone_item_img);
+            name = itemView.findViewById(R.id.tv_phone_item_name);
+            feature = itemView.findViewById(R.id.tv_phone_item_feature);
+            price = itemView.findViewById(R.id.tv_phone_item_price);
             view = itemView;
         }
     }
@@ -55,7 +55,7 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.phone_recycler_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_phone, parent, false);
         final PhoneAdapter.ViewHolder viewHolder = new PhoneAdapter.ViewHolder(view);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

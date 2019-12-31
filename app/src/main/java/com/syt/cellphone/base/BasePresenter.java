@@ -70,6 +70,7 @@ public class BasePresenter<V extends BaseView> {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(observer));
         } else {
+            // repeatWhen() 有条件地、重复发送被观察者事件
             compositeDisposable.add(observable.repeatWhen(new Function<Observable<Object>, ObservableSource<?>>() {
                 @Override
                 public ObservableSource<?> apply(Observable<Object> objectObservable) throws Exception {

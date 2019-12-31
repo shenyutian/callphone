@@ -55,7 +55,7 @@ public class SocAdapter extends RecyclerView.Adapter<SocAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.soc_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_soc, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
         viewHolder.socView.setOnClickListener(new View.OnClickListener() {
             @Override

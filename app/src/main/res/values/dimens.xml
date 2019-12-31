@@ -7,4 +7,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <!--自定义字体大小 目前soc列表使用-->
     <dimen name="textSizeMax">24sp</dimen>
+    <dimen name="appbar_padding">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>

@@ -11,6 +11,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
     buildTypes {
         release {
@@ -44,10 +48,10 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     //butterknife注解框架
-    implementation 'com.jakewharton:butterknife:10.2.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     //retrofit框架，用于网络请求
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.0'
     // 阿里 fastJson
     implementation 'com.alibaba:fastjson:1.2.62'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
@@ -59,25 +63,34 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
     //拦截器
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.14'
     //ConverterFactory的String依赖包
-    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.7.0'
     //ConverterFactory的Gson依赖包
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.0'
     //CallAdapterFactory的Rx依赖包
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.49'
     //Dagger2
-    implementation 'com.google.dagger:dagger:2.25.2'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.25.2'
+    implementation 'com.google.dagger:dagger:2.25.3'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.25.3'
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     //LeakCanary 分析内存
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
-    //模糊
+    //模糊界面
     implementation 'jp.wasabeef:blurry:3.0.0'
+    // viewPage2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    //banner框架 轮播图
+    implementation 'com.youth.banner:banner:1.4.10'
+    // material:material
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    // 腾讯bugle
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
 }
 
 greendao {
