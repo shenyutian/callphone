@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.syt.cellphone">
-
-    <!--允许应用访问有关Wi-Fi网络的信息。-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!--网络-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!--允许应用程序访问有关网络的信息-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--允许只读访问电话状态，包括设备的电话号码，当前的蜂窝网络信息，任何正在进行的呼叫的状态以及PhoneAccount在设备上注册的任何列表 。-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!--读取系统底层日志-->
-<!--    <uses-permission android:name="android.permission.READ_LOGS" />-->
-    <!--允许应用程序写入外部存储-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--允许应用程序请求安装软件包-->
+    <!-- 允许应用访问有关Wi-Fi网络的信息。 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 网络 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 允许应用程序访问有关网络的信息 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 允许只读访问电话状态，包括设备的电话号码，当前的蜂窝网络信息，任何正在进行的呼叫的状态以及PhoneAccount在设备上注册的任何列表 。 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 读取系统底层日志 -->
+    <!-- <uses-permission android:name="android.permission.READ_LOGS" /> -->
+    <!-- 允许应用程序写入外部存储 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 允许应用程序请求安装软件包 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
@@ -25,7 +20,9 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.phone.search.SearchActivity"></activity>
         <activity
             android:name=".ui.SytMainActivity"
             android:launchMode="singleTop"
@@ -49,19 +46,19 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
-        </provider>
-
-        <!--腾讯bugly 配置-->
+                android:resource="@xml/provider_paths" />
+        </provider> <!-- 腾讯bugly 配置 -->
         <!-- 配置APP ID -->
         <meta-data
             android:name="BUGLY_APPID"
-            android:value="7d74b6a586" />
-        <!-- 配置APP版本号 -->
+            android:value="7d74b6a586" /> <!-- 配置APP版本号 -->
+        <!-- 不同于“android:versionName”，“BUGLY_APP_VERSION”配置的是Bugly平台的APP版本号 -->
         <meta-data
             android:name="BUGLY_APP_VERSION"
-            android:value="1.0" />
-        <!-- 配置Bugly调试模式（true或者false）-->
+            android:value="1.0" /> <!-- 配置APP渠道号 -->
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="" /> <!-- 配置Bugly调试模式（true或者false） -->
         <meta-data
             android:name="BUGLY_ENABLE_DEBUG"
             android:value="true" />

@@ -1,28 +1,37 @@
 package com.syt.cellphone.pojo;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+
 /**
  * 品牌类
  */
+@Entity
 public class PhoneRecommend {
-    private Integer recommendId;
 
-    private Integer phoneId;
-
+    /**
+     * recommendId : 1
+     * phoneId : 1291141
+     * recommendReimage : https://dg-fd.zol-img.com.cn/t_s2000x2000/g4/M05/06/05/ChMly113aC-IVGMlAAG11ap9YqUAAXnogBWIakAAbXt993.jpg
+     */
+    @Id
+    private int recommendId;
+    private int phoneId;
     private String recommendReimage;
 
-    public Integer getRecommendId() {
+    public int getRecommendId() {
         return recommendId;
     }
 
-    public void setRecommendId(Integer recommendId) {
+    public void setRecommendId(int recommendId) {
         this.recommendId = recommendId;
     }
 
-    public Integer getPhoneId() {
+    public int getPhoneId() {
         return phoneId;
     }
 
-    public void setPhoneId(Integer phoneId) {
+    public void setPhoneId(int phoneId) {
         this.phoneId = phoneId;
     }
 

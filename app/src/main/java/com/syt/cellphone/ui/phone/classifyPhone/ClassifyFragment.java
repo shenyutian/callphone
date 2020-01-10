@@ -3,6 +3,7 @@ package com.syt.cellphone.ui.phone.classifyPhone;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.pojo.PhoneRecommend;
-import com.syt.cellphone.util.LogUtil;
+import com.syt.cellphone.ui.phone.PhoneBaseAdapter;
 import com.syt.cellphone.util.ToastUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
@@ -39,15 +41,24 @@ import butterknife.BindView;
  */
 public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements ClassifyView {
 
+    /**
+     * --------------黄油刀的布局id注册------------
+     */
     @BindView(R.id.rv_phone_classify_list)
-    RecyclerView rvPhoneClassifyList;
+    RecyclerView        rvPhoneClassifyList;
     @BindView(R.id.srl_phone_classify_handle)
-    SwipeRefreshLayout srlPhoneClassifyHandle;
+    SwipeRefreshLayout  srlPhoneClassifyHandle;
     @BindView(R.id.tv_phone_bottom)
-    TextView tvPhoneBottom;
-    private String titleName;
-    private int item;
-    private ClassifyAdapter classifyAdapter;
+    TextView            tvPhoneBottom;
+
+    /**
+     * --------------页面参数-----------------
+     * titleName        标题名称 例如首页，最近更新.....
+     * classifyAdapter  数据列表适配器
+     */
+    private String          titleName;
+    private int             item;
+    private PhoneBaseAdapter classifyAdapter;
 
     /**
      * 暴露给外部的方法
@@ -90,9 +101,7 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
     protected void initData() {
         //导入数据 滑动监听
         initRv();
-        if (item == 0) {
-            fpresenter.getNetBanner();
-        }
+        fpresenter.getNetPhoneList(true);
         // 底部显示
         tvPhoneBottom.setText(titleName);
     }
@@ -101,21 +110,25 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         // 设置布局方式
         rvPhoneClassifyList.setLayoutManager(new LinearLayoutManager(getContext()));
         // 将数据 和环境context扔进去
-        classifyAdapter = new ClassifyAdapter(R.layout.item_phone, fpresenter.getPhoneBaseList());
-        // 点击事件
-        classifyAdapter.setOnItemChildClickListener((BaseQuickAdapter adapter, View view, int position) -> {
-
-        });
+        classifyAdapter = new PhoneBaseAdapter(R.layout.item_phone, fpresenter.getPhoneBaseList());
         // 上拉事件
         classifyAdapter.setOnLoadMoreListener(() ->
-                        fpresenter.getNetSocList(true)
+                        fpresenter.getNetPhoneList(true)
                 , rvPhoneClassifyList);
         // 执行适配器
         rvPhoneClassifyList.setAdapter(classifyAdapter);
         // 下拉刷新
         srlPhoneClassifyHandle.setOnRefreshListener(() ->
-            fpresenter.getNetSocList(false)
+            fpresenter.getNetPhoneList(false)
         );
+        // rv点击事件
+        rvPhoneClassifyList.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ToastUtil.makeText(fpresenter.getPhoneBaseList().get(position).getBaseName());
+
+            }
+        });
     }
 
     @Override
@@ -128,9 +141,22 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         srlPhoneClassifyHandle.setRefreshing(false);
     }
 
+    /**
+     * 显示我已经到底了
+     */
     @Override
     public void showNoData() {
-
+        if (classifyAdapter.getFooterLayoutCount() > 0) {
+            return;
+        }
+        TextView tvBottom = new TextView(context);
+        tvBottom.setText("我也是有底线的");
+        //刷新界面
+        classifyAdapter.notifyDataSetChanged();
+        // 关闭下面的刷新
+        classifyAdapter.loadMoreComplete();
+        //关闭刷新
+        classifyAdapter.loadMoreEnd();
     }
 
     @Override
@@ -149,11 +175,17 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
     }
 
     /**
-     * 加载上面的轮播图
+     * 加载首页上面的轮播图
      */
     @Override
     public void showHeaderView(List<PhoneRecommend> recommends) {
+        // 推荐数据没有 退出
         if (recommends == null || recommends.size() == 0) {
+            return;
+        }
+        // 顶部有轮播图 就退出
+        Log.d("Class", "showHeaderView: " + classifyAdapter.getHeaderLayoutCount());
+        if (classifyAdapter.getHeaderLayoutCount() > 0) {
             return;
         }
         //标题 + 图片url
@@ -161,6 +193,8 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         List<String> imgurls;
 
         Banner banner = new Banner(context);
+        // 设置轮播图的宽高
+        banner.setLayoutParams(new ViewGroup.LayoutParams(context.getResources().getDisplayMetrics().widthPixels, 350));
         // 如果api高，就用steam。不行就用老方法
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             titles = recommends.stream().map(e -> e.getPhoneId()+"").collect(Collectors.toList());
@@ -179,7 +213,7 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
             banner.setImages(imgurls);
         }
         banner.setOnBannerListener(position ->
-            ToastUtil.makeText("点击了 " + position)
+            ToastUtil.makeText("点击了 " + titles.get(position))
         );
         //设置轮播图加载方式
         banner.setImageLoader(new ImageLoader() {
@@ -188,11 +222,6 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
                 Glide.with(context).load(path).into(imageView);
             }
         }).start();
-        LogUtil.d("高度: " + banner.getHeight());
-        classifyAdapter.addHeaderView(banner, 0);
-
-        
+        classifyAdapter.addHeaderView(banner);
     }
-
-
 }

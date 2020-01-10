@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -33,13 +31,12 @@ import com.syt.cellphone.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class SytMainActivity extends BaseActivity<SytMainPresenter> implements SytMainView, View.OnLongClickListener, TextToSpeech.OnInitListener {
+public class SytMainActivity extends BaseActivity<SytMainPresenter> implements SytMainView, View.OnLongClickListener {
 
     @BindView(R.id.frameLayout_main_content)
     FrameLayout frameLayoutMainContent;
@@ -135,7 +132,6 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
             // 选择底部菜单
             presenter.switchMenus(getIntent());
         }
-        initTextToSpeech();
     }
 
     @Override
@@ -268,23 +264,8 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
             case R.id.constraintLayout_two_bottom_brand:
                 tvTwoBottomBrand.setTextColor(Color.RED);
                 ivTwoBottomBrand.setColorFilter(Color.RED);
-                setFragment(fragments.get(1));
                 currentIndex = 2;
-                // TODO validate success, do something
-                if (textToSpeech != null && !textToSpeech.isSpeaking()) {
-            /*
-                TextToSpeech的speak方法有两个重载。
-                // 执行朗读的方法
-                speak(CharSequence text,int queueMode,Bundle params,String utteranceId);
-                // 将朗读的的声音记录成音频文件
-                synthesizeToFile(CharSequence text,Bundle params,File file,String utteranceId);
-                第二个参数queueMode用于指定发音队列模式，两种模式选择
-                （1）TextToSpeech.QUEUE_FLUSH：该模式下在有新任务时候会清除当前语音任务，执行新的语音任务
-                （2）TextToSpeech.QUEUE_ADD：该模式下会把新的语音任务放到语音任务之后，
-                等前面的语音任务执行完了才会执行新的语音任务
-             */
-                    textToSpeech.speak("语音播放测试", TextToSpeech.QUEUE_FLUSH, null);
-                }
+                setFragment(fragments.get(1));
                 break;
             case 3:
             case R.id.constraintLayout_three_bottom_soc:
@@ -303,40 +284,6 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
             default:
                 ToastUtil.makeText("点击了不存在的地方");
                 break;
-        }
-    }
-
-    private TextToSpeech textToSpeech;
-
-
-    private void initTextToSpeech() {
-        textToSpeech = new TextToSpeech(this, this);
-        textToSpeech.setPitch(1.0f);
-        textToSpeech.setSpeechRate(0.5f);
-    }
-
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            /*
-                使用的是小米手机进行测试，打开设置，在系统和设备列表项中找到更多设置，
-            点击进入更多设置，在点击进入语言和输入法，见语言项列表，点击文字转语音（TTS）输出，
-            首选引擎项有三项为Pico TTs，科大讯飞语音引擎3.0，度秘语音引擎3.0。其中Pico TTS不支持
-            中文语言状态。其他两项支持中文。选择科大讯飞语音引擎3.0。进行测试。
-
-                如果自己的测试机里面没有可以读取中文的引擎，
-            那么不要紧，我在该Module包中放了一个科大讯飞语音引擎3.0.apk，将该引擎进行安装后，进入到
-            系统设置中，找到文字转语音（TTS）输出，将引擎修改为科大讯飞语音引擎3.0即可。重新启动测试
-            Demo即可体验到文字转中文语言。
-             */
-            // setLanguage设置语言
-            int result = textToSpeech.setLanguage(Locale.CHINA);
-            // TextToSpeech.LANG_MISSING_DATA：表示语言的数据丢失
-            // TextToSpeech.LANG_NOT_SUPPORTED：不支持
-            if (result == TextToSpeech.LANG_MISSING_DATA
-                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Toast.makeText(this, "数据丢失或不支持", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 }

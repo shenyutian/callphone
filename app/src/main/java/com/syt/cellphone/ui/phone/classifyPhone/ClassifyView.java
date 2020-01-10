@@ -25,6 +25,7 @@ public interface ClassifyView extends BaseView {
     /**
      * 显示上面的视图
      * 主要用于给首页显示轮播图
+     * @param recommends 轮播图数据
      */
     void showHeaderView(List<PhoneRecommend> recommends);
 }

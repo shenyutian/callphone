@@ -6,6 +6,7 @@
 
     <ImageView
         android:id="@+id/iv_phone_home_banner"
+        android:src="@drawable/gray_radius"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

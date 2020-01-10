@@ -19,7 +19,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.syt.cellphone.R;
 import com.syt.cellphone.pojo.PhoneBase;
 import com.syt.cellphone.pojo.PhoneRecommend;
-import com.syt.cellphone.service.PhoneService;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
@@ -133,7 +132,7 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public class phoneThread extends Thread {
         @Override
         public void run() {
-            phoneBaseList.addAll(PhoneService.getListBaseByid(count));
+//            phoneBaseList.addAll(PhoneService.getListBaseByid(count));
             count++;
         }
     }
@@ -144,7 +143,7 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                pageNum = PhoneService.getPageNum();
+//                pageNum = PhoneService.getPageNum();
             }
         });
         t.start();
@@ -157,7 +156,7 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                phoneRecommendList = PhoneService.getRecommend();
+//                phoneRecommendList = PhoneService.getRecommend();
             }
         });
         t.start();

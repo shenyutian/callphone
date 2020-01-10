@@ -8,6 +8,7 @@ import com.syt.cellphone.net.BaseObserver;
 import com.syt.cellphone.pojo.Soc;
 import com.syt.cellphone.pojo.SocList;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,9 +26,9 @@ public class SocPresenter extends BasePresenter<SocView> {
      * screenSocList 查询结果数据
      */
     private AtomicInteger pageNum = new AtomicInteger(1);
-    private List<Soc> socLists = new LinkedList<>();
+    private List<Soc> socLists = Collections.synchronizedList(new LinkedList<>());
     private String conditions = "";
-    private List<Soc> screenSocList = new LinkedList<>();
+    private List<Soc> screenSocList = Collections.synchronizedList(new LinkedList<>());
     private final static String TAG = "SocPresenter";
 
     SocPresenter(SocView socView) {

@@ -9,4 +9,10 @@
     <dimen name="textSizeMax">24sp</dimen>
     <dimen name="appbar_padding">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+    <!--标题字体大小-->
+    <dimen name="titleSize">20sp</dimen>
+    <!--顶部牛皮糖高度-->
+    <dimen name="titleHeight">40dp</dimen>
+    <!--通知栏高度-->
+    <dimen name="barHeight">56dp</dimen>
 </resources>
