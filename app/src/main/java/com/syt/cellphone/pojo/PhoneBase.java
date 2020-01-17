@@ -2,6 +2,7 @@ package com.syt.cellphone.pojo;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 基础数据类
@@ -25,6 +26,21 @@ public class PhoneBase {
     private String basePrice;
     private String baseImage;
     private String baseRemarks;
+
+    @Generated(hash = 1578867459)
+    public PhoneBase(int baseId, String baseName, String baseFeature, String basePrice,
+            String baseImage, String baseRemarks) {
+        this.baseId = baseId;
+        this.baseName = baseName;
+        this.baseFeature = baseFeature;
+        this.basePrice = basePrice;
+        this.baseImage = baseImage;
+        this.baseRemarks = baseRemarks;
+    }
+
+    @Generated(hash = 2143841467)
+    public PhoneBase() {
+    }
 
     public int getBaseId() {
         return baseId;

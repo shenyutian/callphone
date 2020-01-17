@@ -1,4 +1,4 @@
-package com.syt.cellphone.ui.soc;
+package com.syt.cellphone.adapter;
 
 import android.content.Context;
 import android.view.Gravity;

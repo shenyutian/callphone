@@ -2,6 +2,7 @@ package com.syt.cellphone.pojo;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 品牌
@@ -20,6 +21,18 @@ public class PhoneTrademark {
     private String trademarkId;
     private String trademarkName;
     private String trademarkLog;
+
+    @Generated(hash = 1154455719)
+    public PhoneTrademark(String trademarkId, String trademarkName,
+            String trademarkLog) {
+        this.trademarkId = trademarkId;
+        this.trademarkName = trademarkName;
+        this.trademarkLog = trademarkLog;
+    }
+
+    @Generated(hash = 1910035199)
+    public PhoneTrademark() {
+    }
 
     public String getTrademarkId() {
         return trademarkId;

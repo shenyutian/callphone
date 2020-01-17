@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
@@ -103,16 +102,16 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         // 将数据 和环境context扔进去
         socAdapter = new SocAdapterNew(R.layout.item_soc, fpresenter.getScreenSocList());
         // 点击事件
-        socAdapter.setOnItemChildClickListener((BaseQuickAdapter adapter, View view, int position) -> {
+        socAdapter.setOnItemClickListener((adapter, view, position) -> {
             Soc soc = socAdapter.getItem(position);
             ToastUtil.makeText("点击编号 " + soc.getSocId() + ",名称: " + soc.getSocName());
             dialogSoc(soc);
             Blurry.with(context).radius(10).sampling(2).onto(dlSocMsg);
         });
         // 上拉事件
-        socAdapter.setOnLoadMoreListener(() ->
-                fpresenter.getNetSocList(true)
-                , rvSocList);
+        socAdapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
+            fpresenter.getNetSocList(true);
+        });
         // 执行适配器
         rvSocList.setAdapter(socAdapter);
         // 下拉刷新
@@ -120,7 +119,7 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
             fpresenter.getNetSocList(false);
         });
         //开启adapter动画 从左到右
-        socAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+//        socAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
     }
 
     @Override
@@ -146,7 +145,7 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         //刷新界面
         socAdapter.notifyDataSetChanged();
         // 关闭下面的刷新
-        socAdapter.loadMoreComplete();
+        socAdapter.getLoadMoreModule().loadMoreComplete();
         // 关闭上面的刷新
         srlSocHandle.setRefreshing(false);
     }
@@ -159,9 +158,9 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         //刷新界面
         socAdapter.notifyDataSetChanged();
         // 关闭下面的刷新
-        socAdapter.loadMoreComplete();
+        socAdapter.getLoadMoreModule().loadMoreComplete();
         //关闭刷新
-        socAdapter.loadMoreEnd();
+        socAdapter.getLoadMoreModule().loadMoreEnd();
         if (socAdapter.getItemCount() <= 0) {
             tvSocNoData.setText("暂无数据");
             tvSocNoData.setVisibility(View.VISIBLE);

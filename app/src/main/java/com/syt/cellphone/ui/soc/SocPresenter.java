@@ -25,9 +25,9 @@ public class SocPresenter extends BasePresenter<SocView> {
      * conditions 查询条件 默认为空
      * screenSocList 查询结果数据
      */
-    private AtomicInteger pageNum = new AtomicInteger(1);
-    private List<Soc> socLists = Collections.synchronizedList(new LinkedList<>());
-    private String conditions = "";
+    private AtomicInteger pageNum   = new AtomicInteger(1);
+    private List<Soc> socLists      = Collections.synchronizedList(new LinkedList<>());
+    private String conditions       = "";
     private List<Soc> screenSocList = Collections.synchronizedList(new LinkedList<>());
     private final static String TAG = "SocPresenter";
 

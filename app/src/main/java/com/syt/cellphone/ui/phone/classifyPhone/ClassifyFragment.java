@@ -17,13 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.syt.cellphone.R;
+import com.syt.cellphone.adapter.PhoneBaseAdapter;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.pojo.PhoneRecommend;
-import com.syt.cellphone.ui.phone.PhoneBaseAdapter;
 import com.syt.cellphone.util.ToastUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
@@ -112,23 +110,19 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         // 将数据 和环境context扔进去
         classifyAdapter = new PhoneBaseAdapter(R.layout.item_phone, fpresenter.getPhoneBaseList());
         // 上拉事件
-        classifyAdapter.setOnLoadMoreListener(() ->
-                        fpresenter.getNetPhoneList(true)
-                , rvPhoneClassifyList);
+        classifyAdapter.getLoadMoreModule().setOnLoadMoreListener(
+                () -> fpresenter.getNetPhoneList(true));
+        // rv点击事件
+        classifyAdapter.setOnItemClickListener(
+                (adapter, view, position) ->
+                    ToastUtil.makeText(fpresenter.getPhoneBaseList().get(position).getBaseName())
+                );
         // 执行适配器
         rvPhoneClassifyList.setAdapter(classifyAdapter);
         // 下拉刷新
         srlPhoneClassifyHandle.setOnRefreshListener(() ->
             fpresenter.getNetPhoneList(false)
         );
-        // rv点击事件
-        rvPhoneClassifyList.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ToastUtil.makeText(fpresenter.getPhoneBaseList().get(position).getBaseName());
-
-            }
-        });
     }
 
     @Override
@@ -136,7 +130,7 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         //刷新界面
         classifyAdapter.notifyDataSetChanged();
         // 关闭下面的刷新
-        classifyAdapter.loadMoreComplete();
+        classifyAdapter.getLoadMoreModule().loadMoreComplete();
         // 关闭上面的刷新
         srlPhoneClassifyHandle.setRefreshing(false);
     }
@@ -154,9 +148,9 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         //刷新界面
         classifyAdapter.notifyDataSetChanged();
         // 关闭下面的刷新
-        classifyAdapter.loadMoreComplete();
+        classifyAdapter.getLoadMoreModule().loadMoreComplete();
         //关闭刷新
-        classifyAdapter.loadMoreEnd();
+        classifyAdapter.getLoadMoreModule().loadMoreEnd();
     }
 
     @Override

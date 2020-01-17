@@ -55,8 +55,9 @@ dependencies {
     // 阿里 fastJson
     implementation 'com.alibaba:fastjson:1.2.62'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    // 上拉加载更多的功能使用的 第三方库BaseRecyclerViewAdapterHelper
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.49'
+    // 第三方库BaseRecyclerViewAdapterHelper 上拉加载更多的功能使用的
+//    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.49'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta11'
     // NavigationUI 等布局 导入
     implementation 'com.google.android.material:material:1.0.0'
     //http
@@ -93,11 +94,14 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
     // 谷歌 guava
     implementation 'com.google.guava:guava:28.2-android'
+    // 开源的状态栏 基础依赖包，必须要依赖 fragment快速实现（可选）
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
 }
 
 greendao {
     //数据库的schema版本，也可以理解为数据库版本号
-    schemaVersion 3
+    schemaVersion 4
     //设置DaoMaster、DaoSession、Dao包名，也就是要放置这些类的包的全路径。
     daoPackage 'com.syt.cellphone.greendao'
     //设置DaoMaster、DaoSession、Dao目录

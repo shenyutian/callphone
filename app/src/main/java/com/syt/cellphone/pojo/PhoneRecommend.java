@@ -2,6 +2,7 @@ package com.syt.cellphone.pojo;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 品牌类
@@ -18,6 +19,17 @@ public class PhoneRecommend {
     private int recommendId;
     private int phoneId;
     private String recommendReimage;
+
+    @Generated(hash = 817267004)
+    public PhoneRecommend(int recommendId, int phoneId, String recommendReimage) {
+        this.recommendId = recommendId;
+        this.phoneId = phoneId;
+        this.recommendReimage = recommendReimage;
+    }
+
+    @Generated(hash = 1407069058)
+    public PhoneRecommend() {
+    }
 
     public int getRecommendId() {
         return recommendId;

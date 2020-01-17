@@ -1,5 +1,6 @@
 package com.syt.cellphone.ui.phone;
 
+import android.content.Intent;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -14,6 +15,8 @@ import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.ui.phone.classifyPhone.ClassifyFragment;
+import com.syt.cellphone.ui.phone.search.SearchActivity;
+import com.syt.cellphone.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,17 +61,22 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
         items.add("华为");
         items.add("oppo");
         items.add("vivo");
+        items.add("三星");
+        items.add("苹果");
 
         // 设置菜单列表
 //        for (String item : items) {
 //            tabLayoutPhoneTop.addTab(tabLayoutPhoneTop.newTab().setText(item));
 //        }
         // 连接tabLayout和viewPage2
-        new TabLayoutMediator(tabLayoutPhoneTop, vp2PhoneFragment,(@NonNull TabLayout.Tab tab, int position) -> {
+        new TabLayoutMediator(tabLayoutPhoneTop, vp2PhoneFragment, (@NonNull TabLayout.Tab tab, int position) -> {
             tab.setText(items.get(position));
         }).attach();
         //最大保存10个fragment界面
         vp2PhoneFragment.setOffscreenPageLimit(10);
+
+        // 加载设置搜索控件
+        initSearch();
     }
 
     @Override
@@ -84,6 +92,29 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
     @Override
     public void hideLoading() {
 
+    }
+
+    /**
+     * 加载配置搜索
+     */
+    private void initSearch() {
+        svPhoneSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            // 搜索按钮监听
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                LogUtil.d("搜索监听: " + query);
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("content", query);
+                startActivity(intent);
+                return false;
+            }
+            // 搜索内容变化监听
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                LogUtil.d("文本监听: " + newText);
+                return false;
+            }
+        });
     }
 
     /**

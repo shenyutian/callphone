@@ -12,6 +12,10 @@ public interface SearchView extends BaseView {
     /**
      * 刷新搜索结果列表视图
      */
-    void refreshSearchRv();
+    void resetSearchRv();
 
+    /**
+     * 没有数据了，加载底部提示
+     */
+    void resettoBottom();
 }

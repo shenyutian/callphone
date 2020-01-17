@@ -1,4 +1,4 @@
-package com.syt.cellphone.ui.update;
+package com.syt.cellphone.adapter;
 
 import android.graphics.Color;
 import android.widget.ImageView;
@@ -8,13 +8,14 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.module.LoadMoreModule;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.syt.cellphone.R;
 import com.syt.cellphone.pojo.PhoneBase;
 
 import java.util.List;
 
-public class UpdateAdapter extends BaseQuickAdapter<PhoneBase, BaseViewHolder> {
+public class UpdateAdapter extends BaseQuickAdapter<PhoneBase, BaseViewHolder> implements LoadMoreModule {
 
     public UpdateAdapter(int layoutResId, @Nullable List<PhoneBase> data) {
         super(layoutResId, data);
@@ -29,7 +30,7 @@ public class UpdateAdapter extends BaseQuickAdapter<PhoneBase, BaseViewHolder> {
             helper.setBackgroundColor(R.id.phone_recycler_item, Color.WHITE);
         }
         // 写入数据
-        Glide.with(mContext).load(item.getBaseImage()).into((ImageView) helper.getView(R.id.phone_recycler_item));
+        Glide.with(getContext()).load(item.getBaseImage()).into((ImageView) helper.getView(R.id.phone_recycler_item));
         helper.setText(R.id.tv_phone_item_name, item.getBaseName());
         helper.setText(R.id.tv_phone_item_feature, item.getBaseFeature());
         helper.setText(R.id.tv_phone_item_price, item.getBasePrice());

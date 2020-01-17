@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.syt.cellphone.R;
+import com.syt.cellphone.adapter.UpdateAdapter;
 import com.syt.cellphone.pojo.PhoneBase;
 import com.syt.cellphone.pojo.PhoneRecommend;
 import com.youth.banner.loader.ImageLoader;
@@ -68,32 +67,32 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
         // 写入数据
         updateAdapter = new UpdateAdapter(R.layout.item_phone, phoneBaseList);
         //设置RecyclerView条目点击事件
-        updateAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                PhoneBase phoneBase = updateAdapter.getItem(position);
-                Toast.makeText(view.getContext(), "点击编号 " + phoneBase.getBaseId() + ",名称: " + phoneBase.getBaseName(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        updateAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                PhoneBase phoneBase = updateAdapter.getItem(position);
+//                Toast.makeText(view.getContext(), "点击编号 " + phoneBase.getBaseId() + ",名称: " + phoneBase.getBaseName(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
         /**
          * 上拉 事件
          */
-        updateAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                Log.e("shenyutian", "onLoadMoreRequested: " + count);
-                if (count <= pageNum) {
-                    getBaseList();
-                    updateAdapter.setNewData(phoneBaseList);
-//                    updateAdapter.loadMoreComplete();
-//                    updateAdapter.loadMoreComplete(); //完全刷新布局
-//                    updateAdapter.loadMoreFail(); // 持续更新
-                    updateAdapter.loadMoreEnd(); // 底部插入
-                } else {
-//                    updateAdapter.addFooterView(); // 底部插入视图
-                }
-            }
-        }, recyclerView);
+//        updateAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+//            @Override
+//            public void onLoadMoreRequested() {
+//                Log.e("shenyutian", "onLoadMoreRequested: " + count);
+//                if (count <= pageNum) {
+//                    getBaseList();
+//                    updateAdapter.setNewData(phoneBaseList);
+////                    updateAdapter.loadMoreComplete();
+////                    updateAdapter.loadMoreComplete(); //完全刷新布局
+////                    updateAdapter.loadMoreFail(); // 持续更新
+//                    updateAdapter.loadMoreEnd(); // 底部插入
+//                } else {
+////                    updateAdapter.addFooterView(); // 底部插入视图
+//                }
+//            }
+//        }, recyclerView);
         recyclerView.setAdapter(updateAdapter);
         swipeRefreshLayout.setOnRefreshListener(this);
         onRefresh();
@@ -108,7 +107,7 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
         getBaseList();
         Log.e("shenyutian", "onRefresh: " + count);
         updateAdapter.setNewData(phoneBaseList);
-        updateAdapter.loadMoreComplete();
+//        updateAdapter.loadMoreComplete();
         swipeRefreshLayout.setRefreshing(false);
     }
 
