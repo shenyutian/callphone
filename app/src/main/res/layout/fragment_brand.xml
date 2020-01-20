@@ -8,7 +8,7 @@
 
     <!--品牌布局-->
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="@dimen/barHeight"
+        android:layout_height="@dimen/bar_height"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -25,7 +25,7 @@
         android:id="@+id/rv_brand_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/barHeight"
+        android:layout_marginTop="@dimen/bar_height"
         app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

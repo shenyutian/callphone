@@ -33,7 +33,7 @@
                 <SearchView
                     android:id="@+id/sv_soc_search"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/titleHeight"
+                    android:layout_height="@dimen/title_height"
                     android:layout_marginEnd="32dp"
                     android:queryHint="搜索处理器"
                     android:background="@color/frame_background"
@@ -56,7 +56,7 @@
             <!--顶部功能按钮界面 = 狗皮膏药-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/titleHeight">
+                android:layout_height="@dimen/title_height">
 
                 <TextView
                     android:id="@+id/tv_soc_top_name"

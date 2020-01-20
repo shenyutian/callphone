@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_details_title_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_default"
+        android:paddingTop="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_default"
+        android:text="￥6399"
+        android:textSize="32sp"
+        android:textColor="@color/red"
+        />
+
+    <TextView
+        android:id="@+id/tv_details_title_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="华为Mate30 Pro（8GB/128GB/全网通/5G版/玻璃版）"
+        android:textSize="22sp"
+        android:textColor="@color/title_color"
+        android:paddingLeft="@dimen/padding_default"
+        android:paddingTop="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_default"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/tv_details_title_feature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="双4000万徕卡电影四摄，超曲面OLED环幕屏"
+        android:paddingLeft="@dimen/padding_default"
+        android:paddingTop="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_default"
+        />
+
+</LinearLayout>

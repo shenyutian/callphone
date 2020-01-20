@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bar_search"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/barHeight"
+        android:layout_height="@dimen/bar_height"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView

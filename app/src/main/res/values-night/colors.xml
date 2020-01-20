@@ -10,6 +10,9 @@
     <color name="frame_background">#282828</color>
     <!--选中状态的颜色-->
     <color name="select_underline">#FFFFF0</color>
+    <!--标题大白颜色-->
+    <color name="title_color">#ffffff</color>
+
     <!-- 白色 -->
     <color name="ivory">#FFFFF0</color>
     <!-- 象牙色 -->

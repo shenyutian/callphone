@@ -1,5 +1,6 @@
 package com.syt.cellphone.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -15,10 +16,10 @@ import com.syt.cellphone.R;
 
 /**
  * @author shenyutian
- * @data 2020-01-17 15:40
- * 功能 自定义标题栏 布局
+ * @data 2020-01-19 10:57
+ * 功能 自定义导航栏
  */
-public class CommonToolBar extends ConstraintLayout {
+public class SytToolBar extends ConstraintLayout {
 
     /**
      * isLeftBtnVisible     左边返回按钮是否显示
@@ -50,15 +51,20 @@ public class CommonToolBar extends ConstraintLayout {
 
     private int backgroundResId;
 
-    public CommonToolBar(Context context) {
+    /**
+     * --------------------控件列表-------------------
+     */
+    private TextView titleTv;
+
+    public SytToolBar(Context context) {
         this(context, null);
     }
 
-    public CommonToolBar(Context context, @Nullable AttributeSet attrs) {
+    public SytToolBar(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CommonToolBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SytToolBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(attrs);
     }
@@ -106,10 +112,11 @@ public class CommonToolBar extends ConstraintLayout {
          * 布局控件注册
          */
         View barLayoutView = View.inflate(getContext(), R.layout.layout_common_titlebar, null);
+
         Button leftBtn = barLayoutView.findViewById(R.id.toolbar_left_btn);
         TextView leftTv = barLayoutView.findViewById(R.id.toolbar_left_tv);
 
-        TextView titleTv = barLayoutView.findViewById(R.id.toolbar_title_tv);
+        titleTv = barLayoutView.findViewById(R.id.toolbar_title_tv);
         EditText contentTv = barLayoutView.findViewById(R.id.toolbar_content_et);
 
         Button rightBtn = barLayoutView.findViewById(R.id.toolbar_right_btn);
@@ -118,16 +125,40 @@ public class CommonToolBar extends ConstraintLayout {
         /**
          *  左边的控件属性设置
          */
-        leftBtn.setVisibility(isLeftBtnVisible == true ? VISIBLE : GONE);
-//        leftBtn.setBackgroundResource(leftResld != -1 ? leftResld : null);
+        if (isLeftBtnVisible) {
+            leftBtn.setVisibility(isLeftBtnVisible == true ? VISIBLE : GONE);
+            leftBtn.setBackgroundResource(leftResld != -1 ? leftResld : R.drawable.top_back);
+        }
         leftTv.setVisibility(isLeftTvVisible == true ? VISIBLE : GONE);
+        leftBtn.setOnClickListener(v -> {
+            // 如果当前 context 是 Activity . 就可以退出活动
+            if (getContext() instanceof Activity) {
+                ((Activity) getContext()).finish();
+            }
+        });
+        leftTv.setOnClickListener(v -> {
+            // 如果当前 context 是 Activity . 就可以退出活动
+            if (getContext() instanceof Activity) {
+                ((Activity) getContext()).finish();
+            }
+        });
 
+
+        /**
+         * 中间标题设置
+         */
         if (isTitleVisible) {
             titleTv.setVisibility(VISIBLE);
             titleTv.setText(titleText == null ? "标题" : titleText);
         }
-        titleTv.setVisibility(isTitleVisible == true ? VISIBLE : GONE);
-        contentTv.setVisibility(isContentVisible == true ? VISIBLE : GONE);
+        if (isContentVisible) {
+            contentTv.setVisibility(VISIBLE);
+            contentTv.setHint(contentText);
+        }
+
+
+//        titleTv.setVisibility(isTitleVisible == true ? VISIBLE : GONE);
+//        contentTv.setVisibility(isContentVisible == true ? VISIBLE : GONE);
 
 //        rightBtn.setVisibility(isRightBtnVisible == true ? VISIBLE : GONE);
 //        rightBtn.setBackgroundResource(rightResId != -1 ? rightResId : null);
@@ -140,5 +171,8 @@ public class CommonToolBar extends ConstraintLayout {
         addView(barLayoutView, 0);
     }
 
-
+    public void setTitleText(String titleText) {
+        this.titleText = titleText;
+        titleTv.setText(titleText);
+    }
 }

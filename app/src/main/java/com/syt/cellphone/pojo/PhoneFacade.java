@@ -1,6 +1,15 @@
 package com.syt.cellphone.pojo;
 
 public class PhoneFacade {
+
+    /**
+     * facadeId : 1293901
+     * facadeSize : 158.1x73.1x8.8mm
+     * facadeWeight : 198g
+     * facadeTexture : 玻璃机身查看外观图
+     * facadeOther :
+     */
+
     private Integer facadeId;
 
     private String facadeSize;

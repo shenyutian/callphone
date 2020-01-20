@@ -1,6 +1,28 @@
 package com.syt.cellphone.pojo;
 
+/**
+ * @author syt
+ */
 public class PhoneShow {
+
+    /**
+     * showId : 1293901
+     * showTexture : OLED
+     * showSize : 6.53英寸需双手打字
+     * showResolratio : 2400x1176像素1080P高清（击败90.58%手机）
+     * showArrange :
+     * showPpi :
+     * showAod :
+     * showColorcontrol :
+     * showMaxluminance :
+     * showStimulateluminance :
+     * showColortem :
+     * showSrgb :
+     * showP3 :
+     * showQuality :
+     * showOther : 1670万色，DCI-P3广色域，最多支持10点触控
+     */
+
     private Integer showId;
 
     private String showTexture;

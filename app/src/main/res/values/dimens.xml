@@ -10,9 +10,17 @@
     <dimen name="appbar_padding">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <!--标题字体大小-->
-    <dimen name="titleSize">20sp</dimen>
+    <dimen name="title_size">20sp</dimen>
     <!--顶部牛皮糖高度-->
-    <dimen name="titleHeight">40dp</dimen>
+    <dimen name="title_height">40dp</dimen>
     <!--通知栏高度-->
-    <dimen name="barHeight">56dp</dimen>
+    <dimen name="bar_height">56dp</dimen>
+    <!--搜索框高度-->
+    <dimen name="search_height">40dp</dimen>
+    <!--商品详情的小标题文字大小-->
+    <dimen name="item_head_text">26sp</dimen>
+    <!--所有内边距-->
+    <dimen name="padding_default">16dp</dimen>
+    <!--Rv下边界-->
+    <dimen name="rv_bottom">16dp</dimen>
 </resources>

@@ -17,7 +17,7 @@
         android:paddingRight="24dp"
         android:text="标题"
         android:textStyle="bold"
-        android:textSize="@dimen/titleSize"
+        android:textSize="@dimen/title_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

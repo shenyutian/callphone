@@ -1,6 +1,7 @@
 package com.syt.cellphone.net;
 
 import com.syt.cellphone.pojo.PhoneBasePageList;
+import com.syt.cellphone.pojo.PhoneDetails;
 import com.syt.cellphone.pojo.PhoneRecommend;
 import com.syt.cellphone.pojo.PhoneTrademark;
 import com.syt.cellphone.pojo.Soc;
@@ -66,4 +67,8 @@ public interface ApiServer {
      */
     @GET("trademark/all")
     Observable<List<PhoneTrademark>> getAllTrademark();
+
+
+    @GET("PhoneAllById/{id}")
+    Observable<PhoneDetails> getPhoneDetailsById(@Path("id") int phoneId);
 }

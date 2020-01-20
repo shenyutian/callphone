@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--评语-->
+    <TextView
+        android:id="@+id/tv_item_estimate_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="屏幕从20的2K屏幕降到了高清"
+        android:padding="@dimen/padding_default"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_default">
+
+        <!--评分-->
+        <RatingBar
+            android:id="@+id/rb_item_estimate_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:stepSize="10"
+            android:max="10"
+            android:numStars="5"
+            />
+
+        <!--评价时间-->
+        <TextClock
+            android:id="@+id/tc_item_estimate_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
