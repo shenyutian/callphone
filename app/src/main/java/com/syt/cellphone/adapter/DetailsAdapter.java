@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.syt.cellphone.R;
 import com.syt.cellphone.pojo.Estimate;
 import com.syt.cellphone.pojo.PhoneBase;
+import com.syt.cellphone.util.TimeUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -240,7 +241,8 @@ public class DetailsAdapter extends BaseNodeAdapter {
         @Override
         public void convert(@NotNull BaseViewHolder baseViewHolder, @org.jetbrains.annotations.Nullable BaseNode baseNode) {
             EstimateNode estimate = (EstimateNode) baseNode;
-            baseViewHolder.setText(R.id.tv_item_estimate_content, estimate.getEstimateGrade());
+            baseViewHolder.setText(R.id.tv_item_estimate_content, estimate.getEstimateComment());
+            baseViewHolder.setText(R.id.tv_item_estimate_time, estimate.getEstimateTime());
         }
     }
 
@@ -255,12 +257,12 @@ public class DetailsAdapter extends BaseNodeAdapter {
             this.estimate = estimate;
         }
 
-        public String getEstimateGrade() {
-            return estimate.getEstimateGrade();
+        public String getEstimateComment() {
+            return estimate.getEstimateComment();
         }
 
-        public int getEstimateLike() {
-            return estimate.getEstimateLike();
+        public String getEstimateTime() {
+            return TimeUtil.getEstimateTime(estimate.getEstimateTime());
         }
 
         @org.jetbrains.annotations.Nullable

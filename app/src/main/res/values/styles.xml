@@ -55,4 +55,38 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <!--弹窗动画-->
+    <style name="main_menu_animstyle">
+        <item name="android:windowEnterAnimation">@anim/nav_default_pop_exit_anim</item>
+        <item name="android:windowExitAnimation">@anim/anim_exit_from_bottom</item>
+    </style>
+
+    <!--输入框美化-->
+    <style name="InputBoxStyle">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:layout_marginRight">18dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <!-- 中间弹出框 需要让这个Dialog点击空白部分的activity时消失，背景变暗等功能，就加上这个style-->
+    <style name="dialog_center" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- 去黑边 -->
+        <item name="android:windowFrame">@null</item>
+        <item name="android:screenOrientation">portrait</item>
+        <!-- 设置是否可滑动 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 背景 -->
+        <!-- 窗口背景 @color/touming的值为：#00000000 ， style中不能直接引用16进制，感谢评论区的老铁提醒-->
+
+        <item name="android:windowBackground">@color/title_color</item>
+
+        <!-- 是否变暗 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 点击空白部分activity不消失 -->
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+    
 </resources>

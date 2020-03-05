@@ -1,23 +1,33 @@
 package com.syt.cellphone.ui.phone.details;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
+import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.entity.node.BaseNode;
-import com.gyf.immersionbar.ImmersionBar;
+import com.orhanobut.logger.Logger;
 import com.syt.cellphone.R;
 import com.syt.cellphone.adapter.DetailsAdapter;
 import com.syt.cellphone.base.BaseActivity;
+import com.syt.cellphone.pojo.Estimate;
+import com.syt.cellphone.pojo.PhoneBattery;
+import com.syt.cellphone.pojo.PhoneCamera;
 import com.syt.cellphone.pojo.PhoneConfig;
 import com.syt.cellphone.pojo.PhoneFacade;
 import com.syt.cellphone.pojo.PhoneShow;
 import com.syt.cellphone.pojo.PhotoBean;
+import com.syt.cellphone.dialog.InputTextMsgDialog;
 import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.ToastUtil;
 import com.syt.cellphone.widget.SytToolBar;
@@ -27,16 +37,28 @@ import com.youth.banner.loader.ImageLoader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import butterknife.BindView;
+import jp.wasabeef.blurry.Blurry;
 
+/**
+ * 手机详情
+ * @author syt
+ */
 public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> implements PhoneDetailsView {
 
+    /**
+     * ------------  注入的布局  -------------
+     * clPhoneDetails  底部的提示栏
+     */
     @BindView(R.id.rv_details_data)
     RecyclerView rvDetailsData;
     @BindView(R.id.bar_details_top)
     SytToolBar barDetailsTop;
+    @BindView(R.id.cl_phone_details_bottom)
+    ConstraintLayout clPhoneDetails;
 
     private DetailsAdapter detailsAdapter;
 
@@ -52,12 +74,39 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
     @Override
     protected void initData() {
-        // 沉浸式布局
-        ImmersionBar.with(this).init();
+        Logger.d("\t设备名 " + android.os.Build.DEVICE + "\t设备型号 " + Build.MODEL + "\t设备厂家 " + Build.BRAND);
+        // 沉浸式布局 todo 对异形屏有影响，暂时关闭
+//        ImmersionBar.with(this).init();
         // 列表
         initRv();
         // 请求数据
-        presenter.handlePhoneDetails(1293901);
+        int phoneId = getIntent().getIntExtra("phoneId", 0);
+        presenter.handlePhoneDetails(phoneId);
+
+        // 弹窗 = 填写评价框
+//            dialogEstimate();
+        InputTextMsgDialog inputTextMsgDialog = new InputTextMsgDialog(context, R.style.dialog_center);
+        inputTextMsgDialog.setmOnTextSendListener(msg -> {
+            // 点击发送按钮后，回调这个方法，msg为输入的值
+            ToastUtil.makeText(msg);
+            // todo 获取设备型号 需要进行撞 数据库验证手机型号 执行提交操作
+
+            Estimate estimate = new Estimate();
+            estimate.setPhoneId(phoneId);
+            estimate.setEstimateComment(msg);
+
+            estimate.setEstimateTime(System.currentTimeMillis());
+            presenter.handUnloadEstimate(estimate);
+        });
+
+        // 设置下面提示视图的点击事件
+        clPhoneDetails.setOnClickListener( v -> {
+            // 弹窗 = 填写评价框
+//            dialogEstimate();
+            inputTextMsgDialog.show();
+            // 模糊当前的所有视图
+//            Blurry.with(context).radius(10).sampling(2).onto((ViewGroup) getWindow().getDecorView());
+        });
     }
 
     private void initRv() {
@@ -79,10 +128,18 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
             drawMaxImg(presenter.getData().getPhoto().get(0));
         } else {
             // 显示无详情图
+            drawNoImg();
         }
-        // 显示基础数据 名称 加卖点
+        // 显示基础数据 名称 加卖点 todo 没有数据的时候，需要处理
         DetailsAdapter.TitleNode titleNode = new DetailsAdapter.TitleNode(presenter.getData().getBase());
         detailsAdapter.addData(titleNode);
+
+        // 配置信息
+        DetailsAdapter.RootNode config = handleConfig(presenter.getData().getConfig());
+        if (config != null) {
+            detailsAdapter.addData(config);
+        }
+
         // 屏幕数据 参数列表  二元列表
         DetailsAdapter.RootNode showNode = handleShow(presenter.getData().getShow());
         if (showNode != null) {
@@ -94,20 +151,26 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
             detailsAdapter.addData(facade);
         }
 
-        // 硬件配置信息
-        DetailsAdapter.RootNode config = handleConfig(presenter.getData().getConfig());
-        if (config != null) {
-            detailsAdapter.addData(config);
+        // 相机参数
+        DetailsAdapter.RootNode camera1 = handleCamera(presenter.getData().getCamera());
+        if (camera1 != null) {
+            detailsAdapter.addData(camera1);
         }
 
         // 续航能力 = 电池 + 充电
-
+        DetailsAdapter.RootNode battery = handleBattery(presenter.getData().getBattery());
+        if (battery != null) {
+            detailsAdapter.addData(battery);
+        }
 
         // 相机参数
+        DetailsAdapter.RootNode camera = handleCamera(presenter.getData().getCamera());
+        if (camera != null) {
+            detailsAdapter.addData(camera);
+        }
 
-        // 外观信息
-
-        // 用户评价
+        // 用户评价列表
+        handleEstimate(presenter.getData().getEstimate());
 
     }
 
@@ -155,8 +218,12 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
             banner.setBannerTitles(titles);
             banner.setImages(imgurls);
         }
-        banner.setOnBannerListener(position ->
-                ToastUtil.makeText("点击了 " + titles.get(position))
+        banner.setOnBannerListener(position -> {
+                    ToastUtil.makeText("点击了 " + titles.get(position));
+                    imgMaxDialog(photoList.get(position).getPhotoMax());
+                    // 模糊当前的所有视图
+//                    Blurry.with(context).radius(10).sampling(2).onto((ViewGroup) getWindow().getDecorView());
+                }
         );
         //设置轮播图加载方式
         banner.setImageLoader(new ImageLoader() {
@@ -183,6 +250,24 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
                 context.getResources().getDisplayMetrics().heightPixels/2));
         // 加载图片
         Glide.with(getApplicationContext()).load("http://" + phone.getPhotoMin()).into(img);
+        detailsAdapter.addHeaderView(img);
+        // 点击查看大图
+        img.setOnClickListener( v ->
+            imgMaxDialog(phone.getPhotoMax())
+        );
+    }
+
+    /**
+     * 无详情图的情况，绘制一个无图。
+     */
+    private void drawNoImg() {
+        ImageView img = new ImageView(getApplicationContext());
+        // 设置图片宽高
+        img.setLayoutParams(new ViewGroup.LayoutParams(
+                context.getResources().getDisplayMetrics().widthPixels,
+                context.getResources().getDisplayMetrics().heightPixels/2));
+        // 加载图片
+        Glide.with(getApplicationContext()).load("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=30305038,711507037&fm=26&gp=0.jpg").into(img);
         detailsAdapter.addHeaderView(img);
     }
 
@@ -297,7 +382,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         if (childNodeList.size() < 1) {
             return null;
         }
-        DetailsAdapter.RootNode facadeNode = new DetailsAdapter.RootNode(childNodeList, "硬件配置");
+        DetailsAdapter.RootNode facadeNode = new DetailsAdapter.RootNode(childNodeList, "外观信息");
         return facadeNode;
     }
 
@@ -331,7 +416,208 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         if (childNodeList.size() < 1) {
             return null;
         }
-        DetailsAdapter.RootNode showNode = new DetailsAdapter.RootNode(childNodeList, "配置");
+        DetailsAdapter.RootNode showNode = new DetailsAdapter.RootNode(childNodeList, "硬件配置");
         return showNode;
+    }
+
+    /**
+     * 处理电池充电配置信息参数
+     * @param battery 电池充电数据
+     * @return 电池充电的主节点
+     */
+    private DetailsAdapter.RootNode handleBattery(PhoneBattery battery) {
+
+        List<BaseNode> childNOdeList = new LinkedList<>();
+
+        // 电池容量
+        if (battery.getBatteryCapacity() != null && !battery.getBatteryCapacity().isEmpty()) {
+            childNOdeList.add(new DetailsAdapter.ChildNode("电池容量", battery.getBatteryCapacity()));
+        }
+
+        // 快充协议
+        if (battery.getBatteryScheme() != null && !battery.getBatteryScheme().isEmpty()) {
+            childNOdeList.add(new DetailsAdapter.ChildNode("快充协议", battery.getBatteryScheme()));
+        }
+
+        // 原装充电器
+        if (battery.getBatteryCablecharger() != null && !battery.getBatteryCablecharger().isEmpty()) {
+            childNOdeList.add(new DetailsAdapter.ChildNode("原装充电器", battery.getBatteryCablecharger()));
+        }
+
+        // 无线充电
+        if (battery.getBatteryWirelesscharger() != null && !battery.getBatteryWirelesscharger().isEmpty()) {
+            childNOdeList.add(new DetailsAdapter.ChildNode("无线充电", battery.getBatteryWirelesscharger()));
+        }
+
+        // 有线充满时间
+        if (battery.getBatteryCabletime() != null && !battery.getBatteryCabletime().isEmpty()) {
+            childNOdeList.add(new DetailsAdapter.ChildNode("有线充满时间", battery.getBatteryCabletime()));
+        }
+
+        // 无线充满时间
+        if (battery.getBatteryWirelesstime() != null && !battery.getBatteryWirelesstime().isEmpty()) {
+            childNOdeList.add(new DetailsAdapter.ChildNode("无线充满时间", battery.getBatteryWirelesstime()));
+        }
+
+        // 续航测试
+        if (battery.getBatteryEndurance() != null && !battery.getBatteryEndurance().isEmpty()) {
+            childNOdeList.add(new DetailsAdapter.ChildNode("续航能力", battery.getBatteryEndurance()));
+        }
+
+        // 其他特性
+        if (battery.getBatteryOther() != null && !battery.getBatteryOther().isEmpty()) {
+            childNOdeList.add(new DetailsAdapter.ChildNode("其它特性", battery.getBatteryOther()));
+        }
+
+        DetailsAdapter.RootNode batteryNode = new DetailsAdapter.RootNode(childNOdeList, "电池充电参数");
+        return batteryNode;
+    }
+
+    /**
+     * 处理相机配置参数
+     * @param camera 相机参数
+     * @return 相机参数的主节点
+     */
+    private DetailsAdapter.RootNode handleCamera(PhoneCamera camera) {
+        List<BaseNode> childNodeList = new LinkedList<>();
+
+        // 相机数量
+        if (camera.getCameraAmount() != null && !camera.getCameraAmount().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("相机数量", camera.getCameraAmount()));
+        }
+
+        // 感光元器件
+        if (camera.getCameraCmos() != null && !camera.getCameraCmos().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("感光元件", camera.getCameraCmos()));
+        }
+
+        // 像素
+        if (camera.getCameraPixel() != null && !camera.getCameraPixel().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("像素", camera.getCameraCmos()));
+        }
+
+        // 等效焦段
+        if (camera.getCameraFocallength() != null && !camera.getCameraFocallength().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("等效焦段", camera.getCameraFocallength()));
+        }
+
+        // 光圈系数
+        if (camera.getCameraAperture() != null && !camera.getCameraAperture().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("光圈系数", camera.getCameraAperture()));
+        }
+
+        // 光学防抖
+        if (camera.getCameraOis() != null && !camera.getCameraOis().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("光学防抖", camera.getCameraOis()));
+        }
+
+        // 对焦方式
+        if (camera.getCameraFosusing() != null && !camera.getCameraFosusing().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("对焦方式", camera.getCameraFosusing()));
+        }
+
+        // 拍照功能
+        if (camera.getCameraGraph() != null && !camera.getCameraGraph().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("对焦方式", camera.getCameraGraph()));
+        }
+
+        // 视频规格
+        if (camera.getCameraVideo() != null && !camera.getCameraVideo().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("视频规格", camera.getCameraVideo()));
+        }
+
+        // 视频防抖
+        if (camera.getCameraSteadyvideo() != null && !camera.getCameraSteadyvideo().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("视频防抖", camera.getCameraSteadyvideo()));
+        }
+
+        // 慢动作视频
+        if (camera.getCameraSlowmotion() != null && !camera.getCameraSlowmotion().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("慢动作视频", camera.getCameraSteadyvideo()));
+        }
+
+        // 备注
+        if (camera.getCameraRemarks() != null && !camera.getCameraRemarks().isEmpty()) {
+            childNodeList.add(new DetailsAdapter.ChildNode("备注", camera.getCameraRemarks()));
+        }
+
+        // 如果没有数据就退出
+        if (childNodeList.size() < 1) {
+            return null;
+        }
+        DetailsAdapter.RootNode showNode = new DetailsAdapter.RootNode(childNodeList, "相机参数");
+        return showNode;
+    }
+
+    /**
+     * 处理评论列表
+     * @param estimates 评论数据
+     */
+    private void handleEstimate(List<Estimate> estimates) {
+        DetailsAdapter.EstimateNode estimateNode;
+        for (Estimate estimate : estimates) {
+            estimateNode = new DetailsAdapter.EstimateNode(estimate);
+            detailsAdapter.addData(estimateNode);
+        }
+    }
+
+    /**
+     * 点击大图 -> 大图弹窗
+     * @param imgMax
+     */
+    private void imgMaxDialog(final String imgMax) {
+        // 弹窗创建
+        final AlertDialog toastDialog = new AlertDialog.Builder(context, R.style.DialogStyle).create();
+        // 弹窗显示
+        toastDialog.show();
+        // 获取当前窗口
+        Window window = toastDialog.getWindow();
+        // 居中
+        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+        // 布局显示
+        WindowManager.LayoutParams lp = window.getAttributes();
+        // 宽高
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(lp);
+        window.setContentView(R.layout.dialog_max_img);
+
+        // 绘制大图
+        ImageView maxImg = window.findViewById(R.id.iv_details_max_img);
+        Glide.with(this).load("http://" + imgMax).into(maxImg);
+        LogUtil.d("图片地址  http://" + imgMax);
+
+        // 点击消失事件 getWindow().getDecorView()获得顶级视图
+        maxImg.setOnClickListener( v -> {
+            LogUtil.d("图片点击事件触发");
+            toastDialog.dismiss();
+        });
+
+    }
+
+
+
+    private void dialogEstimate() {
+        // 弹窗创建
+        final AlertDialog toastDialog = new AlertDialog.Builder(context, R.style.DialogStyle).create();
+        // 弹窗显示
+        toastDialog.show();
+        // 获取当前窗口
+        Window window = toastDialog.getWindow();
+        // 居中
+        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+        // 布局显示
+        WindowManager.LayoutParams lp = window.getAttributes();
+        // 宽高
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+        window.setContentView(R.layout.dialog_estimate);
+
+
+        // 清除模糊
+        toastDialog.setOnCancelListener((DialogInterface p) -> {
+            Blurry.delete((ViewGroup) getWindow().getDecorView());
+        });
     }
 }

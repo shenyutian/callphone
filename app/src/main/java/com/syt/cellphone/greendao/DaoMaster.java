@@ -21,20 +21,20 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        SocDao.createTable(db, ifNotExists);
-        PhoneBaseDao.createTable(db, ifNotExists);
         PhoneRecommendDao.createTable(db, ifNotExists);
-        PhoneTrademarkDao.createTable(db, ifNotExists);
         SearchHistoryDao.createTable(db, ifNotExists);
+        PhoneBaseDao.createTable(db, ifNotExists);
+        PhoneTrademarkDao.createTable(db, ifNotExists);
+        SocDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        SocDao.dropTable(db, ifExists);
-        PhoneBaseDao.dropTable(db, ifExists);
         PhoneRecommendDao.dropTable(db, ifExists);
-        PhoneTrademarkDao.dropTable(db, ifExists);
         SearchHistoryDao.dropTable(db, ifExists);
+        PhoneBaseDao.dropTable(db, ifExists);
+        PhoneTrademarkDao.dropTable(db, ifExists);
+        SocDao.dropTable(db, ifExists);
     }
 
     /**
@@ -53,11 +53,11 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(SocDao.class);
-        registerDaoClass(PhoneBaseDao.class);
         registerDaoClass(PhoneRecommendDao.class);
-        registerDaoClass(PhoneTrademarkDao.class);
         registerDaoClass(SearchHistoryDao.class);
+        registerDaoClass(PhoneBaseDao.class);
+        registerDaoClass(PhoneTrademarkDao.class);
+        registerDaoClass(SocDao.class);
     }
 
     public DaoSession newSession() {

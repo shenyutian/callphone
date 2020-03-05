@@ -1,8 +1,17 @@
 package com.syt.cellphone.ui.phone.details;
 
+import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 import com.syt.cellphone.base.BasePresenter;
 import com.syt.cellphone.net.BaseObserver;
+import com.syt.cellphone.pojo.Estimate;
 import com.syt.cellphone.pojo.PhoneDetails;
+import com.syt.cellphone.util.LogUtil;
+import com.syt.cellphone.util.ToastUtil;
+
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * @author shenyutian
@@ -22,18 +31,47 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
     }
 
     public void handlePhoneDetails(int phoneId) {
-        addDisposable(apiServer.getPhoneDetailsById(phoneId),
-            new BaseObserver<PhoneDetails>(baseView) {
-                @Override
-                public void onSuccess(PhoneDetails o) {
-                    data = o;
-                    baseView.resetPhoneDetails();
-                }
+        if (phoneId == 0) {
+            LogUtil.e("暂无设备");
+            // 提示暂无设备
 
-                @Override
-                public void onError(String msg) {
+        } else {
+            addDisposable(apiServer.getPhoneDetailsById(phoneId),
+                    new BaseObserver<PhoneDetails>(baseView) {
+                        @Override
+                        public void onSuccess(PhoneDetails o) {
+                            data = o;
+                            baseView.resetPhoneDetails();
+                        }
 
-                }
-            }, 0);
+                        @Override
+                        public void onError(String msg) {
+
+                        }
+                    }, 0);
+        }
+    }
+
+    public void handUnloadEstimate(Estimate estimate) {
+        if (estimate == null) {
+            Logger.e("评价不能为空");
+            return;
+        }
+        // 还需要一个请求头，来发送token。
+        RequestBody body = FormBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(estimate));
+
+        addDisposable(apiServer.setEstimate(body), new BaseObserver<String>(baseView) {
+
+            @Override
+            public void onSuccess(String o) {
+                ToastUtil.makeText(o);
+                // todo 需要刷新底部评价列表
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        }, 0);
     }
 }

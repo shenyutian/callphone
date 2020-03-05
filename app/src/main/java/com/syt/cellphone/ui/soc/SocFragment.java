@@ -19,7 +19,6 @@ import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.pojo.Soc;
-import com.syt.cellphone.util.ToastUtil;
 
 import java.util.Objects;
 
@@ -104,7 +103,7 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
         // 点击事件
         socAdapter.setOnItemClickListener((adapter, view, position) -> {
             Soc soc = socAdapter.getItem(position);
-            ToastUtil.makeText("点击编号 " + soc.getSocId() + ",名称: " + soc.getSocName());
+//            ToastUtil.makeText("点击编号 " + soc.getSocId() + ",名称: " + soc.getSocName());
             dialogSoc(soc);
             Blurry.with(context).radius(10).sampling(2).onto(dlSocMsg);
         });

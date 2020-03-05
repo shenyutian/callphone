@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseActivity;
@@ -35,7 +36,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-
+/**
+ * 最开始的activity,主页就是它
+ * @author syt
+ */
 public class SytMainActivity extends BaseActivity<SytMainPresenter> implements SytMainView, View.OnLongClickListener {
 
     @BindView(R.id.frameLayout_main_content)
@@ -123,7 +127,7 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
         super.onCreate(savedInstanceState);
         // 内存重启时调用 取出内存中保存的fragment
         if (savedInstanceState != null) {
-            currentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT, currentIndex);
+             currentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT, currentIndex);
             Intent intent = new Intent();
             intent.putExtra("param", currentIndex);
             presenter.switchMenus(intent);
@@ -212,16 +216,18 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
      */
     private void setFragment(Fragment fragment) {
 
-        // 判定是否被添加过了
+        // 判定是否被添加过了  setTransition 添加动画
         if (!fragments.get(currentIndex-1).isAdded()) {
             getSupportFragmentManager()
                     .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .hide(currentFragment)
                     .add(R.id.frameLayout_main_content, fragment)
                     .commit();
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .hide(currentFragment)
                     .show(fragment)
                     .commit();
@@ -251,6 +257,7 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
      */
     @Override
     public void showFragment(int menuNum) {
+
         ToastUtil.makeText("menu: " + menuNum);
         switch (menuNum) {
             case 1:

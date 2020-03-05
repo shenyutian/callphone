@@ -23,4 +23,12 @@
     <dimen name="padding_default">16dp</dimen>
     <!--Rv下边界-->
     <dimen name="rv_bottom">16dp</dimen>
+    <!--底部宽度-->
+    <dimen name="activity_bottom">56dp</dimen>
+    <!--评价字体大小-->
+    <dimen name="size_14">14sp</dimen>
+    <!--1个像素点-->
+    <dimen name="line">1dp</dimen>
+    <!--8dp-->
+    <dimen name="size_8">8dp</dimen>
 </resources>

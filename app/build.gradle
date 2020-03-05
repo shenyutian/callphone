@@ -97,6 +97,10 @@ dependencies {
     // 开源的状态栏 基础依赖包，必须要依赖 fragment快速实现（可选）
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
     implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
+    // 图片缩放库 photoview
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    //日志打印工具
+    implementation 'com.orhanobut:logger:2.2.0'
 }
 
 greendao {

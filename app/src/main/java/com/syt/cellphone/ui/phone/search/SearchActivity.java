@@ -1,6 +1,7 @@
 package com.syt.cellphone.ui.phone.search;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.syt.cellphone.R;
 import com.syt.cellphone.adapter.PhoneBaseAdapter;
 import com.syt.cellphone.adapter.SearchAdapter;
 import com.syt.cellphone.base.BaseActivity;
+import com.syt.cellphone.ui.phone.details.PhoneDetailsActivity;
 import com.syt.cellphone.util.ToastUtil;
 
 import java.util.Objects;
@@ -143,6 +145,11 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         searchResultAdapter.setOnItemClickListener(
                 (adapter, view, position) -> {
                     ToastUtil.makeText(Integer.toString(position));
+                    // 进行跳转
+                    Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+                    // 设备id
+                    startPhoneDetails.putExtra("phoneId", presenter.getSearchResult().get(position).getBaseId());
+                    context.startActivity(startPhoneDetails);
                 }
         );
         // 执行适配器

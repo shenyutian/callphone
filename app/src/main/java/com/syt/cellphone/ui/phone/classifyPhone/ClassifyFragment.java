@@ -1,6 +1,7 @@
 package com.syt.cellphone.ui.phone.classifyPhone;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +23,9 @@ import com.syt.cellphone.adapter.PhoneBaseAdapter;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.pojo.PhoneRecommend;
+import com.syt.cellphone.ui.phone.details.PhoneDetailsActivity;
 import com.syt.cellphone.util.ToastUtil;
-import com.youth.banner.Banner;
+import com.syt.cellphone.widget.MyBanner;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.LinkedList;
@@ -35,7 +37,7 @@ import butterknife.BindView;
 /**
  * @author shenyutian
  * @data 2019-12-24 14:52
- * 功能 分类的fragment
+ * 功能 分类的fragment 就是开始的第一个界面主页
  */
 public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements ClassifyView {
 
@@ -43,7 +45,7 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
      * --------------黄油刀的布局id注册------------
      */
     @BindView(R.id.rv_phone_classify_list)
-    RecyclerView        rvPhoneClassifyList;
+    RecyclerView rvPhoneClassifyList;
     @BindView(R.id.srl_phone_classify_handle)
     SwipeRefreshLayout  srlPhoneClassifyHandle;
     @BindView(R.id.tv_phone_bottom)
@@ -114,8 +116,13 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
                 () -> fpresenter.getNetPhoneList(true));
         // rv点击事件
         classifyAdapter.setOnItemClickListener(
-                (adapter, view, position) ->
-                    ToastUtil.makeText(fpresenter.getPhoneBaseList().get(position).getBaseName())
+                (adapter, view, position) -> {
+                        ToastUtil.makeText(fpresenter.getPhoneBaseList().get(position).getBaseName());
+                        // 进行跳转
+                        Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+                        startPhoneDetails.putExtra("phoneId", fpresenter.getPhoneBaseList().get(position).getBaseId());
+                        context.startActivity(startPhoneDetails);
+                    }
                 );
         // 执行适配器
         rvPhoneClassifyList.setAdapter(classifyAdapter);
@@ -186,7 +193,8 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         List<String> titles;
         List<String> imgurls;
 
-        Banner banner = new Banner(context);
+        MyBanner banner = new MyBanner(context);
+//        Banner banner = new Banner(context);
         // 设置轮播图的宽高
         banner.setLayoutParams(new ViewGroup.LayoutParams(context.getResources().getDisplayMetrics().widthPixels, 350));
         // 如果api高，就用steam。不行就用老方法
@@ -207,8 +215,15 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
             banner.setImages(imgurls);
         }
         banner.setOnBannerListener(position ->
-            ToastUtil.makeText("点击了 " + titles.get(position))
+                {
+                    ToastUtil.makeText("点击了 " + titles.get(position));
+                    // 进行跳转
+                    Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+                    startPhoneDetails.putExtra("phoneId", Integer.parseInt(titles.get(position)));
+                    context.startActivity(startPhoneDetails);
+                }
         );
+
         //设置轮播图加载方式
         banner.setImageLoader(new ImageLoader() {
             @Override
@@ -217,5 +232,6 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
             }
         }).start();
         classifyAdapter.addHeaderView(banner);
+
     }
 }

@@ -10,7 +10,10 @@ import com.syt.cellphone.pojo.SocList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -68,7 +71,20 @@ public interface ApiServer {
     @GET("trademark/all")
     Observable<List<PhoneTrademark>> getAllTrademark();
 
-
+    /**
+     * 查询一个设备的所有信息
+     * @param phoneId 设备id
+     * @return 设备信息大全
+     */
     @GET("PhoneAllById/{id}")
     Observable<PhoneDetails> getPhoneDetailsById(@Path("id") int phoneId);
+
+    /**
+     * 上传设备评价
+     * @param body 请求体
+     * @return 请求结果
+     */
+    @POST("estimate/add")
+//    @Headers("token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NjYifQ.e8UKu1a_kp2AKK11RRPW2XdGjKwmcaoJxwyfLSnZPO4")
+    Observable<String> setEstimate(@Body RequestBody body);
 }
