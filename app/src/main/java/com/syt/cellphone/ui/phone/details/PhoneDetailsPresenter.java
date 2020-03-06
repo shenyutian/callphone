@@ -65,7 +65,8 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
             @Override
             public void onSuccess(String o) {
                 ToastUtil.makeText(o);
-                // todo 需要刷新底部评价列表
+                // 重新请求，刷新整个布局
+                handlePhoneDetails(estimate.getPhoneId());
             }
 
             @Override

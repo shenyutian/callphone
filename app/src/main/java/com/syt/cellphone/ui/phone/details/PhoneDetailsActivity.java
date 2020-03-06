@@ -118,6 +118,9 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
     @Override
     public void resetPhoneDetails() {
+
+
+
         LogUtil.d(presenter.getData().getBase().getBaseName());
         // 判定图集是否大于1
         if (presenter.getData().getPhoto().size() > 1) {
