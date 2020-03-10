@@ -9,6 +9,13 @@ import com.syt.cellphone.base.BaseView;
  */
 public interface PhoneDetailsView extends BaseView {
 
+    /**
+     * 载入全部视图
+     */
     void resetPhoneDetails();
 
+    /**
+     * 添加界面
+     */
+    void refresh();
 }

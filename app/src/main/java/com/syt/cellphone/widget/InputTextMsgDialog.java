@@ -1,4 +1,4 @@
-package com.syt.cellphone.dialog;
+package com.syt.cellphone.widget;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,7 +22,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatDialog;
 
 import com.syt.cellphone.R;
-import com.syt.cellphone.widget.OnMultClickListener;
 
 /**
  * @author shenyutian

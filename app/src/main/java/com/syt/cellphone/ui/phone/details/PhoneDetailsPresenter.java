@@ -64,14 +64,18 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
 
             @Override
             public void onSuccess(String o) {
-                ToastUtil.makeText(o);
+//                ToastUtil.makeText(o);
                 // 重新请求，刷新整个布局
-                handlePhoneDetails(estimate.getPhoneId());
+                data = null;
+                baseView.refresh();
             }
 
             @Override
             public void onError(String msg) {
-
+                ToastUtil.makeText(msg);
+                // 重新请求，刷新整个布局
+                data = null;
+                baseView.refresh();
             }
         }, 0);
     }

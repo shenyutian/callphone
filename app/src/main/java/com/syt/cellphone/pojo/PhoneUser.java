@@ -10,7 +10,11 @@ public class PhoneUser {
 
     private String userName;
 
+    private String userPass;
+
     private String token;
+
+    private String Msg;
 
     public Integer getUserId() {
         return userId;
@@ -28,11 +32,27 @@ public class PhoneUser {
         this.userName = userName;
     }
 
+    public String getUserPass() {
+        return userPass;
+    }
+
+    public void setUserPass(String userPass) {
+        this.userPass = userPass;
+    }
+
     public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getMsg() {
+        return Msg;
+    }
+
+    public void setMsg(String msg) {
+        Msg = msg;
     }
 }

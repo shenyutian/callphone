@@ -1,6 +1,11 @@
 package com.syt.cellphone.ui.setting;
 
+import android.widget.Toast;
+
 import com.syt.cellphone.base.BasePresenter;
+import com.syt.cellphone.net.BaseObserver;
+import com.syt.cellphone.pojo.PhoneUser;
+import com.syt.cellphone.util.SharedConfigUtil;
 
 /**
  * @author：syt Date: 2019-12-09
@@ -13,5 +18,24 @@ public class SettingPresenter extends BasePresenter<SettingView> {
         super(baseView);
     }
 
+    /**
+     * 处理登录逻辑
+     * @param user 用户登录数据
+     */
+    public void handleUserLogin(PhoneUser user) {
+        addDisposable(apiServer.setUserLogin(user), new BaseObserver<PhoneUser>(baseView) {
+            @Override
+            public void onSuccess(PhoneUser o) {
+                if ("登录成功".equals(o.getMsg())) {
+                    SharedConfigUtil.saveToken(o.getToken());
+                    baseView.refresh();
+                }
+            }
 
+            @Override
+            public void onError(String msg) {
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            }
+        }, 0);
+    }
 }

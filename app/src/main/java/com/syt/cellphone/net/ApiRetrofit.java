@@ -1,9 +1,15 @@
 package com.syt.cellphone.net;
 
 import android.util.Log;
+import android.webkit.WebSettings;
 
 import com.syt.cellphone.base.Config;
+import com.syt.cellphone.base.MyApp;
+import com.syt.cellphone.util.SharedConfigUtil;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -19,9 +25,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
- * author：syt
+ * @author：syt
  * Date: 2019-11-22
- * 作用:
+ * 作用: 网络请求构建器
  */
 public class ApiRetrofit {
 
@@ -73,6 +79,19 @@ public class ApiRetrofit {
 
     private ApiRetrofit() {
         OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @NotNull
+                    @Override
+                    public Response intercept(@NotNull Chain chain) throws IOException {
+                        Request request = chain.request()
+                                .newBuilder()
+                                .removeHeader("User-Agent")
+                                .addHeader("User-Agent", WebSettings.getDefaultUserAgent(MyApp.context))
+                                .addHeader("token", SharedConfigUtil.getToken())
+                                .build();
+                        return chain.proceed(request);
+                    }
+                })
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS);
 

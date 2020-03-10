@@ -24,6 +24,7 @@ import butterknife.BindView;
 
 /**
  * @author：syt
+ * 查询活动，也用来实现分类了
  */
 public class SearchActivity extends BaseActivity<SearchPresener> implements SearchView {
 

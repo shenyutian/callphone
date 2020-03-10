@@ -2,6 +2,7 @@ package com.syt.cellphone.ui.phone.details;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -27,9 +28,9 @@ import com.syt.cellphone.pojo.PhoneConfig;
 import com.syt.cellphone.pojo.PhoneFacade;
 import com.syt.cellphone.pojo.PhoneShow;
 import com.syt.cellphone.pojo.PhotoBean;
-import com.syt.cellphone.dialog.InputTextMsgDialog;
 import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.ToastUtil;
+import com.syt.cellphone.widget.InputTextMsgDialog;
 import com.syt.cellphone.widget.SytToolBar;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -89,11 +90,12 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         inputTextMsgDialog.setmOnTextSendListener(msg -> {
             // 点击发送按钮后，回调这个方法，msg为输入的值
             ToastUtil.makeText(msg);
-            // todo 获取设备型号 需要进行撞 数据库验证手机型号 执行提交操作
+            // todo 获取设备型号 需要进行撞 数据库验证手机型号 执行提交操作 暂时用原生的型号
 
             Estimate estimate = new Estimate();
             estimate.setPhoneId(phoneId);
             estimate.setEstimateComment(msg);
+            estimate.setModel(Build.BRAND + " " + Build.MODEL);
 
             estimate.setEstimateTime(System.currentTimeMillis());
             presenter.handUnloadEstimate(estimate);
@@ -118,8 +120,6 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
     @Override
     public void resetPhoneDetails() {
-
-
 
         LogUtil.d(presenter.getData().getBase().getBaseName());
         // 判定图集是否大于1
@@ -558,10 +558,19 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
      */
     private void handleEstimate(List<Estimate> estimates) {
         DetailsAdapter.EstimateNode estimateNode;
-        for (Estimate estimate : estimates) {
-            estimateNode = new DetailsAdapter.EstimateNode(estimate);
+        for (int i = estimates.size() - 1; i >= 0; i--) {
+            estimateNode = new DetailsAdapter.EstimateNode(estimates.get(i));
             detailsAdapter.addData(estimateNode);
         }
+    }
+
+    @Override
+    public void refresh() {
+        // activity进行跳转 模拟刷新
+        Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+        startPhoneDetails.putExtra("phoneId", getIntent().getIntExtra("phoneId", 0));
+        context.startActivity(startPhoneDetails);
+        finish();
     }
 
     /**
@@ -597,8 +606,6 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         });
 
     }
-
-
 
     private void dialogEstimate() {
         // 弹窗创建

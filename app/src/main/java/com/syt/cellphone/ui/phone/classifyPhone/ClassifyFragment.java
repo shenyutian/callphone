@@ -126,9 +126,10 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
                 );
         // 执行适配器
         rvPhoneClassifyList.setAdapter(classifyAdapter);
-        // 下拉刷新
-        srlPhoneClassifyHandle.setOnRefreshListener(() ->
-            fpresenter.getNetPhoneList(false)
+        // 下拉刷新 todo 会导致崩溃
+        srlPhoneClassifyHandle.setOnRefreshListener(() -> {
+                    fpresenter.getNetPhoneList(false);
+                }
         );
     }
 
@@ -196,7 +197,7 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         MyBanner banner = new MyBanner(context);
 //        Banner banner = new Banner(context);
         // 设置轮播图的宽高
-        banner.setLayoutParams(new ViewGroup.LayoutParams(context.getResources().getDisplayMetrics().widthPixels, 350));
+        banner.setLayoutParams(new ViewGroup.LayoutParams(context.getResources().getDisplayMetrics().widthPixels, 450));
         // 如果api高，就用steam。不行就用老方法
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             titles = recommends.stream().map(e -> e.getPhoneId()+"").collect(Collectors.toList());

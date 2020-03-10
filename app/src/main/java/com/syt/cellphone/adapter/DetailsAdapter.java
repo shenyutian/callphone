@@ -243,6 +243,7 @@ public class DetailsAdapter extends BaseNodeAdapter {
             EstimateNode estimate = (EstimateNode) baseNode;
             baseViewHolder.setText(R.id.tv_item_estimate_content, estimate.getEstimateComment());
             baseViewHolder.setText(R.id.tv_item_estimate_time, estimate.getEstimateTime());
+            baseViewHolder.setText(R.id.tv_item_estimate_model, estimate.getModel());
         }
     }
 
@@ -263,6 +264,10 @@ public class DetailsAdapter extends BaseNodeAdapter {
 
         public String getEstimateTime() {
             return TimeUtil.getEstimateTime(estimate.getEstimateTime());
+        }
+
+        public String getModel() {
+            return estimate.getModel();
         }
 
         @org.jetbrains.annotations.Nullable

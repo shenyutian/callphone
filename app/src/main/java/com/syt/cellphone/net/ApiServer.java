@@ -4,6 +4,7 @@ import com.syt.cellphone.pojo.PhoneBasePageList;
 import com.syt.cellphone.pojo.PhoneDetails;
 import com.syt.cellphone.pojo.PhoneRecommend;
 import com.syt.cellphone.pojo.PhoneTrademark;
+import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.pojo.Soc;
 import com.syt.cellphone.pojo.SocList;
 
@@ -81,10 +82,19 @@ public interface ApiServer {
 
     /**
      * 上传设备评价
+     * 如果需要登录，那么就需要请求头token
      * @param body 请求体
      * @return 请求结果
      */
     @POST("estimate/add")
 //    @Headers("token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NjYifQ.e8UKu1a_kp2AKK11RRPW2XdGjKwmcaoJxwyfLSnZPO4")
     Observable<String> setEstimate(@Body RequestBody body);
+
+    /**
+     * 登录操作
+     * @param user 登录信息
+     * @return 返回结果
+     */
+    @POST("/user/login")
+    Observable<PhoneUser> setUserLogin(@Body PhoneUser user);
 }

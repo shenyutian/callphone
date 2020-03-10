@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class TimeUtil {
 
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm");
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public static String getEstimateTime(long time) {
         Date date = new Date(time);

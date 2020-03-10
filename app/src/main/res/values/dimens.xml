@@ -27,6 +27,8 @@
     <dimen name="activity_bottom">56dp</dimen>
     <!--评价字体大小-->
     <dimen name="size_14">14sp</dimen>
+    <!--评价的小时间-->
+    <dimen name="size_12">12sp</dimen>
     <!--1个像素点-->
     <dimen name="line">1dp</dimen>
     <!--8dp-->
