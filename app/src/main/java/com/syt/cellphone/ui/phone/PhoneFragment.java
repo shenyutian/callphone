@@ -1,7 +1,8 @@
 package com.syt.cellphone.ui.phone;
 
 import android.content.Intent;
-import android.widget.SearchView;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,20 +17,20 @@ import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.ui.phone.classifyPhone.ClassifyFragment;
 import com.syt.cellphone.ui.phone.search.SearchActivity;
-import com.syt.cellphone.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author shenyutian
  */
 public class PhoneFragment extends BaseFragment<PhonePresenter> implements PhoneView {
 
-    @BindView(R.id.sv_phone_search)
-    SearchView svPhoneSearch;
+    @BindView(R.id.iv_phone_search)
+    ImageView ivPhoneSearch;
     @BindView(R.id.id_phone_title_name)
     TextView idPhoneTitleName;
     @BindView(R.id.vp2_phone_fragment)
@@ -74,9 +75,6 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
         }).attach();
         //最大保存10个fragment界面
         vp2PhoneFragment.setOffscreenPageLimit(10);
-
-        // 加载设置搜索控件
-        initSearch();
     }
 
     @Override
@@ -94,27 +92,17 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
 
     }
 
-    /**
-     * 加载配置搜索
-     */
-    private void initSearch() {
-        svPhoneSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            // 搜索按钮监听
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                LogUtil.d("搜索监听: " + query);
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("content", query);
-                startActivity(intent);
-                return false;
-            }
-            // 搜索内容变化监听
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                LogUtil.d("文本监听: " + newText);
-                return false;
-            }
-        });
+    @OnClick({R.id.iv_phone_search, R.id.id_phone_title_name})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_phone_search:
+                startActivity(new Intent(getActivity(), SearchActivity.class));
+                break;
+            case R.id.id_phone_title_name:
+                break;
+            default:
+                break;
+        }
     }
 
     /**

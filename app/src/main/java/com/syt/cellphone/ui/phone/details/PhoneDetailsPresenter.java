@@ -1,11 +1,16 @@
 package com.syt.cellphone.ui.phone.details;
 
+import android.content.Intent;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.syt.cellphone.base.BasePresenter;
+import com.syt.cellphone.base.Config;
 import com.syt.cellphone.net.BaseObserver;
 import com.syt.cellphone.pojo.Estimate;
 import com.syt.cellphone.pojo.PhoneDetails;
+import com.syt.cellphone.ui.SytMainActivity;
 import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.ToastUtil;
 
@@ -64,19 +69,29 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
 
             @Override
             public void onSuccess(String o) {
-//                ToastUtil.makeText(o);
-                // 重新请求，刷新整个布局
-                data = null;
-                baseView.refresh();
+                handleEstimate(o);
             }
 
             @Override
             public void onError(String msg) {
                 ToastUtil.makeText(msg);
-                // 重新请求，刷新整个布局
-                data = null;
-                baseView.refresh();
+                handleEstimate(msg);
             }
         }, 0);
+    }
+
+    private void handleEstimate(String msg) {
+        if (msg.equals("成功添加评论")) {
+            // 重新请求，刷新整个布局
+            data = null;
+            baseView.refresh();
+        } else {
+            Toast.makeText(getBaseView().getContext().getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
+            //重启activity, 设置第4个fragment
+            Config.setBottomMenu(4);
+            Intent intent = new Intent(context, SytMainActivity.class);
+            intent.putExtra("param", 4);
+            getBaseView().getContext().getApplicationContext().startActivity(intent);
+        }
     }
 }

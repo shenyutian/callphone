@@ -27,6 +27,7 @@ import com.syt.cellphone.R;
  * @author shenyutian
  * @data 2020/3/4 11:41 AM
  * 功能 评论的弹窗  参考 https://blog.csdn.net/qq_32518491/article/details/85000421
+ * todo 可能出现键盘弹出不正常
  */
 public class InputTextMsgDialog extends AppCompatDialog {
 

@@ -27,7 +27,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--个人头像等栏 登录按钮等-->
+    <!--个人头像等栏 登录按钮等 没有账号的情况-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_setting_person"
         android:layout_width="match_parent"
@@ -38,25 +38,46 @@
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_setting_title"
+        android:padding="@dimen/padding_default"
         >
 
         <TextView
+            android:id="@+id/tv_setting_click_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="需要登录"
+            android:text="点击登录"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/iv_setting_user_portrait"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@mipmap/ic_portrait_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_setting_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="用户名称"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_setting_user_portrait"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     <!--设置列表-->
-
-    <!--退出，切换用户 登录不成功不显示-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constrainLayout_setting_exit"
         android:layout_width="match_parent"
@@ -137,6 +158,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--退出，切换用户 登录不成功不显示-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_setting_bottom"
         android:layout_width="match_parent"
@@ -149,13 +171,17 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
+            android:id="@+id/tv_setting_quit_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="退出登录"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

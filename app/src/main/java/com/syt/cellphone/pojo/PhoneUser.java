@@ -10,11 +10,11 @@ public class PhoneUser {
 
     private String userName;
 
-    private String userPass;
+    private String userPassword;
 
     private String token;
 
-    private String Msg;
+    private String message;
 
     public Integer getUserId() {
         return userId;
@@ -33,11 +33,11 @@ public class PhoneUser {
     }
 
     public String getUserPass() {
-        return userPass;
+        return userPassword;
     }
 
     public void setUserPass(String userPass) {
-        this.userPass = userPass;
+        this.userPassword = userPass;
     }
 
     public String getToken() {
@@ -48,11 +48,12 @@ public class PhoneUser {
         this.token = token;
     }
 
-    public String getMsg() {
-        return Msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        Msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
+
 }

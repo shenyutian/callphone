@@ -26,7 +26,8 @@ public class SettingPresenter extends BasePresenter<SettingView> {
         addDisposable(apiServer.setUserLogin(user), new BaseObserver<PhoneUser>(baseView) {
             @Override
             public void onSuccess(PhoneUser o) {
-                if ("登录成功".equals(o.getMsg())) {
+                Toast.makeText(getBaseView().getContext().getApplicationContext(), "msg: " + o.getMessage(), Toast.LENGTH_SHORT).show();
+                if ("登录成功".equals(o.getMessage())) {
                     SharedConfigUtil.saveToken(o.getToken());
                     baseView.refresh();
                 }
