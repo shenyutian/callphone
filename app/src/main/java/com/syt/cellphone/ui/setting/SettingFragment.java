@@ -119,6 +119,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                         .setView(loginView)
                         .setTitle("登录弹窗")
+                        .setNegativeButton("没有账号，点击注册", ((dialog, which) -> {
+                            // 跳转到注册界面
+
+                        }))
                         .setPositiveButton("登录", ((dialog, which) -> {
 
                             PhoneUser user = new PhoneUser();

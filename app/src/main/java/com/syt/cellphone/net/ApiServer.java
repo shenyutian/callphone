@@ -1,5 +1,6 @@
 package com.syt.cellphone.net;
 
+import com.alibaba.fastjson.JSONObject;
 import com.syt.cellphone.pojo.PhoneBasePageList;
 import com.syt.cellphone.pojo.PhoneDetails;
 import com.syt.cellphone.pojo.PhoneRecommend;
@@ -87,7 +88,7 @@ public interface ApiServer {
      * @return 请求结果
      */
     @POST("estimate/add")
-    Observable<String> setEstimate(@Body RequestBody body);
+    Observable<JSONObject> setEstimate(@Body RequestBody body);
 
     /**
      * 登录操作
@@ -96,4 +97,19 @@ public interface ApiServer {
      */
     @POST("/user/login")
     Observable<PhoneUser> setUserLogin(@Body PhoneUser user);
+
+    /**
+     * 通知服务器发送  邮箱对应的验证码
+     * @param email 邮箱号
+     * @return 1 成功  其它 错误信息
+     */
+    @GET("/user/email/{email}")
+    Observable<String> setUserEmail(@Path("email") String email);
+
+    /**
+     * 发送注册的所有信息
+     * @param user 注册信息
+     * @return 返回成功的用户名 + 用户token
+     */
+    Observable<PhoneUser> setRegistered(@Body PhoneUser user);
 }

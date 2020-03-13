@@ -3,8 +3,10 @@ package com.syt.cellphone.net;
 import android.util.Log;
 import android.webkit.WebSettings;
 
+import com.syt.cellphone.BuildConfig;
 import com.syt.cellphone.base.Config;
 import com.syt.cellphone.base.MyApp;
+import com.syt.cellphone.util.AddressUtils;
 import com.syt.cellphone.util.SharedConfigUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -78,8 +80,12 @@ public class ApiRetrofit {
 
 
     private ApiRetrofit() {
+
         OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
+
+                    private AddressUtils addressUtils = new AddressUtils();
+
                     @NotNull
                     @Override
                     public Response intercept(@NotNull Chain chain) throws IOException {
@@ -88,6 +94,7 @@ public class ApiRetrofit {
                                 .removeHeader("User-Agent")
                                 .addHeader("User-Agent", WebSettings.getDefaultUserAgent(MyApp.context))
                                 .addHeader("token", SharedConfigUtil.getToken())
+                                .addHeader("ip", addressUtils.getV4IP())
                                 .build();
                         return chain.proceed(request);
                     }
@@ -96,9 +103,9 @@ public class ApiRetrofit {
                 .readTimeout(10, TimeUnit.SECONDS);
 
         //debug模式加拦截器
-        //if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
         okhttpBuilder.addInterceptor(interceptor);
-        //}
+        }
         client = okhttpBuilder.build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_SERVER_URL)
