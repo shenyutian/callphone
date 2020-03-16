@@ -171,8 +171,9 @@ public class InputTextMsgDialog extends AppCompatDialog {
         setOnKeyListener(new OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
                     dismiss();
+                }
                 return false;
             }
         });

@@ -1,12 +1,15 @@
 package com.syt.cellphone.ui.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -14,7 +17,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseActivity;
+import com.syt.cellphone.base.Config;
 import com.syt.cellphone.pojo.PhoneUser;
+import com.syt.cellphone.pojo.Registered;
+import com.syt.cellphone.ui.SytMainActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.widget.SytToolBar;
 
@@ -57,6 +63,10 @@ public class RegisteredActivity extends BaseActivity<RegisterPresenter> implemen
     Button btRegisteredSubmit;
     @BindView(R.id.tv_registered_get_verification_countdown)
     TextView tvRegisteredGetVerificationCountdown;
+    @BindView(R.id.textInputLayoutet_registered_input_verification)
+    TextInputLayout textInputLayoutetRegisteredInputVerification;
+    @BindView(R.id.pb_registered_loading)
+    ProgressBar pbRegisteredLoading;
 
     /**
      * ------------------- 参数介绍 ---------------
@@ -123,13 +133,15 @@ public class RegisteredActivity extends BaseActivity<RegisterPresenter> implemen
             case R.id.bt_registered_get_verification:
                 // 验证邮箱
                 if (verificationEmailInput()) {
+                    // 发送验证码
+                    presenter.handleVerificationCode(etRegisteredInputEmail.getText().toString().trim());
+                    pbRegisteredLoading.setVisibility(View.VISIBLE);
+
                     // 启动倒计时
                     countDownTimer.start();
                     // 设置验证码图标变换
                     btRegisteredGetVerification.setVisibility(View.GONE);
                     tvRegisteredGetVerificationCountdown.setVisibility(View.VISIBLE);
-                    // 发送验证码
-//                    presenter.handleVerificationCode(etRegisteredInputEmail.getText().toString().trim());
                 }
                 break;
             case R.id.bt_registered_submit:
@@ -139,8 +151,11 @@ public class RegisteredActivity extends BaseActivity<RegisterPresenter> implemen
 
                     user.setUserName(etRegisteredInputName.getText().toString().trim());
                     user.setUserPass(etRegisteredInputPass.getText().toString().trim());
+                    user.setUserEmail(etRegisteredInputEmail.getText().toString().trim());
+                    user.setVerificationNumber(etRegisteredInputVerification.getText().toString().trim());
 
                     presenter.handRegister(user);
+                    pbRegisteredLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             default:
@@ -243,22 +258,57 @@ public class RegisteredActivity extends BaseActivity<RegisterPresenter> implemen
      * 注册成功后，跳出过渡动画，然后关闭注册 activity 跳转到首页
      */
     @Override
-    public void registeredSuccess(PhoneUser user) {
+    public void registeredSuccess(Registered user) {
 
+        pbRegisteredLoading.setVisibility(View.GONE);
         // 成功操作 保存用户名
         SharedConfigUtil.saveUserName(user.getUserName());
         // 保存返回的token
         SharedConfigUtil.saveUserName(user.getToken());
 
+        Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
 
+        // 跳转至首页个人中心
+        Config.setBottomMenu(4);
+        Intent intent = new Intent(getApplicationContext(), SytMainActivity.class);
+        intent.putExtra("param", 4);
+        startActivity(intent);
     }
 
     /**
      * 注册失败后，跳出提示。
      */
     @Override
-    public void registeredError() {
+    public void registeredError(Registered error) {
+        pbRegisteredLoading.setVisibility(View.GONE);
+
+        Registered.ErrorMapBean errorMap = error.getErrorMap();
+
+        // 错误提示消息
+        etRegisteredInputName.setError(errorMap.getNameError());
+        etRegisteredInputPass.setError(errorMap.getPassError());
+        etRegisteredInputEmail.setError(errorMap.getEmailError());
+        etRegisteredInputVerification.setError(errorMap.getErrorVerNum());
 
     }
+
+    /**
+     * 发送邮件失败
+     */
+    @Override
+    public void emailError(String msg) {
+        pbRegisteredLoading.setVisibility(View.GONE);
+
+        etRegisteredInputEmail.setError(msg);
+    }
+
+    /**
+     * 发送邮件成功
+     */
+    @Override
+    public void emailSuccess() {
+        pbRegisteredLoading.setVisibility(View.GONE);
+    }
+
 
 }

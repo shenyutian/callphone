@@ -99,7 +99,7 @@ dependencies {
     implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
     // 图片缩放库 photoview
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
-    //日志打印工具
+    // 日志打印工具
     implementation 'com.orhanobut:logger:2.2.0'
 }
 

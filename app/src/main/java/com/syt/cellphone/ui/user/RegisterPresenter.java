@@ -1,8 +1,10 @@
 package com.syt.cellphone.ui.user;
 
+import com.alibaba.fastjson.JSONObject;
 import com.syt.cellphone.base.BasePresenter;
 import com.syt.cellphone.net.BaseObserver;
 import com.syt.cellphone.pojo.PhoneUser;
+import com.syt.cellphone.pojo.Registered;
 
 /**
  * @author shenyutian
@@ -20,20 +22,22 @@ public class RegisterPresenter extends BasePresenter<RegisteredView> {
      * @param email 注册的邮箱地址
      */
     public void handleVerificationCode(String email) {
-        addDisposable(apiServer.setUserEmail(email), new BaseObserver<String>(baseView) {
-
+        addDisposable(apiServer.setUserEmail(email), new BaseObserver<JSONObject>(baseView) {
             @Override
-            public void onSuccess(String o) {
-                if ("1".equals(o)) {
+            public void onSuccess(JSONObject o) {
+                if (o.getString("message").equals("1")) {
                     // 邮件发送成功
+                    baseView.emailSuccess();
                 } else {
-                    //
-                }
+                    // 邮箱有问题
+                    baseView.emailError(o.getString("message"));
+               }
             }
 
             @Override
             public void onError(String msg) {
-
+                // 邮箱有问题
+                baseView.emailError(msg);
             }
         }, 0);
     }
@@ -44,11 +48,21 @@ public class RegisterPresenter extends BasePresenter<RegisteredView> {
      */
     public void handRegister(PhoneUser user) {
 
-        // 注册成功失败
-        if (false) {
-            baseView.registeredSuccess(user);
-        } else {
-            baseView.registeredError();
-        }
+        addDisposable(apiServer.setRegistered(user), new BaseObserver<Registered>(baseView) {
+            @Override
+            public void onSuccess(Registered o) {
+                // 注册成功
+                if (o.getMsg() < 1) {
+                    baseView.registeredSuccess(o);
+                } else {
+                    baseView.registeredError(o);
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                baseView.emailError(msg);
+            }
+        }, 0);
     }
 }

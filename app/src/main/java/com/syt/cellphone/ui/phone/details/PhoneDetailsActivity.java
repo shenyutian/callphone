@@ -567,8 +567,6 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
     @Override
     public void refresh() {
 
-
-
         // activity进行跳转 模拟刷新
         Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
         startPhoneDetails.putExtra("phoneId", getIntent().getIntExtra("phoneId", 0));

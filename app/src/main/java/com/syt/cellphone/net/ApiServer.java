@@ -6,16 +6,20 @@ import com.syt.cellphone.pojo.PhoneDetails;
 import com.syt.cellphone.pojo.PhoneRecommend;
 import com.syt.cellphone.pojo.PhoneTrademark;
 import com.syt.cellphone.pojo.PhoneUser;
+import com.syt.cellphone.pojo.Registered;
 import com.syt.cellphone.pojo.Soc;
 import com.syt.cellphone.pojo.SocList;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -104,12 +108,27 @@ public interface ApiServer {
      * @return 1 成功  其它 错误信息
      */
     @GET("/user/email/{email}")
-    Observable<String> setUserEmail(@Path("email") String email);
+    Observable<JSONObject> setUserEmail(@Path("email") String email);
 
     /**
      * 发送注册的所有信息
      * @param user 注册信息
      * @return 返回成功的用户名 + 用户token
      */
-    Observable<PhoneUser> setRegistered(@Body PhoneUser user);
+    @POST("/user/register")
+    Observable<Registered> setRegistered(@Body PhoneUser user);
+
+    /**
+     * 上传头像
+     * @param file 上传的头像文件
+     * @return 上传结果
+     * "code": 0,
+     *     "filepath": "/Users/space/Downloads/qq_file/IMG_20191227_103246.jpg",
+     *     "data": {
+     *         "src": "http://127.0.0.1/IMG_20191227_103246.jpg"
+     *     }
+     */
+    @POST("/api/upload")
+    @Multipart
+    Observable<JSONObject> setPortrait(@Part MultipartBody.Part file);
 }
