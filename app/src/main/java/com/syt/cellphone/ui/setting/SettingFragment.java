@@ -1,11 +1,8 @@
 package com.syt.cellphone.ui.setting;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -13,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.FileProvider;
 
-import com.syt.cellphone.BuildConfig;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
@@ -24,11 +24,14 @@ import com.syt.cellphone.base.Config;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.ui.SytMainActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
+import com.syt.cellphone.widget.GlideEngine;
 
-import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.app.Activity.RESULT_OK;
 
 public class SettingFragment extends BaseFragment<SettingPresenter> implements SettingView {
 
@@ -49,7 +52,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     /**
      * --------------------- 上传文件 -----------------
      */
-    private File mTmpFile;
+    String TAG = "SettingFragment";
 
     @Override
     protected SettingPresenter initPresenter() {
@@ -172,7 +175,13 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                 SharedConfigUtil.saveUserName("");
                 break;
             case R.id.iv_setting_user_portrait:
-                // 点击头像 -> 上传头像 -> 更换头像
+//                 点击头像 -> 上传头像 -> 更换头像
+//                setupDialog();
+
+                PictureSelector.create(getActivity())
+                        .openGallery(PictureMimeType.ofImage())
+                        .loadImageEngine(GlideEngine.createGlideEngine())
+                        .forResult(PictureConfig.CHOOSE_REQUEST);
 
             default:
                 break;
@@ -208,38 +217,52 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         tvSettingQuitLogin.setVisibility(View.VISIBLE);
     }
 
-    /**
-     * 上传头像弹窗
-     */
-    private void setupDialog() {
-        final String[] items = {"拍照", "相册"};
-        AlertDialog.Builder listDialog = new AlertDialog.Builder(getContext());
-        listDialog.setItems(items, (DialogInterface dialog, int i) -> {
-            if (i == 0) {
-                // 启动拍照
-                camera();
-            } else {
-                // 打开相册
-            }
-        });
-        listDialog.show();
-    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    private void camera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-
-            // todo 图片路径暂定
-            String path = "";
-            mTmpFile = new File(path);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getContext(),
-                        BuildConfig.APPLICATION_ID + ".provider", mTmpFile));
-            } else {
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTmpFile));
-            }
-//            startActivityForResult(camera);
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(getContext(), "头像设置失败", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        switch (requestCode) {
+            case PictureConfig.CHOOSE_REQUEST:
+                // 图片选择结果回调
+                List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                // 例如 LocalMedia 里面返回五种path
+                // 1.media.getPath(); 原图path，但在Android Q版本上返回的是content:// Uri类型
+                // 2.media.getCutPath();裁剪后path，需判断media.isCut();切勿直接使用
+                // 3.media.getCompressPath();压缩后path，需判断media.isCompressed();切勿直接使用
+                // 4.media.getOriginalPath()); media.isOriginal());为true时此字段才有值
+                // 5.media.getAndroidQToPath();Android Q版本特有返回的字段，但如果开启了压缩或裁剪还是取裁剪或压缩路
+    //                径；注意：.isAndroidQTransform(false);此字段将返回空
+                // 如果同时开启裁剪和压缩，则取压缩路径为准因为是先裁剪后压缩
+                for (LocalMedia media : selectList) {
+                    Log.i(TAG, "压缩::" + media.getCompressPath());
+                    Log.i(TAG, "原图::" + media.getPath());
+                    Log.i(TAG, "裁剪::" + media.getCutPath());
+                    Log.i(TAG, "是否开启原图::" + media.isOriginal());
+                    Log.i(TAG, "原图路径::" + media.getOriginalPath());
+                    Log.i(TAG, "Android Q 特有Path::" + media.getAndroidQToPath());
+                }
+                Toast.makeText(context, selectList.get(0).getCutPath(), Toast.LENGTH_SHORT).show();
+            break;
+            default:
+                break;
+        }
+//        if (mBitmap != null) {
+//            mBitmap.recycle();
+//        }
+
+//        path = bitmapToBase64(mBitmap);
+
+//        Toast.makeText(context, path, Toast.LENGTH_SHORT).show();
+
+//        mBitmap = BitmapFactory.decodeFile(path);
+//        ivSettingUserPortrait.setImageBitmap(mBitmap);
+
+        // 头像上传 -> 上传成功回调显示头像
     }
+
 }

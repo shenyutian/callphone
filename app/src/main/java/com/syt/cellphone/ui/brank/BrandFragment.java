@@ -2,6 +2,7 @@ package com.syt.cellphone.ui.brank;
 
 
 import android.content.Intent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;

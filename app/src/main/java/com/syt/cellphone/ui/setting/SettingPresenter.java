@@ -39,4 +39,8 @@ public class SettingPresenter extends BasePresenter<SettingView> {
             }
         }, 0);
     }
+
+    public void uploadProtrait() {
+//        apiServer.unload();
+    }
 }

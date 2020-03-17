@@ -131,5 +131,5 @@ public interface ApiServer {
      */
     @POST("/api/upload")
     @Multipart
-    Observable<JSONObject> setPortrait(@Part MultipartBody.Part file);
+    Observable<JSONObject> unload(@Part MultipartBody.Part file);
 }
