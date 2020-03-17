@@ -99,9 +99,9 @@ public class ApiRetrofit {
                         return chain.proceed(request);
                     }
                 })
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(40, TimeUnit.SECONDS)
-                .writeTimeout(40, TimeUnit.SECONDS);
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS);
 
 
         //debug模式加拦截器

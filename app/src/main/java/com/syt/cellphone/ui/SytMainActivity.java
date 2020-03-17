@@ -153,6 +153,15 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    protected void onDestroy() {
+        for (int i = 0; i < 4; i++) {
+            fragments.get(i).onDestroy();
+        }
+        currentFragment.onDestroy();
+        super.onDestroy();
+    }
+
     @OnClick({R.id.constraintLayout_one_bottom_phone, R.id.constraintLayout_two_bottom_brand, R.id.constraintLayout_three_bottom_soc, R.id.constraintLayout_four_bottom_setting})
     public void onViewClicked(View view) {
         // 底部菜单还原

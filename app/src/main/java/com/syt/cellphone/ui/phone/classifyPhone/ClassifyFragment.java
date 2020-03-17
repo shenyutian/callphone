@@ -119,9 +119,9 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
                 (adapter, view, position) -> {
                         ToastUtil.makeText(fpresenter.getPhoneBaseList().get(position).getBaseName());
                         // 进行跳转
-                        Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+                        Intent startPhoneDetails = new Intent(getContext(), PhoneDetailsActivity.class);
                         startPhoneDetails.putExtra("phoneId", fpresenter.getPhoneBaseList().get(position).getBaseId());
-                        context.startActivity(startPhoneDetails);
+                        getContext().startActivity(startPhoneDetails);
                     }
                 );
         // 执行适配器
@@ -151,7 +151,7 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         if (classifyAdapter.getFooterLayoutCount() > 0) {
             return;
         }
-        TextView tvBottom = new TextView(context);
+        TextView tvBottom = new TextView(getContext());
         tvBottom.setText("我也是有底线的");
         //刷新界面
         classifyAdapter.notifyDataSetChanged();
@@ -194,10 +194,10 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         List<String> titles;
         List<String> imgurls;
 
-        MyBanner banner = new MyBanner(context);
+        MyBanner banner = new MyBanner(getContext());
 //        Banner banner = new Banner(context);
         // 设置轮播图的宽高
-        banner.setLayoutParams(new ViewGroup.LayoutParams(context.getResources().getDisplayMetrics().widthPixels, 450));
+        banner.setLayoutParams(new ViewGroup.LayoutParams(getContext().getResources().getDisplayMetrics().widthPixels, 450));
         // 如果api高，就用steam。不行就用老方法
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             titles = recommends.stream().map(e -> e.getPhoneId()+"").collect(Collectors.toList());
@@ -219,7 +219,7 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
                 {
                     ToastUtil.makeText("点击了 " + titles.get(position));
                     // 进行跳转
-                    Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+                    Intent startPhoneDetails = new Intent(getContext(), PhoneDetailsActivity.class);
                     startPhoneDetails.putExtra("phoneId", Integer.parseInt(titles.get(position)));
                     context.startActivity(startPhoneDetails);
                 }
@@ -229,7 +229,7 @@ public class ClassifyFragment extends BaseFragment<ClassifyPresenter> implements
         banner.setImageLoader(new ImageLoader() {
             @Override
             public void displayImage(Context context, Object path, ImageView imageView) {
-                Glide.with(context).load(path).into(imageView);
+                Glide.with(getContext()).load(path).into(imageView);
             }
         }).start();
         classifyAdapter.addHeaderView(banner);

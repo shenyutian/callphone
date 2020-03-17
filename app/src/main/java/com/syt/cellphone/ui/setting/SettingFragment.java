@@ -1,7 +1,11 @@
 package com.syt.cellphone.ui.setting;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -10,7 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.FileProvider;
 
+import com.syt.cellphone.BuildConfig;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
@@ -18,6 +24,8 @@ import com.syt.cellphone.base.Config;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.ui.SytMainActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -38,6 +46,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     @BindView(R.id.tv_setting_quit_login)
     TextView tvSettingQuitLogin;
 
+    /**
+     * --------------------- 上传文件 -----------------
+     */
+    private File mTmpFile;
 
     @Override
     protected SettingPresenter initPresenter() {
@@ -89,7 +101,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 
     }
 
-    @OnClick({R.id.tv_setting_theme, R.id.iv_setting_night_switch, R.id.tv_setting_click_login, R.id.tv_setting_quit_login})
+    @OnClick({R.id.tv_setting_theme, R.id.iv_setting_night_switch, R.id.tv_setting_click_login, R.id.tv_setting_quit_login, R.id.iv_setting_user_portrait})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_setting_night_switch:
@@ -159,6 +171,9 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                 SharedConfigUtil.saveToken("");
                 SharedConfigUtil.saveUserName("");
                 break;
+            case R.id.iv_setting_user_portrait:
+                // 点击头像 -> 上传头像 -> 更换头像
+
             default:
                 break;
         }
@@ -193,4 +208,38 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         tvSettingQuitLogin.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 上传头像弹窗
+     */
+    private void setupDialog() {
+        final String[] items = {"拍照", "相册"};
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(getContext());
+        listDialog.setItems(items, (DialogInterface dialog, int i) -> {
+            if (i == 0) {
+                // 启动拍照
+                camera();
+            } else {
+                // 打开相册
+            }
+        });
+        listDialog.show();
+    }
+
+    private void camera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+
+            // todo 图片路径暂定
+            String path = "";
+            mTmpFile = new File(path);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getContext(),
+                        BuildConfig.APPLICATION_ID + ".provider", mTmpFile));
+            } else {
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTmpFile));
+            }
+//            startActivityForResult(camera);
+        }
+    }
 }

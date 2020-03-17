@@ -106,9 +106,10 @@ public interface ApiServer {
      * 通知服务器发送  邮箱对应的验证码
      * @param email 邮箱号
      * @return 1 成功  其它 错误信息
+     * Field from-data
      */
-    @GET("/user/email/{email}")
-    Observable<JSONObject> setUserEmail(@Path("email") String email);
+    @POST("/user/email")
+    Observable<JSONObject> setUserEmail(@Query("email") String email);
 
     /**
      * 发送注册的所有信息
