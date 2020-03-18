@@ -18,8 +18,8 @@ public class Config {
     public  static boolean toastSwitch = true;
     public  static int logLevel = 2;
 //    public  static String url = "http://111.229.170.213:8001/";
-    public  static String url = "http://47.115.43.73:8001/";
-//    public  static String url = "http://10.10.10.50:8001/";
+//    public  static String url = "http://47.115.43.73:8001/";
+    public  static String url = "http://10.10.10.50:8001/";
 //    public  static String url = "http://10.0.2.2:8001/";
 
     private static int  bottomMenu = SharedConfigUtil.getBottomMenus();

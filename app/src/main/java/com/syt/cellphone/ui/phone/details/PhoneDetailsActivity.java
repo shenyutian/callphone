@@ -2,7 +2,6 @@ package com.syt.cellphone.ui.phone.details;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -568,10 +567,12 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
     public void refresh() {
 
         // activity进行跳转 模拟刷新
-        Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
-        startPhoneDetails.putExtra("phoneId", getIntent().getIntExtra("phoneId", 0));
-        context.startActivity(startPhoneDetails);
-        finish();
+//        Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+//        startPhoneDetails.putExtra("phoneId", getIntent().getIntExtra("phoneId", 0));
+//        context.startActivity(startPhoneDetails);
+//        finish();
+        detailsAdapter.notifyDataSetChanged();
+
     }
 
     /**

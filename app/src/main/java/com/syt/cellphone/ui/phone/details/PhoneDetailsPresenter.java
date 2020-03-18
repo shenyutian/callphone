@@ -26,6 +26,7 @@ import okhttp3.RequestBody;
 public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
 
     private PhoneDetails data;
+    private int phoneId;
 
     public PhoneDetailsPresenter(PhoneDetailsView baseView) {
         super(baseView);
@@ -41,6 +42,7 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
             // 提示暂无设备
 
         } else {
+            this.phoneId = phoneId;
             addDisposable(apiServer.getPhoneDetailsById(phoneId),
                     new BaseObserver<PhoneDetails>(baseView) {
                         @Override
@@ -97,7 +99,9 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
         if (msg.get("msg").equals("0")) {
             // 重新请求，刷新整个布局
             data = null;
-            baseView.refresh();
+
+            handlePhoneDetails(phoneId);
+
         } else {
             Toast.makeText(getBaseView().getContext().getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
             //重启activity, 设置第4个fragment
