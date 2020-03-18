@@ -10,28 +10,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.bumptech.glide.Glide;
 import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.listener.OnResultCallbackListener;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.base.Config;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.ui.SytMainActivity;
+import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.widget.GlideEngine;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static android.app.Activity.RESULT_OK;
 
 public class SettingFragment extends BaseFragment<SettingPresenter> implements SettingView {
 
@@ -84,6 +84,12 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
             tvSettingUserName.setText(SharedConfigUtil.getUserName());
             tvSettingUserName.setVisibility(View.VISIBLE);
             ivSettingUserPortrait.setVisibility(View.VISIBLE);
+            // 有图片就显示头像
+            if (!SharedConfigUtil.getPortrait().isEmpty()) {
+                Glide.with(context)
+                        .load(SharedConfigUtil.getPortrait())
+                        .into(ivSettingUserPortrait);
+            }
             // 显示退出登录按钮
             tvSettingQuitLogin.setVisibility(View.VISIBLE);
         }
@@ -134,9 +140,9 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                         .setView(loginView)
                         .setTitle("登录弹窗")
-                        .setNegativeButton("没有账号，点击注册", ((dialog, which) -> {
+                        .setNegativeButton("注册", ((dialog, which) -> {
                             // 跳转到注册界面
-
+                            startActivity(new Intent(getContext(), RegisteredActivity.class));
                         }))
                         .setPositiveButton("登录", ((dialog, which) -> {
 
@@ -178,10 +184,47 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 //                 点击头像 -> 上传头像 -> 更换头像
 //                setupDialog();
 
+                // 参考 https://github.com/LuckSiege/PictureSelector/wiki/PictureSelector-%E5%8A%9F%E8%83%BD%E9%85%8D%E5%88%B6%E9%A1%B9
                 PictureSelector.create(getActivity())
                         .openGallery(PictureMimeType.ofImage())
                         .loadImageEngine(GlideEngine.createGlideEngine())
-                        .forResult(PictureConfig.CHOOSE_REQUEST);
+                        .maxSelectNum(1)
+                        .enableCrop(true)
+                        .circleDimmedLayer(true)
+                        .setCircleDimmedColor(R.color.bg_color)
+                        .setCircleDimmedBorderColor(R.color.select_underline)
+                        .setCircleStrokeWidth(3)
+                        .isAndroidQTransform(true)
+                        .forResult(new OnResultCallbackListener() {
+                            @Override
+                            public void onResult(List<LocalMedia> selectList) {
+                                // 图片选择结果回调
+                                // 例如 LocalMedia 里面返回五种path
+                                // 1.media.getPath(); 原图path，但在Android Q版本上返回的是content:// Uri类型
+                                // 2.media.getCutPath();裁剪后path，需判断media.isCut();切勿直接使用
+                                // 3.media.getCompressPath();压缩后path，需判断media.isCompressed();切勿直接使用
+                                // 4.media.getOriginalPath()); media.isOriginal());为true时此字段才有值
+                                // 5.media.getAndroidQToPath();Android Q版本特有返回的字段，但如果开启了压缩或裁剪还是取裁剪或压缩路
+                                //                径；注意：.isAndroidQTransform(false);此字段将返回空
+                                // 如果同时开启裁剪和压缩，则取压缩路径为准因为是先裁剪后压缩
+                                File portraitFile = null;
+                                for (LocalMedia media : selectList) {
+                                    Log.i(TAG, "压缩::" + media.getCompressPath());
+                                    Log.i(TAG, "原图::" + media.getPath());
+                                    Log.i(TAG, "裁剪::" + media.getCutPath());
+                                    Log.i(TAG, "是否开启原图::" + media.isOriginal());
+                                    Log.i(TAG, "原图路径::" + media.getOriginalPath());
+                                    Log.i(TAG, "Android Q 特有Path::" + media.getAndroidQToPath());
+                                    portraitFile = new File(media.getAndroidQToPath());
+                                }
+                                fpresenter.uploadProtrait(portraitFile);
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                Toast.makeText(getContext(), "头像设置失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
             default:
                 break;
@@ -218,51 +261,11 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode != RESULT_OK) {
-            Toast.makeText(getContext(), "头像设置失败", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        switch (requestCode) {
-            case PictureConfig.CHOOSE_REQUEST:
-                // 图片选择结果回调
-                List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-                // 例如 LocalMedia 里面返回五种path
-                // 1.media.getPath(); 原图path，但在Android Q版本上返回的是content:// Uri类型
-                // 2.media.getCutPath();裁剪后path，需判断media.isCut();切勿直接使用
-                // 3.media.getCompressPath();压缩后path，需判断media.isCompressed();切勿直接使用
-                // 4.media.getOriginalPath()); media.isOriginal());为true时此字段才有值
-                // 5.media.getAndroidQToPath();Android Q版本特有返回的字段，但如果开启了压缩或裁剪还是取裁剪或压缩路
-    //                径；注意：.isAndroidQTransform(false);此字段将返回空
-                // 如果同时开启裁剪和压缩，则取压缩路径为准因为是先裁剪后压缩
-                for (LocalMedia media : selectList) {
-                    Log.i(TAG, "压缩::" + media.getCompressPath());
-                    Log.i(TAG, "原图::" + media.getPath());
-                    Log.i(TAG, "裁剪::" + media.getCutPath());
-                    Log.i(TAG, "是否开启原图::" + media.isOriginal());
-                    Log.i(TAG, "原图路径::" + media.getOriginalPath());
-                    Log.i(TAG, "Android Q 特有Path::" + media.getAndroidQToPath());
-                }
-                Toast.makeText(context, selectList.get(0).getCutPath(), Toast.LENGTH_SHORT).show();
-            break;
-            default:
-                break;
-        }
-//        if (mBitmap != null) {
-//            mBitmap.recycle();
-//        }
-
-//        path = bitmapToBase64(mBitmap);
-
-//        Toast.makeText(context, path, Toast.LENGTH_SHORT).show();
-
-//        mBitmap = BitmapFactory.decodeFile(path);
-//        ivSettingUserPortrait.setImageBitmap(mBitmap);
-
-        // 头像上传 -> 上传成功回调显示头像
+    public void refreshPortrait(String imgSrc) {
+        Glide.with(this)
+                .load(imgSrc)
+                .into(ivSettingUserPortrait);
+        SharedConfigUtil.savePortrait(imgSrc);
     }
 
 }

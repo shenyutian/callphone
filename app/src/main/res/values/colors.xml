@@ -324,4 +324,7 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+
+    <!--图标颜色-->
+    <color name="ic_color">#000000</color>
 </resources>

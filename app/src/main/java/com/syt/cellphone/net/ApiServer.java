@@ -9,6 +9,7 @@ import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.pojo.Registered;
 import com.syt.cellphone.pojo.Soc;
 import com.syt.cellphone.pojo.SocList;
+import com.syt.cellphone.pojo.UnloadFile;
 
 import java.util.List;
 
@@ -86,7 +87,7 @@ public interface ApiServer {
     Observable<PhoneDetails> getPhoneDetailsById(@Path("id") int phoneId);
 
     /**
-     * 上传设备评价
+     * 上传评价设备
      * 如果需要登录，那么就需要请求头token
      * @param body 请求体
      * @return 请求结果
@@ -120,8 +121,8 @@ public interface ApiServer {
     Observable<Registered> setRegistered(@Body PhoneUser user);
 
     /**
-     * 上传头像
-     * @param file 上传的头像文件
+     * 上传图片接口
+     * @param file 上传的图像文件
      * @return 上传结果
      * "code": 0,
      *     "filepath": "/Users/space/Downloads/qq_file/IMG_20191227_103246.jpg",
@@ -131,5 +132,13 @@ public interface ApiServer {
      */
     @POST("/api/upload")
     @Multipart
-    Observable<JSONObject> unload(@Part MultipartBody.Part file);
+    Observable<UnloadFile> unload(@Part MultipartBody.Part file);
+
+    /**
+     * 上传用户头像
+     * @param portraitSrc 头像路径
+     * @return 结果 msg = 1 + protraitSrc 成功  失败 msg = 0
+     */
+    @POST("/user/portrait")
+    Observable<JSONObject> setPortrait(@Query("portraitSrc") String portraitSrc);
 }

@@ -71,6 +71,7 @@ public class InputTextMsgDialog extends AppCompatDialog {
     private void init() {
         setContentView(R.layout.dialog_estimate);
         messageTextView = findViewById(R.id.et_input_message);
+
         tvNumber = findViewById(R.id.tv_input_number);
         final LinearLayout rldlgview = findViewById(R.id.rl_inputdlg_view);
         confirmBth = findViewById(R.id.bt_input_submit);
@@ -111,6 +112,13 @@ public class InputTextMsgDialog extends AppCompatDialog {
 
         // 注册键盘监听器
         imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        // 键盘弹出
+        messageTextView.setFocusable(true);
+        messageTextView.setFocusableInTouchMode(true);
+        messageTextView.requestFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
 
         // 点击关闭
         rlDlg = findViewById(R.id.rl_outside_view);

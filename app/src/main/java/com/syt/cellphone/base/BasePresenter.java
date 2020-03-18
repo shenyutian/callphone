@@ -99,7 +99,6 @@ public class BasePresenter<V extends BaseView> {
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
             compositeDisposable.clear();
-
         }
     }
 

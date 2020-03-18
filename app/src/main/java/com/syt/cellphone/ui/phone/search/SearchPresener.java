@@ -108,4 +108,11 @@ public class SearchPresener extends BasePresenter<SearchView> {
             }
         }, 0);
     }
+
+    public void handCleanHistory() {
+        // 清空历史
+        searchHistoryDao.deleteAll();
+        // 刷新页面
+        baseView.resetSearchRv();
+    }
 }

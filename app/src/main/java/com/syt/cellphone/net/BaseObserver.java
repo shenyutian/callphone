@@ -33,6 +33,11 @@ public abstract class BaseObserver<T> extends DisposableObserver<T> {
      */
     public static final int CONNECT_TIMEOUT = 1004;
 
+    /**
+     * 状态码 message
+     */
+    public static String message;
+
 
     public BaseObserver(BaseView view) {
         this.view = view;

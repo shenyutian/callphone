@@ -37,7 +37,6 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
     ViewPager2 vp2PhoneFragment;
     @BindView(R.id.tabLayout_phone_top)
     TabLayout tabLayoutPhoneTop;
-    private List<Fragment> fragments = new ArrayList<>();
     private List<String> items = new ArrayList<>(6);
     private PhonePagerAdapter phonePagerAdapter;
 

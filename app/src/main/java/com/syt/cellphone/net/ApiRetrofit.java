@@ -99,7 +99,7 @@ public class ApiRetrofit {
                         return chain.proceed(request);
                     }
                 })
-                .connectTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS);
 

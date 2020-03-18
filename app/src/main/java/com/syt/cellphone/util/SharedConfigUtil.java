@@ -108,4 +108,26 @@ public class SharedConfigUtil {
             editor.commit();
         }
     }
+
+    /**
+     * 保存头像地址
+     * @param portrait 头像地址
+     */
+    public static void savePortrait(String portrait) {
+        if (editor != null) {
+            editor.putString("portrait", portrait);
+            editor.commit();
+        }
+    }
+
+    /**
+     * 头像地址获取
+     * @return 头像地址 or null
+     */
+    public static String getPortrait() {
+        if (preferences != null) {
+            return preferences.getString("portrait", "");
+        }
+        return "";
+    }
 }

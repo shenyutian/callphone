@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,6 +67,8 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
     TextView tvSearchRecommend;
     @BindView(R.id.tv_search_history)
     TextView tvSearchHistory;
+    @BindView(R.id.tv_search_history_clean)
+    TextView getTvSearchHistoryClean;
 
     /**
      * --------------------参数结束-----------------------
@@ -100,6 +103,10 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
             etSearchInput.setVisibility(View.GONE);
             presenter.handleSearchResult(getIntent().getStringExtra("content"));
         } else {
+            // 弹出键盘
+            etSearchInput.requestFocus();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
             // 监听键盘事件
             etSearchInput.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -116,7 +123,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
     }
 
 
-    @OnClick({R.id.tv_search_back, R.id.iv_search_ic, R.id.tv_search_recommend, R.id.tv_search_history})
+    @OnClick({R.id.tv_search_back, R.id.iv_search_ic, R.id.tv_search_recommend, R.id.tv_search_history, R.id.tv_search_history_clean})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search_back:
@@ -124,6 +131,10 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
                 break;
             case R.id.iv_search_ic:
                 startSearch(etSearchInput.getText().toString().trim());
+                break;
+            case R.id.tv_search_history_clean:
+                // 清空历史
+                presenter.handCleanHistory();
                 break;
             default:
                 break;

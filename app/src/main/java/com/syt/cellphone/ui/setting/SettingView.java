@@ -13,4 +13,9 @@ public interface SettingView extends BaseView {
      */
     void refresh();
 
+    /**
+     * 刷新头像
+     * @param imgSrc 图片路径
+     */
+    void refreshPortrait(String imgSrc);
 }
