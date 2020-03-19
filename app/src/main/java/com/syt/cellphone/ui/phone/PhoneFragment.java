@@ -68,9 +68,11 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
 //        for (String item : items) {
 //            tabLayoutPhoneTop.addTab(tabLayoutPhoneTop.newTab().setText(item));
 //        }
+
         // 连接tabLayout和viewPage2
         new TabLayoutMediator(tabLayoutPhoneTop, vp2PhoneFragment, (@NonNull TabLayout.Tab tab, int position) -> {
             tab.setText(items.get(position));
+//            tab.set
         }).attach();
         //最大保存10个fragment界面
         vp2PhoneFragment.setOffscreenPageLimit(10);

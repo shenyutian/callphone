@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -98,6 +99,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
             // 隐藏搜索提示布局，显示搜索结果
             rvSearchResponse.setVisibility(View.VISIBLE);
             clSearchNoData.setVisibility(View.GONE);
+            ivSearchIc.setVisibility(View.GONE);
             tvClassifyName.setText(content);
             tvClassifyName.setVisibility(View.VISIBLE);
             etSearchInput.setVisibility(View.GONE);
@@ -130,6 +132,8 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
                 finish();
                 break;
             case R.id.iv_search_ic:
+                // 关闭输入法
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(etSearchInput, InputMethodManager.SHOW_IMPLICIT);
                 startSearch(etSearchInput.getText().toString().trim());
                 break;
             case R.id.tv_search_history_clean:

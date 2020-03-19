@@ -1,10 +1,12 @@
 package com.syt.cellphone.ui.setting;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,13 +19,13 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
+import com.orhanobut.logger.Logger;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.base.Config;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.ui.SytMainActivity;
-import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.widget.GlideEngine;
 
@@ -51,8 +53,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 
     /**
      * --------------------- 上传文件 -----------------
+     * alertDialog      登录弹窗
      */
     String TAG = "SettingFragment";
+    private AlertDialog alertDialog;
 
     @Override
     protected SettingPresenter initPresenter() {
@@ -114,118 +118,17 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_setting_night_switch:
-                if (!SharedConfigUtil.getNightOnOff()) {
-                    //日间 切换 夜间
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    SharedConfigUtil.saveNightOnOff(true);
-                } else {
-                    //夜间 切换 日间
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    SharedConfigUtil.saveNightOnOff(false);
-                }
-                //重启activity, 设置第4个fragment
-                Config.setBottomMenu(4);
-                Intent intent = new Intent(context, SytMainActivity.class);
-                intent.putExtra("param", 4);
-                startActivity(intent);
+                handSettingNight();
                 break;
             case R.id.tv_setting_click_login:
-                // 暂时出现登录dialog
-                View loginView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_user_login, null);
-                final EditText etName = loginView.findViewById(R.id.et_user_login_name);
-                final EditText etPass = loginView.findViewById(R.id.et_user_login_pass);
-                // 历史账号上去
-                etName.setText(SharedConfigUtil.getUserName());
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setView(loginView)
-                        .setTitle("登录弹窗")
-                        .setNegativeButton("注册", ((dialog, which) -> {
-                            // 跳转到注册界面
-                            startActivity(new Intent(getContext(), RegisteredActivity.class));
-                        }))
-                        .setPositiveButton("登录", ((dialog, which) -> {
-
-                            PhoneUser user = new PhoneUser();
-
-                            user.setUserName(etName.getText().toString().trim());
-                            user.setUserPass(etPass.getText().toString().trim());
-
-                            if (user.getUserName() == null || user.getUserName().isEmpty()) {
-                                Toast.makeText(getActivity().getApplicationContext(), "账号不能为空", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            if (user.getUserPass() == null || user.getUserPass().isEmpty()) {
-                                Toast.makeText(getActivity().getApplicationContext(), "密码不能为空", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            SharedConfigUtil.saveUserName(user.getUserName());
-
-                            fpresenter.handleUserLogin(user);
-                            dialog.dismiss();
-                        }));
-                builder.create().show();
+                handLogin();
                 break;
             case R.id.tv_setting_quit_login:
-                // 退出登录流程
-                // 隐藏头像 and 用户名
-                ivSettingUserPortrait.setVisibility(View.GONE);
-                tvSettingUserName.setVisibility(View.GONE);
-                // 显示登录按钮
-                tvSettingClickLogin.setVisibility(View.VISIBLE);
-                // 隐藏退出登录按钮
-                tvSettingQuitLogin.setVisibility(View.GONE);
-                // 清空token and 用户名
-                SharedConfigUtil.saveToken("");
-                SharedConfigUtil.saveUserName("");
+                handQuitLogin();
                 break;
             case R.id.iv_setting_user_portrait:
-//                 点击头像 -> 上传头像 -> 更换头像
-//                setupDialog();
-
-                // 参考 https://github.com/LuckSiege/PictureSelector/wiki/PictureSelector-%E5%8A%9F%E8%83%BD%E9%85%8D%E5%88%B6%E9%A1%B9
-                PictureSelector.create(getActivity())
-                        .openGallery(PictureMimeType.ofImage())
-                        .loadImageEngine(GlideEngine.createGlideEngine())
-                        .maxSelectNum(1)
-                        .enableCrop(true)
-                        .circleDimmedLayer(true)
-                        .setCircleDimmedColor(R.color.bg_color)
-                        .setCircleDimmedBorderColor(R.color.select_underline)
-                        .setCircleStrokeWidth(3)
-                        .isAndroidQTransform(true)
-                        .forResult(new OnResultCallbackListener() {
-                            @Override
-                            public void onResult(List<LocalMedia> selectList) {
-                                // 图片选择结果回调
-                                // 例如 LocalMedia 里面返回五种path
-                                // 1.media.getPath(); 原图path，但在Android Q版本上返回的是content:// Uri类型
-                                // 2.media.getCutPath();裁剪后path，需判断media.isCut();切勿直接使用
-                                // 3.media.getCompressPath();压缩后path，需判断media.isCompressed();切勿直接使用
-                                // 4.media.getOriginalPath()); media.isOriginal());为true时此字段才有值
-                                // 5.media.getAndroidQToPath();Android Q版本特有返回的字段，但如果开启了压缩或裁剪还是取裁剪或压缩路
-                                //                径；注意：.isAndroidQTransform(false);此字段将返回空
-                                // 如果同时开启裁剪和压缩，则取压缩路径为准因为是先裁剪后压缩
-                                File portraitFile = null;
-                                for (LocalMedia media : selectList) {
-                                    Log.i(TAG, "压缩::" + media.getCompressPath());
-                                    Log.i(TAG, "原图::" + media.getPath());
-                                    Log.i(TAG, "裁剪::" + media.getCutPath());
-                                    Log.i(TAG, "是否开启原图::" + media.isOriginal());
-                                    Log.i(TAG, "原图路径::" + media.getOriginalPath());
-                                    Log.i(TAG, "Android Q 特有Path::" + media.getAndroidQToPath());
-                                    portraitFile = new File(media.getAndroidQToPath());
-                                }
-                                fpresenter.uploadProtrait(portraitFile);
-                            }
-
-                            @Override
-                            public void onCancel() {
-                                Toast.makeText(getContext(), "头像设置失败", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
+                handSetPortrait();
+                break;
             default:
                 break;
         }
@@ -250,6 +153,8 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         if (SharedConfigUtil.getToken().isEmpty()) {
             return;
         }
+        // 关闭登录框
+        alertDialog.dismiss();
         // 隐藏需要登录
         tvSettingClickLogin.setVisibility(View.GONE);
         // 显示账号信息
@@ -268,4 +173,155 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         SharedConfigUtil.savePortrait(imgSrc);
     }
 
+    /**
+     * 点击黑夜or白天事件
+     */
+    private void handSettingNight() {
+        if (!SharedConfigUtil.getNightOnOff()) {
+            //日间 切换 夜间
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            SharedConfigUtil.saveNightOnOff(true);
+        } else {
+            //夜间 切换 日间
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            SharedConfigUtil.saveNightOnOff(false);
+        }
+        //重启activity, 设置第4个fragment
+        Config.setBottomMenu(4);
+        Intent intent = new Intent(context, SytMainActivity.class);
+        intent.putExtra("param", 4);
+        startActivity(intent);
+    }
+
+    /**
+     * 处理登录
+     */
+    private void handLogin() {
+// 暂时出现登录dialog
+        View loginView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_user_login, null);
+        final EditText etName = loginView.findViewById(R.id.et_user_login_name);
+        final EditText etPass = loginView.findViewById(R.id.et_user_login_pass);
+        // 历史账号上去
+        etName.setText(SharedConfigUtil.getUserName());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                .setView(loginView)
+                .setTitle("欢迎登录")
+                .setNegativeButton("取消", ((dialog, which) -> {
+                    // 跳转到注册界面
+//                    startActivity(new Intent(getContext(), RegisteredActivity.class));
+                    dialog.cancel();
+                }))
+                .setPositiveButton("登录", null);
+        alertDialog = builder.create();
+
+        // 重写onShow()方法 里面的getButton
+        alertDialog.setOnShowListener((DialogInterface dialogInterface) -> {
+            Button button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            button.setOnClickListener((View v) -> {
+                PhoneUser user = new PhoneUser();
+
+                user.setUserName(etName.getText().toString().trim());
+                user.setUserPass(etPass.getText().toString().trim());
+
+                if (user.getUserName() == null || user.getUserName().isEmpty()) {
+                    Toast.makeText(getActivity().getApplicationContext(), "账号不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (user.getUserPass() == null || user.getUserPass().isEmpty()) {
+                    Toast.makeText(getActivity().getApplicationContext(), "密码不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                SharedConfigUtil.saveUserName(user.getUserName());
+
+                fpresenter.handleUserLogin(user);
+            });
+        });
+
+        alertDialog.show();
+    }
+
+    /**
+     * 退出登录
+     */
+    private void handQuitLogin() {
+        // 退出登录流程
+        // 隐藏头像 and 用户名
+        ivSettingUserPortrait.setVisibility(View.GONE);
+        tvSettingUserName.setVisibility(View.GONE);
+        // 显示登录按钮
+        tvSettingClickLogin.setVisibility(View.VISIBLE);
+        // 隐藏退出登录按钮
+        tvSettingQuitLogin.setVisibility(View.GONE);
+        // 清空token and 用户名
+        SharedConfigUtil.saveToken("");
+        SharedConfigUtil.saveUserName("");
+    }
+
+    /**
+     * 头像上传
+     */
+    private void handSetPortrait() {
+        //                 点击头像 -> 上传头像 -> 更换头像
+//                setupDialog();
+
+        // 参考 https://github.com/LuckSiege/PictureSelector/wiki/PictureSelector-%E5%8A%9F%E8%83%BD%E9%85%8D%E5%88%B6%E9%A1%B9
+        PictureSelector.create(getActivity())
+                // 传入图片
+                .openGallery(PictureMimeType.ofImage())
+                .loadImageEngine(GlideEngine.createGlideEngine())
+                // 多选 or 单选 2 ? 1
+                .selectionMode(1)
+                // 单选模式下直接返回
+                .isSingleDirectReturn(true)
+                // 开启压缩
+                .compress(true)
+                // 低于200k不压缩
+                .minimumCompressSize(200)
+                // 是否裁剪
+                .enableCrop(true)
+                // 开启圆形裁剪
+                .circleDimmedLayer(true)
+                // 裁切比例
+                .withAspectRatio(1, 1)
+                // 是否显示裁剪矩形边框 圆形裁剪时建议设为false
+                .showCropFrame(false)
+                // 是否显示裁剪矩形网格 圆形裁剪时建议设为false
+                .showCropGrid(false)
+                // 支持android q 的沙盒
+                .isAndroidQTransform(true)
+                // 回调
+                .forResult(new OnResultCallbackListener() {
+                    @Override
+                    public void onResult(List<LocalMedia> selectList) {
+                        // 图片选择结果回调
+                        // 例如 LocalMedia 里面返回五种path
+                        // 1.media.getPath(); 原图path，但在Android Q版本上返回的是content:// Uri类型
+                        // 2.media.getCutPath();裁剪后path，需判断media.isCut();切勿直接使用
+                        // 3.media.getCompressPath();压缩后path，需判断media.isCompressed();切勿直接使用
+                        // 4.media.getOriginalPath()); media.isOriginal());为true时此字段才有值
+                        // 5.media.getAndroidQToPath();Android Q版本特有返回的字段，但如果开启了压缩或裁剪还是取裁剪或压缩路
+                        //                径；注意：.isAndroidQTransform(false);此字段将返回空
+                        // 如果同时开启裁剪和压缩，则取压缩路径为准因为是先裁剪后压缩
+                        File portraitFile = null;
+                        for (LocalMedia media : selectList) {
+                            Log.i(TAG, "压缩::" + media.getCompressPath());
+                            Log.i(TAG, "原图::" + media.getPath());
+                            Log.i(TAG, "裁剪::" + media.getCutPath());
+                            Log.i(TAG, "是否开启原图::" + media.isOriginal());
+                            Log.i(TAG, "原图路径::" + media.getOriginalPath());
+                            Log.i(TAG, "Android Q 特有Path::" + media.getAndroidQToPath());
+                            portraitFile = new File(media.getAndroidQToPath());
+                        }
+                        fpresenter.uploadProtrait(portraitFile);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Logger.d("头像设置失败");
+                    }
+                });
+
+    }
 }

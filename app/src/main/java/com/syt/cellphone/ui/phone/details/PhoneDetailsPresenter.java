@@ -25,8 +25,15 @@ import okhttp3.RequestBody;
  */
 public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
 
+    /**
+     *   data           基础数据集合
+     *   phoneId        请求phoneId
+     *   newEstimate    新的评价
+     *
+     */
     private PhoneDetails data;
     private int phoneId;
+    private Estimate newEstimate;
 
     public PhoneDetailsPresenter(PhoneDetailsView baseView) {
         super(baseView);
@@ -34,6 +41,10 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
 
     public PhoneDetails getData() {
         return data;
+    }
+
+    public Estimate getNewEstimate() {
+        return newEstimate;
     }
 
     public void handlePhoneDetails(int phoneId) {
@@ -76,7 +87,7 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
 
             @Override
             public void onError(String msg) {
-//                LogUtil.d("onError: " + msg);
+                LogUtil.d("onError: " + msg);
 //                LogUtil.d("Thread : " + Thread.currentThread().getName());
 //                handleEstimate(msg);
                 // 请登录
@@ -86,7 +97,7 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
                 Intent intent = new Intent(context, SytMainActivity.class);
                 intent.putExtra("param", 4);
                 // 去除context 跳转限制
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         }, 0);
@@ -97,12 +108,13 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
         LogUtil.d("handleEstimate" + msg.toString());
 
         if (msg.get("msg").equals("0")) {
-            // 重新请求，刷新整个布局
-            data = null;
 
-            handlePhoneDetails(phoneId);
+            newEstimate = msg.getObject("estimate", Estimate.class);
+
+            baseView.refresh();
 
         } else {
+            Logger.e("添加评价失败 " + msg.toJSONString());
             Toast.makeText(getBaseView().getContext().getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
             //重启activity, 设置第4个fragment
             Config.setBottomMenu(4);

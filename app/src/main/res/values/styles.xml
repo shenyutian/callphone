@@ -11,6 +11,17 @@
         <item name="android:background">@color/bg_color</item>
         <!--去掉button和tabLayout的大写-->
         <item name="android:textAllCaps">false</item>
+        <!--下面是头像上传背景-->
+        <!--预览界面标题栏背景色-->
+        <item name="picture.ac_preview.title.bg">@color/bg_color</item>
+        <!--预览界面底部背景色-->
+        <item name="picture.ac_preview.bottom.bg">@color/bg_color</item>
+        <!--裁剪页面标题背景色-->
+        <item name="picture.crop.toolbar.bg">@color/bg_color</item>
+        <!--裁剪页面状态栏颜色-->
+        <item name="picture.crop.status.color">@color/bg_color</item>
+        <!--裁剪页面标题文字颜色-->
+        <item name="picture.crop.title.color">@color/base_color</item>
     </style>
 
     <style name="DialogStyle" parent="@android:style/Theme.Dialog">

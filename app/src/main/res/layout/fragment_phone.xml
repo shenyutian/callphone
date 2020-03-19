@@ -50,9 +50,24 @@
                 android:id="@+id/tabLayout_phone_top"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/title_height"
+                app:tabIndicatorColor="@color/ic_color"
+                app:tabIndicatorHeight="10dp"
+                app:tabGravity="start"
                 app:tabTextAppearance="@style/TabLayoutTextStyle"
                 app:tabSelectedTextColor="@color/select_underline"
                 >
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="小米"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="小米"/>
+
+
             </com.google.android.material.tabs.TabLayout>
 
         </com.google.android.material.appbar.AppBarLayout>

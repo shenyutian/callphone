@@ -12,6 +12,8 @@
     <color name="select_underline">#FFFFF0</color>
     <!--标题大白颜色-->
     <color name="title_color">#ffffff</color>
+    <!--图标颜色-->
+    <color name="ic_color">#FFFFFF</color>
 
     <!-- 白色 -->
     <color name="ivory">#FFFFF0</color>
@@ -325,6 +327,4 @@
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
 
-    <!--图标颜色-->
-    <color name="ic_color">#FFFFFF</color>
 </resources>

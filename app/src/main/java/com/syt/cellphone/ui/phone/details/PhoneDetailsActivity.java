@@ -28,6 +28,7 @@ import com.syt.cellphone.pojo.PhoneFacade;
 import com.syt.cellphone.pojo.PhoneShow;
 import com.syt.cellphone.pojo.PhotoBean;
 import com.syt.cellphone.util.LogUtil;
+import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
 import com.syt.cellphone.widget.InputTextMsgDialog;
 import com.syt.cellphone.widget.SytToolBar;
@@ -61,6 +62,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
     ConstraintLayout clPhoneDetails;
 
     private DetailsAdapter detailsAdapter;
+    private List<DetailsAdapter.EstimateNode> estimateNodeList = new LinkedList<>();
 
     @Override
     protected PhoneDetailsPresenter createPresenter() {
@@ -87,6 +89,12 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 //            dialogEstimate();
         InputTextMsgDialog inputTextMsgDialog = new InputTextMsgDialog(context, R.style.dialog_center);
         inputTextMsgDialog.setmOnTextSendListener(msg -> {
+            // 判定是否登录 -> 没有登录就提示需要登录
+            if (SharedConfigUtil.getUserName().isEmpty() || SharedConfigUtil.getToken().isEmpty()) {
+                // 提示登录
+                return;
+            }
+
             // 点击发送按钮后，回调这个方法，msg为输入的值
             ToastUtil.makeText(msg);
             // todo 获取设备型号 需要进行撞 数据库验证手机型号 执行提交操作 暂时用原生的型号
@@ -116,6 +124,10 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         rvDetailsData.setAdapter(detailsAdapter);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     public void resetPhoneDetails() {
@@ -556,11 +568,13 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
      * @param estimates 评论数据
      */
     private void handleEstimate(List<Estimate> estimates) {
-        DetailsAdapter.EstimateNode estimateNode;
+        presenter.getData().getEstimate();
+        DetailsAdapter.EstimateNode estimateNode = null;
         for (int i = estimates.size() - 1; i >= 0; i--) {
             estimateNode = new DetailsAdapter.EstimateNode(estimates.get(i));
-            detailsAdapter.addData(estimateNode);
+            estimateNodeList.add(estimateNode);
         }
+        detailsAdapter.addData(estimateNodeList);
     }
 
     @Override
@@ -571,8 +585,19 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 //        startPhoneDetails.putExtra("phoneId", getIntent().getIntExtra("phoneId", 0));
 //        context.startActivity(startPhoneDetails);
 //        finish();
-        detailsAdapter.notifyDataSetChanged();
 
+        // 先情空评价列表
+//        for (int i = 0; i < estimateNodeList.size(); i++) {
+//            detailsAdapter.remove(estimateNodeList.get(i));
+//        }
+        // 获取最上面的节点
+        int item = detailsAdapter.getItemPosition(estimateNodeList.get(0));
+        // 然后重新填入
+        detailsAdapter.addData(item, new DetailsAdapter.EstimateNode(presenter.getNewEstimate()));
+
+        // 填入节点表中
+//        estimateNodeList.add(0, new DetailsAdapter.EstimateNode(presenter.getNewEstimate()));
+        Logger.d("添加评价：" + presenter.getNewEstimate());
     }
 
     /**
