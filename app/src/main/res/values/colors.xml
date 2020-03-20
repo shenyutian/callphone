@@ -3,7 +3,8 @@
     <!--白天模式-->
     <!--主背景色调-->
 <!--    <color name="bg_color">#fafafa</color>-->
-    <color name="bg_color">#87CEEB</color>
+    <color name="bar_bg_color">#00a8f0</color>
+    <color name="bg_color">#dff5fd</color>
     <color name="white_c">#ffffff</color>
     <!--  主字体 颜色 -->
     <color name="base_color">#505050</color>

@@ -2,6 +2,7 @@
 <resources>
     <!--夜间模式的-->
     <!--主背景颜色-->
+    <color name="bar_bg_color">#000000</color>
     <color name="bg_color">#000000</color>
     <color name="white_c">#ffffff</color>
     <!--主字体 颜色 -->

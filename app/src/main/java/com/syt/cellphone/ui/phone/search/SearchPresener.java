@@ -11,8 +11,8 @@ import com.syt.cellphone.pojo.PhoneRecommend;
 import com.syt.cellphone.pojo.SearchHistory;
 import com.syt.cellphone.util.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,10 +35,10 @@ public class SearchPresener extends BasePresenter<SearchView> {
      */
     private String              searchInput         =   null;
     private AtomicInteger       pageNum             =   new AtomicInteger(0);
-    private List<PhoneBase>     searchResult        =   Collections.synchronizedList(new LinkedList<>());
+    private List<PhoneBase>     searchResult        =   Collections.synchronizedList(new ArrayList<>());
     private SearchHistoryDao    searchHistoryDao    =   MyApp.getDaoSession().getSearchHistoryDao();
     private PhoneRecommendDao   recommendDao        =   MyApp.getDaoSession().getPhoneRecommendDao();
-    private List<SearchHistory> searchRecommends     =  new LinkedList<>();
+    private List<SearchHistory> searchRecommends    =   new ArrayList<>();
     private List<SearchHistory> searchHistoryList   =   null;
 
     public SearchPresener(SearchView baseView) {

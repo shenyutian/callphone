@@ -9,8 +9,8 @@ import com.syt.cellphone.pojo.PhoneBasePageList;
 import com.syt.cellphone.pojo.PhoneRecommend;
 import com.syt.cellphone.util.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -27,7 +27,7 @@ public class ClassifyPresenter extends BasePresenter<ClassifyView> {
      * pageNum 页号
      */
     private String item;
-    private List<PhoneBase> phoneBaseList = Collections.synchronizedList(new LinkedList<>());
+    private List<PhoneBase> phoneBaseList = Collections.synchronizedList(new ArrayList<>());
     private AtomicInteger pageNum = new AtomicInteger(1);
     private PhoneRecommendDao recommendDao = MyApp.getDaoSession().getPhoneRecommendDao();
 

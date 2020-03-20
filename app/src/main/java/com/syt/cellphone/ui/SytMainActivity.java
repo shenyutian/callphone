@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.orhanobut.logger.Logger;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseActivity;
 import com.syt.cellphone.base.Config;
@@ -87,6 +88,9 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     private static final String CURRENT_FRAGMENT = "STATE_FRAGMENT_SHOW";
     private int currentIndex = Config.getBottomMenu();
 
+    // todo 第一次启动标记 上旋转监听事件
+    private boolean ifStart = true;
+
     @Override
     protected SytMainPresenter createPresenter() {
         return new SytMainPresenter(this);
@@ -125,7 +129,18 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 内存重启时调用 取出内存中保存的fragment
+
+        // todo 测试fragments数量
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+//        Logger.d(fragmentList);
+        Logger.d("fragmentListSize: " + fragmentList.size());
+        if (fragmentList.size() == 1) {
+            // todo 出栈 fragment 失败
+            getSupportFragmentManager().popBackStack();
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+
+        // 内存重启时调用 取出内存中保存的fragment 名称
         if (savedInstanceState != null) {
              currentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT, currentIndex);
             Intent intent = new Intent();
@@ -155,6 +170,10 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
 
     @Override
     protected void onDestroy() {
+
+        // 清空所有fragment
+//        getSupportFragmentManager().popBackStackImmediate();
+
         for (int i = 0; i < 4; i++) {
             fragments.get(i).onDestroy();
         }
@@ -226,7 +245,7 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     private void setFragment(Fragment fragment) {
 
         // 判定是否被添加过了  setTransition 添加动画
-        if (!fragments.get(currentIndex-1).isAdded()) {
+        if (!this.fragments.get(currentIndex-1).isAdded()) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -267,7 +286,8 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     @Override
     public void showFragment(int menuNum) {
 
-        ToastUtil.makeText("menu: " + menuNum);
+//        ToastUtil.makeText("menu: " + menuNum);
+        Logger.d("menu: " + menuNum);
         switch (menuNum) {
             case 1:
             case R.id.constraintLayout_one_bottom_phone:

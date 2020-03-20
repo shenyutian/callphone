@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/frame_background"
     tools:context=".ui.setting.SettingFragment">
 
     <!--顶部标题栏-->
@@ -12,6 +11,7 @@
         android:id="@+id/constraintLayout_setting_title"
         android:layout_width="0dp"
         android:layout_height="36dp"
+        android:background="@color/bar_bg_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

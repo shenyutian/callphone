@@ -8,15 +8,15 @@
 
     <!--品牌布局-->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/bar_brand_top"
         android:layout_height="@dimen/bar_height"
         android:layout_width="match_parent"
+        android:padding="@dimen/padding_default"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:text="品牌列表" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -25,7 +25,8 @@
         android:id="@+id/rv_brand_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/bar_height"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:paddingBottom="@dimen/bar_height"
+        app:layout_constraintTop_toBottomOf="@+id/bar_brand_top"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

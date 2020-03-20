@@ -9,7 +9,6 @@
         android:id="@+id/tv_details_root_head"
         android:text="小标题"
         android:textSize="@dimen/item_head_text"
-        android:background="@color/bg_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/padding_default"

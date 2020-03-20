@@ -6,7 +6,6 @@ import android.webkit.WebSettings;
 import com.syt.cellphone.BuildConfig;
 import com.syt.cellphone.base.Config;
 import com.syt.cellphone.base.MyApp;
-import com.syt.cellphone.util.AddressUtils;
 import com.syt.cellphone.util.SharedConfigUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -84,7 +83,7 @@ public class ApiRetrofit {
         OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
 
-                    private AddressUtils addressUtils = new AddressUtils();
+//                    private AddressUtils addressUtils = new AddressUtils();
 
                     @NotNull
                     @Override
@@ -94,7 +93,7 @@ public class ApiRetrofit {
                                 .removeHeader("User-Agent")
                                 .addHeader("User-Agent", WebSettings.getDefaultUserAgent(MyApp.context))
                                 .addHeader("token", SharedConfigUtil.getToken())
-                                .addHeader("ip", addressUtils.getV4IP())
+//                                .addHeader("ip", addressUtils.getV4IP())
                                 .build();
                         return chain.proceed(request);
                     }
@@ -106,7 +105,7 @@ public class ApiRetrofit {
 
         //debug模式加拦截器
         if (BuildConfig.DEBUG) {
-        okhttpBuilder.addInterceptor(interceptor);
+            okhttpBuilder.addInterceptor(interceptor);
         }
         client = okhttpBuilder.build();
         retrofit = new Retrofit.Builder()
