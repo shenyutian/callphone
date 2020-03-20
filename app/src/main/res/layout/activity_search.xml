@@ -10,6 +10,7 @@
         android:id="@+id/bar_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bar_height"
+        android:background="@color/bar_bg_color"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
