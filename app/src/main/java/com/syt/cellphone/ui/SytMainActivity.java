@@ -88,8 +88,8 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     private static final String CURRENT_FRAGMENT = "STATE_FRAGMENT_SHOW";
     private int currentIndex = Config.getBottomMenu();
 
-    // todo 第一次启动标记 上旋转监听事件
-    private boolean ifStart = true;
+    //启动标记 上旋转监听事件 堆内存应该没问题的
+    private static boolean ifStart = true;
 
     @Override
     protected SytMainPresenter createPresenter() {
@@ -130,14 +130,10 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // todo 测试fragments数量
-        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-//        Logger.d(fragmentList);
-        Logger.d("fragmentListSize: " + fragmentList.size());
-        if (fragmentList.size() == 1) {
-            // todo 出栈 fragment 失败
-            getSupportFragmentManager().popBackStack();
-            getSupportFragmentManager().popBackStackImmediate();
+        // 第一次启动跳过
+        if (ifStart) {
+            ifStart = false;
+            return;
         }
 
         // 内存重启时调用 取出内存中保存的fragment 名称
