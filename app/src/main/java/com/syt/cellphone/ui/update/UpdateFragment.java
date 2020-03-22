@@ -1,24 +1,20 @@
 package com.syt.cellphone.ui.update;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
 import com.syt.cellphone.R;
 import com.syt.cellphone.adapter.UpdateAdapter;
 import com.syt.cellphone.pojo.PhoneBase;
 import com.syt.cellphone.pojo.PhoneRecommend;
-import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -169,12 +165,12 @@ public class UpdateFragment extends Fragment implements SwipeRefreshLayout.OnRef
     /**
      *     加载图片banner轮播图图片
      */
-    private class GlideImageLoader extends ImageLoader {
-        @Override
-        public void displayImage(Context context, Object path, ImageView imageView) {
-            //Glide 加载图片简单用法
-            Glide.with(context).load((String) path).into(imageView);
-        }
-    }
+//    private class GlideImageLoader extends ImageLoader {
+//        @Override
+//        public void displayImage(Context context, Object path, ImageView imageView) {
+//            //Glide 加载图片简单用法
+//            Glide.with(context).load((String) path).into(imageView);
+//        }
+//    }
 
 }

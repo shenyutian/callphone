@@ -15,7 +15,7 @@ import org.greenrobot.greendao.internal.DaoConfig;
 /** 
  * DAO for table "PHONE_RECOMMEND".
 */
-public class PhoneRecommendDao extends AbstractDao<PhoneRecommend, Integer> {
+public class PhoneRecommendDao extends AbstractDao<PhoneRecommend, Long> {
 
     public static final String TABLENAME = "PHONE_RECOMMEND";
 
@@ -24,9 +24,10 @@ public class PhoneRecommendDao extends AbstractDao<PhoneRecommend, Integer> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property RecommendId = new Property(0, int.class, "recommendId", true, "RECOMMEND_ID");
-        public final static Property PhoneId = new Property(1, int.class, "phoneId", false, "PHONE_ID");
+        public final static Property RecommendId = new Property(0, Long.class, "recommendId", true, "_id");
+        public final static Property PhoneId = new Property(1, Integer.class, "phoneId", false, "PHONE_ID");
         public final static Property RecommendReimage = new Property(2, String.class, "recommendReimage", false, "RECOMMEND_REIMAGE");
+        public final static Property RecommendName = new Property(3, String.class, "recommendName", false, "RECOMMEND_NAME");
     }
 
 
@@ -42,9 +43,10 @@ public class PhoneRecommendDao extends AbstractDao<PhoneRecommend, Integer> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PHONE_RECOMMEND\" (" + //
-                "\"RECOMMEND_ID\" INTEGER PRIMARY KEY NOT NULL ," + // 0: recommendId
-                "\"PHONE_ID\" INTEGER NOT NULL ," + // 1: phoneId
-                "\"RECOMMEND_REIMAGE\" TEXT);"); // 2: recommendReimage
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: recommendId
+                "\"PHONE_ID\" INTEGER," + // 1: phoneId
+                "\"RECOMMEND_REIMAGE\" TEXT," + // 2: recommendReimage
+                "\"RECOMMEND_NAME\" TEXT);"); // 3: recommendName
     }
 
     /** Drops the underlying database table. */
@@ -56,56 +58,85 @@ public class PhoneRecommendDao extends AbstractDao<PhoneRecommend, Integer> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, PhoneRecommend entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getRecommendId());
-        stmt.bindLong(2, entity.getPhoneId());
+ 
+        Long recommendId = entity.getRecommendId();
+        if (recommendId != null) {
+            stmt.bindLong(1, recommendId);
+        }
+ 
+        Integer phoneId = entity.getPhoneId();
+        if (phoneId != null) {
+            stmt.bindLong(2, phoneId);
+        }
  
         String recommendReimage = entity.getRecommendReimage();
         if (recommendReimage != null) {
             stmt.bindString(3, recommendReimage);
+        }
+ 
+        String recommendName = entity.getRecommendName();
+        if (recommendName != null) {
+            stmt.bindString(4, recommendName);
         }
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, PhoneRecommend entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getRecommendId());
-        stmt.bindLong(2, entity.getPhoneId());
+ 
+        Long recommendId = entity.getRecommendId();
+        if (recommendId != null) {
+            stmt.bindLong(1, recommendId);
+        }
+ 
+        Integer phoneId = entity.getPhoneId();
+        if (phoneId != null) {
+            stmt.bindLong(2, phoneId);
+        }
  
         String recommendReimage = entity.getRecommendReimage();
         if (recommendReimage != null) {
             stmt.bindString(3, recommendReimage);
         }
+ 
+        String recommendName = entity.getRecommendName();
+        if (recommendName != null) {
+            stmt.bindString(4, recommendName);
+        }
     }
 
     @Override
-    public Integer readKey(Cursor cursor, int offset) {
-        return cursor.getInt(offset + 0);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public PhoneRecommend readEntity(Cursor cursor, int offset) {
         PhoneRecommend entity = new PhoneRecommend( //
-            cursor.getInt(offset + 0), // recommendId
-            cursor.getInt(offset + 1), // phoneId
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // recommendReimage
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // recommendId
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // phoneId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // recommendReimage
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // recommendName
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, PhoneRecommend entity, int offset) {
-        entity.setRecommendId(cursor.getInt(offset + 0));
-        entity.setPhoneId(cursor.getInt(offset + 1));
+        entity.setRecommendId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setPhoneId(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
         entity.setRecommendReimage(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setRecommendName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }
     
     @Override
-    protected final Integer updateKeyAfterInsert(PhoneRecommend entity, long rowId) {
-        return entity.getRecommendId();
+    protected final Long updateKeyAfterInsert(PhoneRecommend entity, long rowId) {
+        entity.setRecommendId(rowId);
+        return rowId;
     }
     
     @Override
-    public Integer getKey(PhoneRecommend entity) {
+    public Long getKey(PhoneRecommend entity) {
         if(entity != null) {
             return entity.getRecommendId();
         } else {
@@ -115,7 +146,7 @@ public class PhoneRecommendDao extends AbstractDao<PhoneRecommend, Integer> {
 
     @Override
     public boolean hasKey(PhoneRecommend entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        return entity.getRecommendId() != null;
     }
 
     @Override

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--自定义的标题栏样式，已经废弃了-->
+    <!--自定义的标题栏样式-->
     <declare-styleable name="CustomToolBar">
         <!--左按钮是否可见|背景-->
         <attr name="left_btn_visible" format="boolean"/>

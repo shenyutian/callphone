@@ -17,7 +17,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.orhanobut.logger.Logger;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseActivity;
 import com.syt.cellphone.base.Config;
@@ -35,7 +37,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-
+/**
+ * 最开始的activity,主页就是它
+ * @author syt
+ */
 public class SytMainActivity extends BaseActivity<SytMainPresenter> implements SytMainView, View.OnLongClickListener {
 
     @BindView(R.id.frameLayout_main_content)
@@ -83,6 +88,9 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     private static final String CURRENT_FRAGMENT = "STATE_FRAGMENT_SHOW";
     private int currentIndex = Config.getBottomMenu();
 
+    //启动标记 上旋转监听事件 堆内存应该没问题的
+    private static boolean ifStart = true;
+
     @Override
     protected SytMainPresenter createPresenter() {
         return new SytMainPresenter(this);
@@ -121,9 +129,16 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 内存重启时调用 取出内存中保存的fragment
+
+        // 第一次启动跳过
+        if (ifStart) {
+            ifStart = false;
+            return;
+        }
+
+        // 内存重启时调用 取出内存中保存的fragment 名称
         if (savedInstanceState != null) {
-            currentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT, currentIndex);
+             currentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT, currentIndex);
             Intent intent = new Intent();
             intent.putExtra("param", currentIndex);
             presenter.switchMenus(intent);
@@ -147,6 +162,19 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
         // 保存当前 fragment 索引
         outState.putInt(CURRENT_FRAGMENT, currentIndex);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        // 清空所有fragment
+//        getSupportFragmentManager().popBackStackImmediate();
+
+        for (int i = 0; i < 4; i++) {
+            fragments.get(i).onDestroy();
+        }
+        currentFragment.onDestroy();
+        super.onDestroy();
     }
 
     @OnClick({R.id.constraintLayout_one_bottom_phone, R.id.constraintLayout_two_bottom_brand, R.id.constraintLayout_three_bottom_soc, R.id.constraintLayout_four_bottom_setting})
@@ -212,16 +240,18 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
      */
     private void setFragment(Fragment fragment) {
 
-        // 判定是否被添加过了
-        if (!fragments.get(currentIndex-1).isAdded()) {
+        // 判定是否被添加过了  setTransition 添加动画
+        if (!this.fragments.get(currentIndex-1).isAdded()) {
             getSupportFragmentManager()
                     .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .hide(currentFragment)
                     .add(R.id.frameLayout_main_content, fragment)
                     .commit();
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .hide(currentFragment)
                     .show(fragment)
                     .commit();
@@ -251,7 +281,9 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
      */
     @Override
     public void showFragment(int menuNum) {
-        ToastUtil.makeText("menu: " + menuNum);
+
+//        ToastUtil.makeText("menu: " + menuNum);
+        Logger.d("menu: " + menuNum);
         switch (menuNum) {
             case 1:
             case R.id.constraintLayout_one_bottom_phone:

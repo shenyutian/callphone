@@ -2,6 +2,7 @@ package com.syt.cellphone.widget;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.syt.cellphone.R;
+import com.syt.cellphone.ui.SytMainActivity;
 
 /**
  * @author shenyutian
@@ -142,7 +144,11 @@ public class SytToolBar extends ConstraintLayout {
                 ((Activity) getContext()).finish();
             }
         });
-
+        // 设置左边的文字
+        if (isLeftTvVisible) {
+            leftTv.setVisibility(isLeftTvVisible == true ? VISIBLE : GONE);
+            leftTv.setText(leftTvText);
+        }
 
         /**
          * 中间标题设置
@@ -167,6 +173,17 @@ public class SytToolBar extends ConstraintLayout {
 //        if(backgroundResId != -1){
 //            barRlyt.setBackgroundColor(backgroundResId);
 //        }
+
+        /**
+         * ---------------设置右边的属性------------
+         */
+        if (isRightTvVisible) {
+            rightTv.setText(rightTvText);
+            // 右边的点击事件返回首页
+            rightTv.setOnClickListener( v -> {
+                getContext().startActivity(new Intent(getContext(), SytMainActivity.class));
+            });
+        }
 
         addView(barLayoutView, 0);
     }

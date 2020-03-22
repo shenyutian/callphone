@@ -2,6 +2,7 @@
 <resources>
     <!--夜间模式的-->
     <!--主背景颜色-->
+    <color name="bar_bg_color">#000000</color>
     <color name="bg_color">#000000</color>
     <color name="white_c">#ffffff</color>
     <!--主字体 颜色 -->
@@ -12,6 +13,8 @@
     <color name="select_underline">#FFFFF0</color>
     <!--标题大白颜色-->
     <color name="title_color">#ffffff</color>
+    <!--图标颜色-->
+    <color name="ic_color">#FFFFFF</color>
 
     <!-- 白色 -->
     <color name="ivory">#FFFFF0</color>
@@ -324,4 +327,5 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+
 </resources>

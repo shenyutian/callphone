@@ -23,16 +23,15 @@
 
         <Button
             android:id="@+id/toolbar_left_btn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:gravity="center"
+            android:layout_width="24dp"
+            android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:background="@mipmap/ic_bottom_back"
+            android:gravity="center"
             android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/toolbar_left_tv"
@@ -42,7 +41,7 @@
             android:gravity="center"
             android:layout_centerVertical="true"
             android:textSize="15sp"
-            android:text="返回"
+            android:text="左边文字"
             android:visibility="visible"
             app:layout_constraintStart_toEndOf="@id/toolbar_left_btn"
             app:layout_constraintTop_toTopOf="parent"
@@ -104,7 +103,7 @@
             android:gravity="center"
             android:layout_centerVertical="true"
             android:textSize="15sp"
-            android:text="首页"
+            android:text="右边文字"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

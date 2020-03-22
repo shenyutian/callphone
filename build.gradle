@@ -2,14 +2,18 @@
 
 buildscript {
     repositories {
+        // 添加阿里云 maven 地址
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
         google()
         jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.6.1'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+        classpath "com.tencent.bugly:tinker-support:1.1.5"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -17,6 +21,9 @@ buildscript {
 
 allprojects {
     repositories {
+        // 添加阿里云 maven 地址
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
         google()
         jcenter()
         maven { url "https://jitpack.io" }

@@ -22,7 +22,7 @@ public class MyDaoMaster extends DaoMaster.OpenHelper {
     }
 
     /**
-     * SearchHistoryDao 升级的数据库表
+     * PhoneRecommendDao 升级的数据库表
      */
     @Override
     public void onUpgrade(Database db, int oldVersion, int newVersion) {
@@ -36,7 +36,7 @@ public class MyDaoMaster extends DaoMaster.OpenHelper {
             public void onDropAllTables(Database db, boolean ifExists) {
                 DaoMaster.dropAllTables(db, ifExists);
             }
-        },SearchHistoryDao.class);
+        },PhoneRecommendDao.class);
         Log.e(TAG, "onUpgrade: " + oldVersion + " newVersion = " + newVersion);
     }
 }

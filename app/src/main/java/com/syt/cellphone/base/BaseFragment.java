@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,7 +22,7 @@ import butterknife.Unbinder;
  * Date: 2019-12-05
  * 作用: 基础碎片
  */
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView {
+public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView, View.OnTouchListener {
 
     public Context context;
     protected P fpresenter;
@@ -50,6 +51,16 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+    }
+
+
+    /** 防止点击穿透
+     * @param view
+     * @param savedInstanceState
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        view.setOnTouchListener(this);
     }
 
     @Nullable
@@ -88,4 +99,14 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         }
     }
 
+    /**
+     * 拦截空白页面，防止点击穿透
+     * @param v 当前视图
+     * @param event 点击处理
+     * @return 拦截
+     */
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return true;
+    }
 }

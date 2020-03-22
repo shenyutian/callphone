@@ -6,19 +6,28 @@ package com.syt.cellphone.pojo;
  * 功能 评价
  */
 public class Estimate {
+
     /**
-     * estimateId : 1
+     * estimateId : 196
      * phoneId : 1293901
      * userId : 666
-     * estimateGrade : 真的辣鸡
-     * estimateLike : 1
+     * estimateGrade : 9.9
+     * estimateComment : 真的**辣鸡123da**as**gaga
+     * estimateLike : null
+     * estimateObjectto : null
+     * estimateTime : 1583717182858
+     * model : null
      */
 
     private int estimateId;
     private int phoneId;
     private int userId;
-    private String estimateGrade;
+    private float estimateGrade;
+    private String estimateComment;
     private int estimateLike;
+    private int estimateObjectto;
+    private long estimateTime;
+    private String model;
 
     public int getEstimateId() {
         return estimateId;
@@ -44,19 +53,66 @@ public class Estimate {
         this.userId = userId;
     }
 
-    public String getEstimateGrade() {
+    public Object getEstimateGrade() {
         return estimateGrade;
     }
 
-    public void setEstimateGrade(String estimateGrade) {
+    public void setEstimateGrade(float estimateGrade) {
         this.estimateGrade = estimateGrade;
     }
 
-    public int getEstimateLike() {
+    public String getEstimateComment() {
+        return estimateComment;
+    }
+
+    public void setEstimateComment(String estimateComment) {
+        this.estimateComment = estimateComment;
+    }
+
+    public Object getEstimateLike() {
         return estimateLike;
     }
 
     public void setEstimateLike(int estimateLike) {
         this.estimateLike = estimateLike;
+    }
+
+    public Object getEstimateObjectto() {
+        return estimateObjectto;
+    }
+
+    public void setEstimateObjectto(int estimateObjectto) {
+        this.estimateObjectto = estimateObjectto;
+    }
+
+    public long getEstimateTime() {
+        return estimateTime;
+    }
+
+    public void setEstimateTime(long estimateTime) {
+        this.estimateTime = estimateTime;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    @Override
+    public String toString() {
+        return "Estimate{" +
+                "estimateId=" + estimateId +
+                ", phoneId=" + phoneId +
+                ", userId=" + userId +
+                ", estimateGrade=" + estimateGrade +
+                ", estimateComment='" + estimateComment + '\'' +
+                ", estimateLike=" + estimateLike +
+                ", estimateObjectto=" + estimateObjectto +
+                ", estimateTime=" + estimateTime +
+                ", model=" + model +
+                '}';
     }
 }

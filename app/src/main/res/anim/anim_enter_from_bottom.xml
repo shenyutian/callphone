@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+    translate 平移
+    fromYDelta 表示相对于自己左上角Y方向上的起点
+    toYDelta 表示相对于自己左上角Y方向上的终点
+    fillAfter表示动画结束后是否维持动画结束时的状态
+    duration 动画持续时间
+    -->
+    <translate
+        android:fromYDelta="100%"
+        android:toYDelta="0"
+        android:fillAfter="false"
+        android:duration="300"
+        />
+    <!--
+    alpha 透明度
+    fromAlpha 表示起始透明度，0~1,0为完全透明，1为完全不透明
+    toAlpha  表示终止透明度，0~1,0为完全透明，1为完全不透明
+    duration 设置动画时间
+    fillAfter 表示动画结束后是否维持动画结束时的状态
+    -->
+    <alpha
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:duration="300"
+        android:fillAfter="true"
+        />
+</set>

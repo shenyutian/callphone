@@ -1,6 +1,7 @@
 package com.syt.cellphone.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.syt.cellphone.R;
 import com.syt.cellphone.pojo.PhoneBase;
+import com.syt.cellphone.ui.phone.details.PhoneDetailsActivity;
 
 import java.util.List;
 
@@ -63,6 +65,10 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
                 int position = viewHolder.getAdapterPosition();
                 PhoneBase phoneBase = phoneBaseList.get(position);
                 Toast.makeText(v.getContext(), "点击编号 " + phoneBase.getBaseId() + ",名称: " + phoneBase.getBaseName(), Toast.LENGTH_SHORT).show();
+                // 进行跳转
+                Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+                startPhoneDetails.putExtra("phoneId", phoneBase.getBaseId());
+                context.startActivity(startPhoneDetails);
             }
         });
         return viewHolder;

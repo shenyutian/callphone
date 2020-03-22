@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
 import com.syt.cellphone.greendao.DaoMaster;
 import com.syt.cellphone.greendao.DaoSession;
 import com.syt.cellphone.pojo.PhoneUser;
@@ -42,6 +46,12 @@ public class MyApp extends Application {
         initGrennDao();
         // 腾讯 Bugly 初始化
         initBugle();
+        // 日志logger初始化
+        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(false)
+                .tag("syt")
+                .build();
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
     }
 
     /**

@@ -260,10 +260,10 @@ public class TestAdapter extends BaseProviderMultiAdapter<TestPojo> {
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getContext().getResources().getDisplayMetrics().widthPixels, 350);
 
             List<PhoneRecommend> recommends = new LinkedList<>();
-            recommends.add(new PhoneRecommend(1, 1, "https://dg-fd.zol-img.com.cn/t_s2000x2000/g4/M05/06/05/ChMly113aC-IVGMlAAG11ap9YqUAAXnogBWIakAAbXt993.jpg"));
-            recommends.add(new PhoneRecommend(2, 2, "https://dg-fd.zol-img.com.cn/t_s2000x2000/g1/M0A/02/03/ChMljl2EabyIPg2aAAFbqHHjP_gAAP3CgAVUUYAAVvA000.jpg"));
-            recommends.add(new PhoneRecommend(3, 3, "https://dg-fd.zol-img.com.cn/t_s2000x2000/g4/M07/09/05/ChMlzF2LDVeIDWpCAAEy5pe9cV0AAXzvALgkHcAATL-905.jpg"));
-            recommends.add(new PhoneRecommend(4, 4, "https://dg-fd.zol-img.com.cn/t_s2000x2000/g4/M07/06/01/ChMlzF110BOICajxAAEChBTt38gAAXmwAEL5J8AAQKc522.jpg"));
+            recommends.add(new PhoneRecommend(1L, 1, "https://dg-fd.zol-img.com.cn/t_s2000x2000/g4/M05/06/05/ChMly113aC-IVGMlAAG11ap9YqUAAXnogBWIakAAbXt993.jpg", ""));
+            recommends.add(new PhoneRecommend(2L, 2, "https://dg-fd.zol-img.com.cn/t_s2000x2000/g1/M0A/02/03/ChMljl2EabyIPg2aAAFbqHHjP_gAAP3CgAVUUYAAVvA000.jpg", ""));
+            recommends.add(new PhoneRecommend(3L, 3, "https://dg-fd.zol-img.com.cn/t_s2000x2000/g4/M07/09/05/ChMlzF2LDVeIDWpCAAEy5pe9cV0AAXzvALgkHcAATL-905.jpg", ""));
+            recommends.add(new PhoneRecommend(4L, 4, "https://dg-fd.zol-img.com.cn/t_s2000x2000/g4/M07/06/01/ChMlzF110BOICajxAAEChBTt38gAAXmwAEL5J8AAQKc522.jpg", ""));
 
             //标题 + 图片url
             List<String> titles;

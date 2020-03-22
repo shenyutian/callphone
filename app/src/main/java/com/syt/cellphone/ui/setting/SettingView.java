@@ -1,8 +1,5 @@
 package com.syt.cellphone.ui.setting;
 
-import android.content.Context;
-
-import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseView;
 
 /**
@@ -11,6 +8,14 @@ import com.syt.cellphone.base.BaseView;
  */
 public interface SettingView extends BaseView {
 
+    /**
+     * 登录成功后，对界面进行刷新
+     */
+    void refresh();
 
-
+    /**
+     * 刷新头像
+     * @param imgSrc 图片路径
+     */
+    void refreshPortrait(String imgSrc);
 }

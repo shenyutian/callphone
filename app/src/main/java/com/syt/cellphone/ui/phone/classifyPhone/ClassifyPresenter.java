@@ -1,14 +1,16 @@
 package com.syt.cellphone.ui.phone.classifyPhone;
 
 import com.syt.cellphone.base.BasePresenter;
+import com.syt.cellphone.base.MyApp;
+import com.syt.cellphone.greendao.PhoneRecommendDao;
 import com.syt.cellphone.net.BaseObserver;
 import com.syt.cellphone.pojo.PhoneBase;
 import com.syt.cellphone.pojo.PhoneBasePageList;
 import com.syt.cellphone.pojo.PhoneRecommend;
 import com.syt.cellphone.util.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,8 +27,9 @@ public class ClassifyPresenter extends BasePresenter<ClassifyView> {
      * pageNum 页号
      */
     private String item;
-    private List<PhoneBase> phoneBaseList = Collections.synchronizedList(new LinkedList<>());
+    private List<PhoneBase> phoneBaseList = Collections.synchronizedList(new ArrayList<>());
     private AtomicInteger pageNum = new AtomicInteger(1);
+    private PhoneRecommendDao recommendDao = MyApp.getDaoSession().getPhoneRecommendDao();
 
     public ClassifyPresenter(ClassifyView classifyView, String item) {
         super(classifyView);
@@ -112,12 +115,15 @@ public class ClassifyPresenter extends BasePresenter<ClassifyView> {
 
             @Override
             public void onSuccess(List<PhoneRecommend> phoneRecommends) {
+                // 保存推荐列表 后面的搜索推荐也要用
+                recommendDao.insertOrReplaceInTx(phoneRecommends);
+                // 刷新主页推荐轮播图
                 baseView.showHeaderView(phoneRecommends);
             }
 
             @Override
             public void onError(String msg) {
-
+                baseView.showHeaderView(recommendDao.loadAll());
             }
         }, 0);
     }

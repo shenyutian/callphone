@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author shenyutian
  * @data 2020-01-19 17:16
- * 功能 手机详情
+ * 功能 手机详情 todo 评价需要修改
  */
 public class PhoneDetails {
 
