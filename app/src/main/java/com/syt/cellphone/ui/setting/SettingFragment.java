@@ -26,6 +26,7 @@ import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.base.Config;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.ui.SytMainActivity;
+import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.widget.GlideEngine;
 
@@ -201,14 +202,14 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         View loginView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_user_login, null);
         final EditText etName = loginView.findViewById(R.id.et_user_login_name);
         final EditText etPass = loginView.findViewById(R.id.et_user_login_pass);
+        final Button btSubmit = loginView.findViewById(R.id.bt_user_login_submit);
+        final TextView btRequest = loginView.findViewById(R.id.tv_user_login_request);
         // 历史账号上去
         etName.setText(SharedConfigUtil.getUserName());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setView(loginView)
                 .setNegativeButton("取消", ((dialog, which) -> {
-                    // 跳转到注册界面
-//                    startActivity(new Intent(getContext(), RegisteredActivity.class));
                     dialog.cancel();
                 }))
                 .setPositiveButton("登录", null);
@@ -216,7 +217,9 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 
         // 重写onShow()方法 里面的getButton
         alertDialog.setOnShowListener((DialogInterface dialogInterface) -> {
+
             Button button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+
             button.setOnClickListener((View v) -> {
                 PhoneUser user = new PhoneUser();
 
@@ -236,6 +239,32 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 
                 fpresenter.handleUserLogin(user);
             });
+        });
+
+        // 验证登录
+        btSubmit.setOnClickListener((v -> {
+            PhoneUser user = new PhoneUser();
+
+            user.setUserName(etName.getText().toString().trim());
+            user.setUserPass(etPass.getText().toString().trim());
+
+            if (user.getUserName() == null || user.getUserName().isEmpty()) {
+                Toast.makeText(getActivity().getApplicationContext(), "账号不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (user.getUserPass() == null || user.getUserPass().isEmpty()) {
+                Toast.makeText(getActivity().getApplicationContext(), "密码不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            SharedConfigUtil.saveUserName(user.getUserName());
+
+            fpresenter.handleUserLogin(user);
+        }));
+
+        btRequest.setOnClickListener(v -> {
+            // 跳转到注册界面
+            startActivity(new Intent(getContext(), RegisteredActivity.class));
         });
 
         alertDialog.show();

@@ -18,4 +18,9 @@ public interface PhoneDetailsView extends BaseView {
      * 添加界面
      */
     void refresh();
+
+    /**
+     * 登录完成关闭登录窗口
+     */
+    void closeLoginDialog();
 }

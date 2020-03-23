@@ -11,8 +11,10 @@ import com.syt.cellphone.base.Config;
 import com.syt.cellphone.net.BaseObserver;
 import com.syt.cellphone.pojo.Estimate;
 import com.syt.cellphone.pojo.PhoneDetails;
+import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.ui.SytMainActivity;
 import com.syt.cellphone.util.LogUtil;
+import com.syt.cellphone.util.SharedConfigUtil;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -122,5 +124,28 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
             intent.putExtra("param", 4);
             getBaseView().getContext().getApplicationContext().startActivity(intent);
         }
+    }
+
+    /**
+     * 处理登录逻辑
+     * @param user 用户登录数据
+     */
+    public void handleUserLogin(PhoneUser user) {
+        addDisposable(apiServer.setUserLogin(user), new BaseObserver<PhoneUser>(baseView) {
+            @Override
+            public void onSuccess(PhoneUser o) {
+                Toast.makeText(getBaseView().getContext().getApplicationContext(), o.getMessage(), Toast.LENGTH_SHORT).show();
+                if ("登录成功".equals(o.getMessage())) {
+                    SharedConfigUtil.saveToken(o.getToken());
+                    SharedConfigUtil.saveUserName(o.getUserName());
+                    baseView.closeLoginDialog();
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            }
+        }, 0);
     }
 }

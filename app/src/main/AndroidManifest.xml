@@ -38,10 +38,9 @@
             tools:ignore="LockedOrientationActivity"
             >
         </activity>
-        <activity android:name=".ui.TestActivity"></activity>
-        <activity
-            android:name=".ui.phone.details.PhoneDetailsActivity"
-            tools:ignore="LockedOrientationActivity"></activity>
+        <activity android:name=".ui.TestActivity" />
+
+        <activity android:name=".ui.phone.details.PhoneDetailsActivity"/>
 
         <activity android:name=".ui.phone.search.SearchActivity" />
 

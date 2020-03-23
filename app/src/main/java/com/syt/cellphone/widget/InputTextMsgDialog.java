@@ -27,7 +27,6 @@ import com.syt.cellphone.R;
  * @author shenyutian
  * @data 2020/3/4 11:41 AM
  * 功能 评论的弹窗  参考 https://blog.csdn.net/qq_32518491/article/details/85000421
- * todo 可能出现键盘弹出不正常
  */
 public class InputTextMsgDialog extends AppCompatDialog {
 
@@ -135,11 +134,12 @@ public class InputTextMsgDialog extends AppCompatDialog {
                     public void onMultClick(View v) {
                         String msg = messageTextView.getText().toString().trim();
                         if (msg.length() > maxNumber) {
-                            Toast.makeText(getContext(), "超过最大字数限制", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "超过最大字数限制", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (msg.isEmpty()) {
-                            Toast.makeText(getContext(), "请输入文字", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "请输入文字", Toast.LENGTH_SHORT).show();
+                            messageTextView.setText("");
                         } else {
                             // 输入回调，关闭输入法
                             onTextSendListener.onTextSend(msg);
@@ -150,7 +150,6 @@ public class InputTextMsgDialog extends AppCompatDialog {
                             // 关闭窗口
                             dismiss();
                         }
-                        messageTextView.setText(null);
                     }
                 });
         // 监听视图加载完毕

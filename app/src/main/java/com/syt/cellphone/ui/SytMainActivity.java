@@ -89,8 +89,6 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     private static final String CURRENT_FRAGMENT = "STATE_FRAGMENT_SHOW";
     private int currentIndex = Config.getBottomMenu();
 
-    //启动标记 上旋转监听事件 堆内存应该没问题的
-    private static boolean ifStart = true;
     private static final String TAG = "MainActivity";
 
     @Override
@@ -134,11 +132,6 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
         super.onCreate(savedInstanceState);
 
         Log.e(TAG, "onCreate: " + currentFragment.getClass().getName());
-        // 第一次启动跳过
-//        if (ifStart) {
-//            ifStart = false;
-//            return;
-//        }
 
         // 内存重启时调用 取出内存中保存的fragment 名称
         if (savedInstanceState != null) {
@@ -146,6 +139,7 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
             // 查询内存中是否有没有被回收的fragment
             List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
             for (Fragment fragment : fragmentList) {
+                Logger.d(fragment);
                 // 将当前的fragment 等于上一次的
                 currentFragment = fragment;
             }
