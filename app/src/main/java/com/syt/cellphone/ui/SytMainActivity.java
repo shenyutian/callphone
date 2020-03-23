@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -90,6 +91,7 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
 
     //启动标记 上旋转监听事件 堆内存应该没问题的
     private static boolean ifStart = true;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected SytMainPresenter createPresenter() {
@@ -112,6 +114,7 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
         fragments.add(new BrandFragment());
         fragments.add(new SocFragment());
         fragments.add(new SettingFragment());
+
         //设置底部长按监听
         constraintLayoutOneBottomPhone.setOnLongClickListener(this);
         constraintLayoutTwoBottomBrand.setOnLongClickListener(this);
@@ -130,15 +133,29 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.e(TAG, "onCreate: " + currentFragment.getClass().getName());
         // 第一次启动跳过
-        if (ifStart) {
-            ifStart = false;
-            return;
-        }
+//        if (ifStart) {
+//            ifStart = false;
+//            return;
+//        }
 
         // 内存重启时调用 取出内存中保存的fragment 名称
         if (savedInstanceState != null) {
-             currentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT, currentIndex);
+
+            // 查询内存中是否有没有被回收的fragment
+            List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+            for (Fragment fragment : fragmentList) {
+                // 将当前的fragment 等于上一次的
+                currentFragment = fragment;
+            }
+//            this.fragments.set(1, getSupportFragmentManager().findFragmentByTag(BrandFragment.class.getName()));
+//            this.fragments.set(2, getSupportFragmentManager().findFragmentByTag(SocFragment.class.getName()));
+//            this.fragments.set(3, getSupportFragmentManager().findFragmentByTag(SettingFragment.class.getName()));
+
+
+
+            currentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT, currentIndex);
             Intent intent = new Intent();
             intent.putExtra("param", currentIndex);
             presenter.switchMenus(intent);
@@ -167,13 +184,14 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     @Override
     protected void onDestroy() {
 
+        Log.e(TAG, "onDestroy: " + currentFragment);
         // 清空所有fragment
 //        getSupportFragmentManager().popBackStackImmediate();
 
-        for (int i = 0; i < 4; i++) {
-            fragments.get(i).onDestroy();
-        }
-        currentFragment.onDestroy();
+//        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+//            getSupportFragmentManager().popBackStack();
+//        }
+//        currentFragment.onDestroy();
         super.onDestroy();
     }
 

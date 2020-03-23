@@ -212,4 +212,10 @@ public class InputTextMsgDialog extends AppCompatDialog {
         super.dismiss();
         mLastDiff = 0;
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        messageTextView = null;
+    }
 }

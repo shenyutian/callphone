@@ -197,7 +197,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
      * 处理登录
      */
     private void handLogin() {
-// 暂时出现登录dialog
+        // 暂时出现登录dialog
         View loginView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_user_login, null);
         final EditText etName = loginView.findViewById(R.id.et_user_login_name);
         final EditText etPass = loginView.findViewById(R.id.et_user_login_pass);
@@ -206,7 +206,6 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                 .setView(loginView)
-                .setTitle("欢迎登录")
                 .setNegativeButton("取消", ((dialog, which) -> {
                     // 跳转到注册界面
 //                    startActivity(new Intent(getContext(), RegisteredActivity.class));

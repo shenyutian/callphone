@@ -106,6 +106,8 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
             estimate.setEstimateTime(System.currentTimeMillis());
             presenter.handUnloadEstimate(estimate);
+
+            inputTextMsgDialog.dismiss();
         });
 
         // 设置下面提示视图的点击事件
@@ -127,6 +129,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
     }
 
     @Override

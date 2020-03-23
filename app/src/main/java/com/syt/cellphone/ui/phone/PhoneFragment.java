@@ -85,6 +85,12 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
 //        changeTextColor();
     }
 
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setRetainInstance(true);
+//    }
+
     private void changeTextColor() {
         tabLayoutPhoneTop.post(() -> {
             try {
