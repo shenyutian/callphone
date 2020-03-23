@@ -65,9 +65,13 @@ public class InputTextMsgDialog extends AppCompatDialog {
         this.getWindow().setWindowAnimations(R.style.main_menu_animstyle);
         init();
         setLayout();
+
+        // todo 上色 暂时这样子
+        getWindow().setBackgroundDrawableResource(R.color.white_c);
     }
 
     private void init() {
+
         setContentView(R.layout.dialog_estimate);
         messageTextView = findViewById(R.id.et_input_message);
 
@@ -215,6 +219,6 @@ public class InputTextMsgDialog extends AppCompatDialog {
     @Override
     protected void onStop() {
         super.onStop();
-        messageTextView = null;
+//        messageTextView = null;
     }
 }

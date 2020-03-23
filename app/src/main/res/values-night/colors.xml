@@ -4,7 +4,7 @@
     <!--主背景颜色-->
     <color name="bar_bg_color">#000000</color>
     <color name="bg_color">#000000</color>
-    <color name="white_c">#ffffff</color>
+    <color name="white_c">#000000</color>
     <!--主字体 颜色 -->
     <color name="base_color">#f1f1f1</color>
     <!--外边的背景-->

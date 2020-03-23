@@ -5,7 +5,6 @@
     android:id="@+id/rl_outside_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white_c"
     android:orientation="horizontal">
 
     <LinearLayout
