@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -29,7 +28,6 @@ import com.syt.cellphone.ui.phone.PhoneFragment;
 import com.syt.cellphone.ui.setting.SettingFragment;
 import com.syt.cellphone.ui.soc.SocFragment;
 import com.syt.cellphone.util.LogUtil;
-import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -84,7 +82,7 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
      * CURRENT_FRAGMENT 当前显示的fragment 的索引
      * currentIndex     当前选择的碎片
      */
-    private Fragment currentFragment = new PhoneFragment();
+    private Fragment currentFragment = PhoneFragment.newInstance();
     private List<Fragment> fragments = new ArrayList<>();
     private static final String CURRENT_FRAGMENT = "STATE_FRAGMENT_SHOW";
     private int currentIndex = Config.getBottomMenu();
@@ -108,10 +106,10 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
         initPermission();
 
         // 加载设置布局
-        fragments.add(new PhoneFragment());
-        fragments.add(new BrandFragment());
-        fragments.add(new SocFragment());
-        fragments.add(new SettingFragment());
+        fragments.add(PhoneFragment.newInstance());
+        fragments.add(BrandFragment.newInstance());
+        fragments.add(SocFragment.newInstance());
+        fragments.add(SettingFragment.newInstance());
 
         //设置底部长按监听
         constraintLayoutOneBottomPhone.setOnLongClickListener(this);
@@ -142,6 +140,7 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
                 Logger.d(fragment);
                 // 将当前的fragment 等于上一次的
                 currentFragment = fragment;
+                replaceFragment(fragment);
             }
 //            this.fragments.set(1, getSupportFragmentManager().findFragmentByTag(BrandFragment.class.getName()));
 //            this.fragments.set(2, getSupportFragmentManager().findFragmentByTag(SocFragment.class.getName()));
@@ -177,15 +176,8 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
 
     @Override
     protected void onDestroy() {
-
         Log.e(TAG, "onDestroy: " + currentFragment);
-        // 清空所有fragment
-//        getSupportFragmentManager().popBackStackImmediate();
-
-//        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
-//            getSupportFragmentManager().popBackStack();
-//        }
-//        currentFragment.onDestroy();
+        currentFragment.onDestroy();
         super.onDestroy();
     }
 
@@ -252,8 +244,11 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
      */
     private void setFragment(Fragment fragment) {
 
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        Log.e(TAG, "setFragment: " + fragmentList);
+
         // 判定是否被添加过了  setTransition 添加动画
-        if (!this.fragments.get(currentIndex-1).isAdded()) {
+        if (!fragments.get(currentIndex-1).isAdded()) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -275,13 +270,17 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
      * 设置主题
      */
     private void setTheme() {
-        if (SharedConfigUtil.getNightOnOff()) {
+
+        // 改成原生的深色模式
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+
+//        if (SharedConfigUtil.getNightOnOff()) {
             //夜间
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//        } else {
             //日间
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//        }
     }
 
     /**
@@ -327,6 +326,30 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
                 break;
             default:
                 ToastUtil.makeText("点击了不存在的地方");
+                break;
+        }
+    }
+
+    /**
+     * 替换fragments中的fragment为上一次保存的
+     * @param fragment
+     */
+    private void replaceFragment(Fragment fragment) {
+        Log.d(TAG, "replaceFragmentName: " + fragment.getClass().getName());
+        switch (fragment.getClass().getName()) {
+            case "com.syt.cellphone.ui.phone.PhoneFragment":
+                fragments.set(0, fragment);
+                break;
+            case "com.syt.cellphone.ui.brank.BrandFragment":
+                fragments.set(1, fragment);
+                break;
+            case "com.syt.cellphone.ui.soc.SocFragment":
+                fragments.set(2, fragment);
+                break;
+            case "com.syt.cellphone.ui.setting.SettingFragment":
+                fragments.set(3, fragment);
+                break;
+            default:
                 break;
         }
     }

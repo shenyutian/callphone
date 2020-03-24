@@ -51,7 +51,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import butterknife.BindView;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * 手机详情
@@ -110,13 +109,13 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
             }
 
             // 点击发送按钮后，回调这个方法，msg为输入的值
-            ToastUtil.makeText(msg);
             // todo 获取设备型号 需要进行撞 数据库验证手机型号 执行提交操作 暂时用原生的型号
 
             Estimate estimate = new Estimate();
             estimate.setPhoneId(phoneId);
             estimate.setEstimateComment(msg);
-            estimate.setModel(Build.BRAND + " " + Build.MODEL);
+            estimate.setModel(new StringBuilder(Build.BOARD).append(" ").append(Build.MODEL).toString());
+
 
             estimate.setEstimateTime(System.currentTimeMillis());
             presenter.handUnloadEstimate(estimate);
@@ -650,30 +649,6 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
             toastDialog.dismiss();
         });
 
-    }
-
-    private void dialogEstimate() {
-        // 弹窗创建
-        final AlertDialog toastDialog = new AlertDialog.Builder(this, R.style.DialogStyle).create();
-        // 弹窗显示
-        toastDialog.show();
-        // 获取当前窗口
-        Window window = toastDialog.getWindow();
-        // 居中
-        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
-        // 布局显示
-        WindowManager.LayoutParams lp = window.getAttributes();
-        // 宽高
-        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        window.setAttributes(lp);
-        window.setContentView(R.layout.dialog_estimate);
-
-
-        // 清除模糊
-        toastDialog.setOnCancelListener((DialogInterface p) -> {
-            Blurry.delete((ViewGroup) getWindow().getDecorView());
-        });
     }
 
     /**

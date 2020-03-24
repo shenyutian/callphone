@@ -137,7 +137,6 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
                 Toast.makeText(getBaseView().getContext().getApplicationContext(), o.getMessage(), Toast.LENGTH_SHORT).show();
                 if ("登录成功".equals(o.getMessage())) {
                     SharedConfigUtil.saveToken(o.getToken());
-                    SharedConfigUtil.saveUserName(o.getUserName());
                     baseView.closeLoginDialog();
                 }
             }

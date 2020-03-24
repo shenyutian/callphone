@@ -33,4 +33,6 @@
     <dimen name="line">1dp</dimen>
     <!--8dp-->
     <dimen name="size_8">8dp</dimen>
+    <!--图标文字间隔-->
+    <dimen name="ic_distance">16dp</dimen>
 </resources>

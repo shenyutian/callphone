@@ -3,6 +3,7 @@ package com.syt.cellphone.ui.setting;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.luck.picture.lib.PictureSelector;
@@ -23,9 +25,7 @@ import com.orhanobut.logger.Logger;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
-import com.syt.cellphone.base.Config;
 import com.syt.cellphone.pojo.PhoneUser;
-import com.syt.cellphone.ui.SytMainActivity;
 import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.widget.GlideEngine;
@@ -36,6 +36,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 第四个界面
+ */
 public class SettingFragment extends BaseFragment<SettingPresenter> implements SettingView {
 
 
@@ -57,7 +60,34 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
      * alertDialog      登录弹窗
      */
     String TAG = "SettingFragment";
+    @BindView(R.id.constraintLayout_setting_title)
+    ConstraintLayout constraintLayoutSettingTitle;
+    @BindView(R.id.constraintLayout_setting_person)
+    ConstraintLayout constraintLayoutSettingPerson;
+    @BindView(R.id.constraintLayout_setting_theme)
+    ConstraintLayout constraintLayoutSettingTheme;
+    @BindView(R.id.constraintLayout_setting_update)
+    ConstraintLayout constraintLayoutSettingUpdate;
+    @BindView(R.id.constraintLayout_setting_help)
+    ConstraintLayout constraintLayoutSettingHelp;
+    @BindView(R.id.constraintLayout_setting_about)
+    ConstraintLayout constraintLayoutSettingAbout;
+    @BindView(R.id.constraintLayout_setting_introduce)
+    ConstraintLayout constraintLayoutSettingIntroduce;
+    @BindView(R.id.constrainLayout_setting_all)
+    ConstraintLayout constrainLayoutSettingAll;
+    @BindView(R.id.constraintLayout_setting_bottom)
+    ConstraintLayout constraintLayoutSettingBottom;
     private AlertDialog alertDialog;
+
+    public static SettingFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        SettingFragment fragment = new SettingFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected SettingPresenter initPresenter() {
@@ -115,20 +145,37 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 
     }
 
-    @OnClick({R.id.tv_setting_theme, R.id.iv_setting_night_switch, R.id.tv_setting_click_login, R.id.tv_setting_quit_login, R.id.iv_setting_user_portrait})
+    @OnClick({R.id.tv_setting_theme, R.id.iv_setting_night_switch, R.id.tv_setting_click_login, R.id.tv_setting_quit_login, R.id.iv_setting_user_portrait, R.id.constraintLayout_setting_update, R.id.constraintLayout_setting_help, R.id.constraintLayout_setting_about, R.id.constraintLayout_setting_introduce})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_setting_night_switch:
+                // 点击主题切换
                 handSettingNight();
                 break;
             case R.id.tv_setting_click_login:
+                // 登录点击
                 handLogin();
                 break;
             case R.id.tv_setting_quit_login:
+                // 退出登录点击
                 handQuitLogin();
                 break;
             case R.id.iv_setting_user_portrait:
+                // 头像点击
                 handSetPortrait();
+                break;
+            case R.id.constraintLayout_setting_update:
+                // 更新点击
+
+                break;
+            case R.id.constraintLayout_setting_help:
+                // 帮助点击
+                break;
+            case R.id.constraintLayout_setting_about:
+                // 关于
+                break;
+            case R.id.constraintLayout_setting_introduce:
+                // 使用帮助
                 break;
             default:
                 break;
@@ -180,18 +227,19 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     private void handSettingNight() {
         if (!SharedConfigUtil.getNightOnOff()) {
             //日间 切换 夜间
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             SharedConfigUtil.saveNightOnOff(true);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             //夜间 切换 日间
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             SharedConfigUtil.saveNightOnOff(false);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         //重启activity, 设置第4个fragment
-        Config.setBottomMenu(4);
-        Intent intent = new Intent(context, SytMainActivity.class);
-        intent.putExtra("param", 4);
-        startActivity(intent);
+        // todo 下面是新注释
+//        Config.setBottomMenu(4);
+//        Intent intent = new Intent(context, SytMainActivity.class);
+//        intent.putExtra("param", 4);
+//        startActivity(intent);
     }
 
     /**

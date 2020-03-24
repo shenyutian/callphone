@@ -2,7 +2,7 @@ package com.syt.cellphone.ui.brank;
 
 
 import android.content.Intent;
-import android.view.MotionEvent;
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -30,6 +30,15 @@ public class BrandFragment extends BaseFragment<BrandPresenter> implements Brand
     RecyclerView rvBrandList;
     BrandAdapter brandAdapter;
 
+    public static BrandFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        BrandFragment fragment = new BrandFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+    
     @Override
     protected BrandPresenter initPresenter() {
         return new BrandPresenter(this);

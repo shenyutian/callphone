@@ -2,6 +2,7 @@ package com.syt.cellphone.ui.phone;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,6 +45,15 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
     private List<String> items = new ArrayList<>(8);
     private PhonePagerAdapter phonePagerAdapter;
 
+    public static PhoneFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        PhoneFragment fragment = new PhoneFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+    
     @Override
     protected PhonePresenter initPresenter() {
         return new PhonePresenter(this);

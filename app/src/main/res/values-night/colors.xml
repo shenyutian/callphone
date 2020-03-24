@@ -21,6 +21,8 @@
     <color name="bt_end_color">#ff5f00</color>
     <!--背景字体颜色-->
     <color name="text_bg">#0b0b0b</color>
+    <!--设置页图标颜色-->
+    <color name="ic_setting_color">#ffffff</color>
 
     <!-- 白色 -->
     <color name="ivory">#FFFFF0</color>
