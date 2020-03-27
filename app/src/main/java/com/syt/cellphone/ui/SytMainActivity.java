@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -70,6 +71,8 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     ConstraintLayout constraintLayoutFourBottomSetting;
     @BindView(R.id.conlay_main_top)
     ConstraintLayout conlayMainTop;
+    @BindView(R.id.drawer_layout_main_activity)
+    DrawerLayout drawerLayoutMainActivity;
 
     /**
      * currentFragment  当前碎片

@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +34,7 @@ import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
+import com.syt.cellphone.util.ToastUtil;
 import com.syt.cellphone.widget.GlideEngine;
 
 import java.io.File;
@@ -54,14 +61,6 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     TextView tvSettingUserName;
     @BindView(R.id.tv_setting_quit_login)
     TextView tvSettingQuitLogin;
-
-    /**
-     * --------------------- 上传文件 -----------------
-     * alertDialog      登录弹窗
-     */
-    String TAG = "SettingFragment";
-    @BindView(R.id.constraintLayout_setting_title)
-    ConstraintLayout constraintLayoutSettingTitle;
     @BindView(R.id.constraintLayout_setting_person)
     ConstraintLayout constraintLayoutSettingPerson;
     @BindView(R.id.constraintLayout_setting_theme)
@@ -78,8 +77,16 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
     ConstraintLayout constrainLayoutSettingAll;
     @BindView(R.id.constraintLayout_setting_bottom)
     ConstraintLayout constraintLayoutSettingBottom;
-    private AlertDialog alertDialog;
+    @BindView(R.id.bar_setting_title)
+    Toolbar barSettingTitle;
 
+
+    /**
+     * --------------------- 上传文件 -----------------
+     * alertDialog      登录弹窗
+     */
+    String TAG = "SettingFragment";
+    private AlertDialog alertDialog;
     public static SettingFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -101,6 +108,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 
     @Override
     protected void initData() {
+        // 设置标题栏
+        setHasOptionsMenu(true);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(barSettingTitle);
+
         // 查询来选择是否夜间模式
         switchNightOnOff();
         // 判定是否有账户信息
@@ -128,6 +139,33 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
             // 显示退出登录按钮
             tvSettingQuitLogin.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * 标题栏设置
+     * @param menu 标题内容
+     * @param inflater 标题设置
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.setting_bar, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_setting_admin:
+                ToastUtil.makeText("管理员界面");
+                break;
+            case R.id.item_setting_author:
+                ToastUtil.makeText("打开作者详情");
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override

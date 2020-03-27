@@ -7,25 +7,17 @@
     tools:context=".ui.setting.SettingFragment">
 
     <!--顶部标题栏-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout_setting_title"
-        android:layout_width="0dp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/bar_setting_title"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/bar_height"
         android:background="@color/bar_bg_color"
+        app:popupTheme="@style/Theme.AppCompat.DayNight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="设置页面"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--个人头像等栏 登录按钮等 没有账号的情况-->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +29,7 @@
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_setting_title"
+        app:layout_constraintTop_toBottomOf="@+id/bar_setting_title"
         android:padding="@dimen/padding_default"
         >
 
@@ -55,7 +47,7 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_setting_user_portrait"
             android:layout_width="88dp"
             android:layout_height="88dp"

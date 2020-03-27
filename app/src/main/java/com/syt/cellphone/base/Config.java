@@ -23,6 +23,13 @@ public class Config {
 //    public  static String url = "http://10.10.10.50:8001/";
 //    public  static String url = "http://10.0.2.2:8001/";
 
+    /**
+     * 虹软人脸 key + id
+     */
+    public static final String APP_ID = "8wg3VuJ8j5Fw2pNqg9gfrjAh5Ggar7ZahDAUewH7KmbY";
+    public static final String SDK_KEY = "CbXWbZT9e8Nx2KmGN2ivPjSHtGoJr6rzevotMjKEorBg";
+
+
     private static int  bottomMenu = SharedConfigUtil.getBottomMenus();
     /**
      * 获取底部菜单

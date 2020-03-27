@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -42,6 +43,8 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
     ViewPager2 vp2PhoneFragment;
     @BindView(R.id.tabLayout_phone_top)
     TabLayout tabLayoutPhoneTop;
+    @BindView(R.id.drawer_layout_phone_fragment)
+    DrawerLayout drawerLayoutPhoneFragment;
     private List<String> items = new ArrayList<>(8);
     private PhonePagerAdapter phonePagerAdapter;
 

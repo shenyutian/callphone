@@ -143,14 +143,14 @@ public class InputTextMsgDialog extends AppCompatDialog {
                         }
                         if (msg.isEmpty()) {
                             Toast.makeText(context, "请输入文字", Toast.LENGTH_SHORT).show();
-                            messageTextView.setText("");
+                            messageTextView.setText(null);
                         } else {
                             // 输入回调，关闭输入法
                             onTextSendListener.onTextSend(msg);
                             imm.showSoftInput(messageTextView, InputMethodManager.SHOW_FORCED);
                             //隐藏键盘
                             imm.hideSoftInputFromWindow(messageTextView.getWindowToken(), 0);
-                            messageTextView.setText("");
+                            messageTextView.setText(null);
                             // 关闭窗口
                             dismiss();
                         }
@@ -171,6 +171,7 @@ public class InputTextMsgDialog extends AppCompatDialog {
             }
             mLastDiff = heightDifference;
         });
+
 
         // 点击关闭输入框
         rldlgview.setOnClickListener(v -> {
@@ -213,12 +214,12 @@ public class InputTextMsgDialog extends AppCompatDialog {
     @Override
     public void dismiss() {
         super.dismiss();
+        // dismiss之前 重置mLastDiff值避免下次无法打开
         mLastDiff = 0;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        messageTextView = null;
     }
 }

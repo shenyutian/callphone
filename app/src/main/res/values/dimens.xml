@@ -35,4 +35,5 @@
     <dimen name="size_8">8dp</dimen>
     <!--图标文字间隔-->
     <dimen name="ic_distance">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>
