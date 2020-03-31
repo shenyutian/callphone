@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/tab_admin_recommend"
+        android:icon="@drawable/ic_setting_update"
+        android:title="@string/admin_recommend"/>
+
+    <item
+        android:id="@+id/tab_admin_phone"
+        android:icon="@drawable/ic_setting_about"
+        android:title="@string/admin_phone"/>
+
+    <item
+        android:id="@+id/tab_admin_soc"
+        android:icon="@drawable/ic_setting_open"
+        android:title="@string/admin_soc"/>
+
+    <item
+        android:id="@+id/tab_admin_user"
+        android:icon="@drawable/ic_setting_feedback"
+        android:title="@string/admin_user"/>
+</menu>

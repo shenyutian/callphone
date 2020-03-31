@@ -27,7 +27,6 @@ import com.syt.cellphone.R;
  * @author shenyutian
  * @data 2020/3/4 11:41 AM
  * 功能 评论的弹窗  参考 https://blog.csdn.net/qq_32518491/article/details/85000421
- * todo 可能出现键盘弹出不正常
  */
 public class InputTextMsgDialog extends AppCompatDialog {
 
@@ -66,9 +65,13 @@ public class InputTextMsgDialog extends AppCompatDialog {
         this.getWindow().setWindowAnimations(R.style.main_menu_animstyle);
         init();
         setLayout();
+
+        // todo 上色 暂时这样子
+        getWindow().setBackgroundDrawableResource(R.color.white_c);
     }
 
     private void init() {
+
         setContentView(R.layout.dialog_estimate);
         messageTextView = findViewById(R.id.et_input_message);
 
@@ -135,22 +138,22 @@ public class InputTextMsgDialog extends AppCompatDialog {
                     public void onMultClick(View v) {
                         String msg = messageTextView.getText().toString().trim();
                         if (msg.length() > maxNumber) {
-                            Toast.makeText(getContext(), "超过最大字数限制", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "超过最大字数限制", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (msg.isEmpty()) {
-                            Toast.makeText(getContext(), "请输入文字", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "请输入文字", Toast.LENGTH_SHORT).show();
+                            messageTextView.setText(null);
                         } else {
                             // 输入回调，关闭输入法
                             onTextSendListener.onTextSend(msg);
                             imm.showSoftInput(messageTextView, InputMethodManager.SHOW_FORCED);
                             //隐藏键盘
                             imm.hideSoftInputFromWindow(messageTextView.getWindowToken(), 0);
-                            messageTextView.setText("");
+                            messageTextView.setText(null);
                             // 关闭窗口
                             dismiss();
                         }
-                        messageTextView.setText(null);
                     }
                 });
         // 监听视图加载完毕
@@ -168,6 +171,7 @@ public class InputTextMsgDialog extends AppCompatDialog {
             }
             mLastDiff = heightDifference;
         });
+
 
         // 点击关闭输入框
         rldlgview.setOnClickListener(v -> {
@@ -210,6 +214,12 @@ public class InputTextMsgDialog extends AppCompatDialog {
     @Override
     public void dismiss() {
         super.dismiss();
+        // dismiss之前 重置mLastDiff值避免下次无法打开
         mLastDiff = 0;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

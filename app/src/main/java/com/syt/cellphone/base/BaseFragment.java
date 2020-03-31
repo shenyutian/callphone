@@ -28,10 +28,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     protected P fpresenter;
     Unbinder unbinder;
 
-
     /**
      * 初始化 p
-     * @return
+     * @return 布局控制器
      */
     protected abstract P initPresenter();
 

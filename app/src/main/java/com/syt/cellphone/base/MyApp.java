@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -52,6 +54,9 @@ public class MyApp extends Application {
                 .tag("syt")
                 .build();
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+        // 设置主题  改成原生的深色模式
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+
     }
 
     /**

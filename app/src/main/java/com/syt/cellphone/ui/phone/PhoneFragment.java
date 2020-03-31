@@ -2,11 +2,13 @@ package com.syt.cellphone.ui.phone;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -41,9 +43,20 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
     ViewPager2 vp2PhoneFragment;
     @BindView(R.id.tabLayout_phone_top)
     TabLayout tabLayoutPhoneTop;
+    @BindView(R.id.drawer_layout_phone_fragment)
+    DrawerLayout drawerLayoutPhoneFragment;
     private List<String> items = new ArrayList<>(8);
     private PhonePagerAdapter phonePagerAdapter;
 
+    public static PhoneFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        PhoneFragment fragment = new PhoneFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+    
     @Override
     protected PhonePresenter initPresenter() {
         return new PhonePresenter(this);
@@ -84,6 +97,12 @@ public class PhoneFragment extends BaseFragment<PhonePresenter> implements Phone
         // 自定义修改下划线
 //        changeTextColor();
     }
+
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setRetainInstance(true);
+//    }
 
     private void changeTextColor() {
         tabLayoutPhoneTop.post(() -> {

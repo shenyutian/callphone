@@ -1,6 +1,7 @@
 package com.syt.cellphone.ui.soc;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -50,6 +51,15 @@ public class SocFragment extends BaseFragment<SocPresenter> implements SocView {
     TextView tvSocNoData;
     private SocAdapterNew socAdapter;
     private final static String TAG = "SocFragment";
+
+    public static SocFragment newInstance() {
+
+        Bundle args = new Bundle();
+        SocFragment fragment = new SocFragment();
+        fragment.setArguments(args);
+        return fragment;
+
+    }
 
     @Override
     protected SocPresenter initPresenter() {

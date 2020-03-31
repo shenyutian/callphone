@@ -2,12 +2,19 @@ package com.syt.cellphone.ui.phone.details;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -26,7 +33,9 @@ import com.syt.cellphone.pojo.PhoneCamera;
 import com.syt.cellphone.pojo.PhoneConfig;
 import com.syt.cellphone.pojo.PhoneFacade;
 import com.syt.cellphone.pojo.PhoneShow;
+import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.pojo.PhotoBean;
+import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
@@ -42,7 +51,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import butterknife.BindView;
-import jp.wasabeef.blurry.Blurry;
 
 /**
  * 手机详情
@@ -63,6 +71,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
     private DetailsAdapter detailsAdapter;
     private List<DetailsAdapter.EstimateNode> estimateNodeList = new LinkedList<>();
+    private AlertDialog alertDialog;
 
     @Override
     protected PhoneDetailsPresenter createPresenter() {
@@ -85,27 +94,33 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         int phoneId = getIntent().getIntExtra("phoneId", 0);
         presenter.handlePhoneDetails(phoneId);
 
+        // 加载登录弹窗
+        initHandLogin();
+
         // 弹窗 = 填写评价框
 //            dialogEstimate();
-        InputTextMsgDialog inputTextMsgDialog = new InputTextMsgDialog(context, R.style.dialog_center);
+        InputTextMsgDialog inputTextMsgDialog = new InputTextMsgDialog(this, R.style.dialog_center);
         inputTextMsgDialog.setmOnTextSendListener(msg -> {
             // 判定是否登录 -> 没有登录就提示需要登录
             if (SharedConfigUtil.getUserName().isEmpty() || SharedConfigUtil.getToken().isEmpty()) {
                 // 提示登录
+                alertDialog.show();
                 return;
             }
 
             // 点击发送按钮后，回调这个方法，msg为输入的值
-            ToastUtil.makeText(msg);
             // todo 获取设备型号 需要进行撞 数据库验证手机型号 执行提交操作 暂时用原生的型号
 
             Estimate estimate = new Estimate();
             estimate.setPhoneId(phoneId);
             estimate.setEstimateComment(msg);
-            estimate.setModel(Build.BRAND + " " + Build.MODEL);
+            estimate.setModel(new StringBuilder(Build.BOARD).append(" ").append(Build.MODEL).toString());
+
 
             estimate.setEstimateTime(System.currentTimeMillis());
             presenter.handUnloadEstimate(estimate);
+
+            inputTextMsgDialog.dismiss();
         });
 
         // 设置下面提示视图的点击事件
@@ -120,13 +135,15 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
     private void initRv() {
         detailsAdapter = new DetailsAdapter();
-        rvDetailsData.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvDetailsData.setLayoutManager(new LinearLayoutManager(this));
         rvDetailsData.setAdapter(detailsAdapter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        alertDialog.cancel();
+        alertDialog = null;
     }
 
     @Override
@@ -190,7 +207,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
     @Override
     public Context getContext() {
-        return getApplicationContext();
+        return this;
     }
 
     /**
@@ -202,7 +219,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         if (photoList == null || photoList.size() <= 1) {
             return;
         }
-        Banner banner = new Banner(getApplicationContext());
+        Banner banner = new Banner(this);
 
         //标题 + 图片url
         List<String> titles;
@@ -210,8 +227,8 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
         // 设置轮播图的宽高
         banner.setLayoutParams(new ViewGroup.LayoutParams(
-                context.getResources().getDisplayMetrics().widthPixels,
-                context.getResources().getDisplayMetrics().heightPixels/2));
+                this.getResources().getDisplayMetrics().widthPixels,
+                this.getResources().getDisplayMetrics().heightPixels/2));
         // 设置标题
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
         banner.setDelayTime(5000);
@@ -257,13 +274,13 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         if (phone == null || phone.getPhotoMin() == null) {
             return;
         }
-        ImageView img = new ImageView(getApplicationContext());
+        ImageView img = new ImageView(this);
         // 设置图片宽高
         img.setLayoutParams(new ViewGroup.LayoutParams(
-                context.getResources().getDisplayMetrics().widthPixels,
-                context.getResources().getDisplayMetrics().heightPixels/2));
+                this.getResources().getDisplayMetrics().widthPixels,
+                this.getResources().getDisplayMetrics().heightPixels/2));
         // 加载图片
-        Glide.with(getApplicationContext()).load("http://" + phone.getPhotoMin()).into(img);
+        Glide.with(this).load("http://" + phone.getPhotoMin()).into(img);
         detailsAdapter.addHeaderView(img);
         // 点击查看大图
         img.setOnClickListener( v ->
@@ -275,13 +292,13 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
      * 无详情图的情况，绘制一个无图。
      */
     private void drawNoImg() {
-        ImageView img = new ImageView(getApplicationContext());
+        ImageView img = new ImageView(this);
         // 设置图片宽高
         img.setLayoutParams(new ViewGroup.LayoutParams(
-                context.getResources().getDisplayMetrics().widthPixels,
-                context.getResources().getDisplayMetrics().heightPixels/2));
+                this.getResources().getDisplayMetrics().widthPixels,
+                this.getResources().getDisplayMetrics().heightPixels/2));
         // 加载图片
-        Glide.with(getApplicationContext()).load("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=30305038,711507037&fm=26&gp=0.jpg").into(img);
+        Glide.with(this).load("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=30305038,711507037&fm=26&gp=0.jpg").into(img);
         detailsAdapter.addHeaderView(img);
     }
 
@@ -606,7 +623,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
      */
     private void imgMaxDialog(final String imgMax) {
         // 弹窗创建
-        final AlertDialog toastDialog = new AlertDialog.Builder(context, R.style.DialogStyle).create();
+        final AlertDialog toastDialog = new AlertDialog.Builder(this, R.style.DialogStyle).create();
         // 弹窗显示
         toastDialog.show();
         // 获取当前窗口
@@ -634,27 +651,87 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
     }
 
-    private void dialogEstimate() {
-        // 弹窗创建
-        final AlertDialog toastDialog = new AlertDialog.Builder(context, R.style.DialogStyle).create();
-        // 弹窗显示
-        toastDialog.show();
-        // 获取当前窗口
-        Window window = toastDialog.getWindow();
-        // 居中
-        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
-        // 布局显示
-        WindowManager.LayoutParams lp = window.getAttributes();
-        // 宽高
-        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        window.setAttributes(lp);
-        window.setContentView(R.layout.dialog_estimate);
+    /**
+     * 加载弹窗的内容
+     */
+    private void initHandLogin() {
 
+        // 暂时出现登录dialog
+        View loginView = LayoutInflater.from(this).inflate(R.layout.dialog_user_login, null);
+        final EditText etName = loginView.findViewById(R.id.et_user_login_name);
+        final EditText etPass = loginView.findViewById(R.id.et_user_login_pass);
+        final Button btSubmit = loginView.findViewById(R.id.bt_user_login_submit);
+        final TextView btRequest = loginView.findViewById(R.id.tv_user_login_request);
+//         历史账号上去
+        etName.setText(SharedConfigUtil.getUserName());
 
-        // 清除模糊
-        toastDialog.setOnCancelListener((DialogInterface p) -> {
-            Blurry.delete((ViewGroup) getWindow().getDecorView());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setView(loginView)
+                .setNegativeButton("取消", ((dialog, which) -> {
+                    dialog.cancel();
+                }))
+                .setPositiveButton("登录", null);
+
+        alertDialog = builder.create();
+
+        // 重写onShow()方法 里面的getButton
+        alertDialog.setOnShowListener((DialogInterface dialogInterface) -> {
+
+            Button button = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+
+            button.setOnClickListener((View v) -> {
+                PhoneUser user = new PhoneUser();
+
+                user.setUserName(etName.getText().toString().trim());
+                user.setUserPass(etPass.getText().toString().trim());
+
+                if (user.getUserName() == null || user.getUserName().isEmpty()) {
+                    Toast.makeText(this, "账号不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (user.getUserPass() == null || user.getUserPass().isEmpty()) {
+                    Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                SharedConfigUtil.saveUserName(user.getUserName());
+
+                presenter.handleUserLogin(user);
+            });
         });
+
+        // 验证登录
+        btSubmit.setOnClickListener((v -> {
+            PhoneUser user = new PhoneUser();
+
+            user.setUserName(etName.getText().toString().trim());
+            user.setUserPass(etPass.getText().toString().trim());
+
+            if (user.getUserName() == null || user.getUserName().isEmpty()) {
+                Toast.makeText(this, "账号不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (user.getUserPass() == null || user.getUserPass().isEmpty()) {
+                Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            SharedConfigUtil.saveUserName(user.getUserName());
+
+            presenter.handleUserLogin(user);
+        }));
+
+        btRequest.setOnClickListener(v -> {
+            // 跳转到注册界面
+            startActivity(new Intent(this, RegisteredActivity.class));
+        });
+    }
+
+    /**
+     * 关闭登录弹窗
+     */
+    @Override
+    public void closeLoginDialog() {
+        alertDialog.dismiss();
     }
 }

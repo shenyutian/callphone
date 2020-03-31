@@ -4,7 +4,7 @@
     <!--主背景颜色-->
     <color name="bar_bg_color">#000000</color>
     <color name="bg_color">#000000</color>
-    <color name="white_c">#ffffff</color>
+    <color name="white_c">#000000</color>
     <!--主字体 颜色 -->
     <color name="base_color">#f1f1f1</color>
     <!--外边的背景-->
@@ -15,6 +15,14 @@
     <color name="title_color">#ffffff</color>
     <!--图标颜色-->
     <color name="ic_color">#FFFFFF</color>
+    <!--提交按钮过渡初始颜色-->
+    <color name="bt_start_color">#ff2100</color>
+    <!--提交按钮结束颜色-->
+    <color name="bt_end_color">#ff5f00</color>
+    <!--背景字体颜色-->
+    <color name="text_bg">#0b0b0b</color>
+    <!--设置页图标颜色-->
+    <color name="ic_setting_color">#ffffff</color>
 
     <!-- 白色 -->
     <color name="ivory">#FFFFF0</color>

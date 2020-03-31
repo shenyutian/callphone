@@ -19,7 +19,7 @@
         app:title_visible="true"
         app:right_tv_text="首页"
         app:right_tv_visible="true"
-        tools:layout_editor_absoluteX="0dp" />
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_details_data"
