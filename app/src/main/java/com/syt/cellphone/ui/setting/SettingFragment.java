@@ -36,6 +36,7 @@ import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
 import com.syt.cellphone.widget.GlideEngine;
+import com.tencent.bugly.beta.Beta;
 
 import java.io.File;
 import java.util.List;
