@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -89,6 +88,43 @@ public class AdminActivity extends BaseActivity<AdminPresenter> implements Admin
             }
         });
 
+
+        vp2AdminFragment.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+
+            // 当前 vp2 的 item
+            private int item;
+            // 保存上一次滑动状态
+            private int direction;
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+//                Log.d(TAG, "onPageSelected: position " + position);
+                // todo 底部改变
+//                bottomNavigationViewAdmin.setSelectedItemId(position);
+                item = position;
+            }
+
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+//                Log.d(TAG, "onPageScrolled: position = " + position);
+//                Log.d(TAG, "onPageScrolled: positionOffset = " + positionOffset);
+//                Log.d(TAG, "onPageScrolled: positionOffsetPixels = " + positionOffsetPixels);
+//            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+//                Log.d(TAG, "onPageScrollStateChanged: state = " + state);
+                if (item == 0 && direction == 1 && state == 0) {
+                    // 左滑到顶了
+                    drawerLayoutAdmin.openDrawer(GravityCompat.START);
+                }
+                direction = state;
+            }
+        });
+
         bottomNavigationViewAdmin.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.tab_admin_recommend:
@@ -109,51 +145,6 @@ public class AdminActivity extends BaseActivity<AdminPresenter> implements Admin
             return true;
         });
 
-        vp2AdminFragment.setPageTransformer(new DepthPageTransformer());
-
-    }
-
-    @RequiresApi(21)
-    public class DepthPageTransformer implements ViewPager2.PageTransformer {
-        private static final float MIN_SCALE = 0.75f;
-
-        @Override
-        public void transformPage(View view, float position) {
-            int pageWidth = view.getWidth();
-
-            Log.e(TAG, "transformPage: " + position);
-            if (position < -1) { // [-Infinity,-1)
-                // This page is way off-screen to the left.
-                view.setAlpha(0f);
-
-            } else if (position <= 0) { // [-1,0]
-                // Use the default slide transition when moving to the left page
-                view.setAlpha(1f);
-                view.setTranslationX(0f);
-                view.setTranslationZ(0f);
-                view.setScaleX(1f);
-                view.setScaleY(1f);
-
-            } else if (position <= 1) { // (0,1]
-                // Fade the page out.
-                view.setAlpha(1 - position);
-
-                // Counteract the default slide transition
-                view.setTranslationX(pageWidth * -position);
-                // Move it behind the left page
-                view.setTranslationZ(-1f);
-
-                // Scale the page down (between MIN_SCALE and 1)
-                float scaleFactor = MIN_SCALE
-                        + (1 - MIN_SCALE) * (1 - Math.abs(position));
-                view.setScaleX(scaleFactor);
-                view.setScaleY(scaleFactor);
-
-            } else { // (1,+Infinity]
-                // This page is way off-screen to the right.
-                view.setAlpha(0f);
-            }
-        }
     }
 
     @Override

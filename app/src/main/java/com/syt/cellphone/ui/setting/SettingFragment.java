@@ -36,6 +36,7 @@ import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
 import com.syt.cellphone.widget.GlideEngine;
+import com.tencent.bugly.beta.Beta;
 
 import java.io.File;
 import java.util.List;
@@ -204,10 +205,10 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                 break;
             case R.id.constraintLayout_setting_update:
                 // 更新点击
-
+                Beta.checkUpgrade();
                 break;
             case R.id.constraintLayout_setting_help:
-                // 帮助点击
+                // 帮助反馈点击
                 break;
             case R.id.constraintLayout_setting_about:
                 // 关于
