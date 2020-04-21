@@ -65,11 +65,11 @@ public class ApiRetrofit {
 
         String url = request.url().toString();
 
-        Log.e(TAG, "----------  Request Start   ----------------");
-        Log.e(TAG, "| " + request.toString() + request.headers().toString());
-        Log.e(TAG, "| Response: " + content);
+        Log.i(TAG, "----------  Request Start   ----------------");
+        Log.i(TAG, "| " + request.toString() + request.headers().toString());
+        Log.i(TAG, "| Response: " + content);
 //        Log.e(TAG, "| request:  " + decodeStr);
-        Log.e(TAG, "----------    Request End:" + duration + "毫秒----------");
+        Log.i(TAG, "----------    Request End:" + duration + "毫秒----------");
 
         //发送响应结果
         return response.newBuilder()

@@ -71,7 +71,10 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 
     private DetailsAdapter detailsAdapter;
     private List<DetailsAdapter.EstimateNode> estimateNodeList = new LinkedList<>();
+    // 登录弹窗
     private AlertDialog alertDialog;
+    // 弹窗 = 填写评价框
+    private InputTextMsgDialog inputTextMsgDialog;
 
     @Override
     protected PhoneDetailsPresenter createPresenter() {
@@ -98,8 +101,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         initHandLogin();
 
         // 弹窗 = 填写评价框
-//            dialogEstimate();
-        InputTextMsgDialog inputTextMsgDialog = new InputTextMsgDialog(this, R.style.dialog_center);
+        inputTextMsgDialog = new InputTextMsgDialog(this, R.style.dialog_center);
         inputTextMsgDialog.setmOnTextSendListener(msg -> {
             // 判定是否登录 -> 没有登录就提示需要登录
             if (SharedConfigUtil.getUserName().isEmpty() || SharedConfigUtil.getToken().isEmpty()) {
@@ -142,6 +144,10 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // 关闭输出框
+        if (inputTextMsgDialog != null) {
+            inputTextMsgDialog.dismiss();
+        }
         alertDialog.cancel();
         alertDialog = null;
     }
@@ -192,12 +198,6 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         DetailsAdapter.RootNode battery = handleBattery(presenter.getData().getBattery());
         if (battery != null) {
             detailsAdapter.addData(battery);
-        }
-
-        // 相机参数
-        DetailsAdapter.RootNode camera = handleCamera(presenter.getData().getCamera());
-        if (camera != null) {
-            detailsAdapter.addData(camera);
         }
 
         // 用户评价列表

@@ -90,10 +90,10 @@ public class SearchPresener extends BasePresenter<SearchView> {
                 // 原子+1
                 pageNum.incrementAndGet();
                 if (pageNum.get() >= o.getPageSize()) {
-//                    baseView.resettoBottom();
+                    baseView.resettoBottom();
 //                    return;
                     // 超过了就重新加载，省的没有内容难看
-                    pageNum.set(0);
+//                    pageNum.set(0);
                 }
                 // 数据库保存搜索历史
                 SearchHistory searchHistory = new SearchHistory(null, searchInput, System.currentTimeMillis());

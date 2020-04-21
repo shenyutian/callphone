@@ -205,7 +205,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                 break;
             case R.id.constraintLayout_setting_update:
                 // 更新点击
-                Beta.checkUpgrade();
+                Beta.checkUpgrade(true, false);
                 break;
             case R.id.constraintLayout_setting_help:
                 // 帮助反馈点击

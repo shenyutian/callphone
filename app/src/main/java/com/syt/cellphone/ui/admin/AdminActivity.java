@@ -4,10 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,29 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.arcsoft.face.ActiveFileInfo;
-import com.arcsoft.face.ErrorInfo;
-import com.arcsoft.face.FaceEngine;
-import com.arcsoft.face.enums.RuntimeABI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.orhanobut.logger.Logger;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseActivity;
-import com.syt.cellphone.base.Config;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author shenyutian
@@ -70,8 +55,6 @@ public class AdminActivity extends BaseActivity<AdminPresenter> implements Admin
 
     @Override
     protected void initData() {
-        // 激活人脸引擎
-        activeEngine();
 
         fragments = getFragments();
 
@@ -189,68 +172,6 @@ public class AdminActivity extends BaseActivity<AdminPresenter> implements Admin
     private static final String[] NEEDED_PERMISSIONS = new String[]{
             Manifest.permission.READ_PHONE_STATE
     };
-
-    /**
-     * 激活引擎
-     */
-    private void activeEngine() {
-        if (!checkSoFile()) {
-            Log.e(TAG, "activeEngine: " + R.string.library_not_found);
-            return;
-        }
-        if (!checkPermissions(NEEDED_PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, 0x001);
-            return;
-        }
-        Observable.create(new ObservableOnSubscribe<Integer>() {
-
-            @Override
-            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                RuntimeABI runtimeABI = FaceEngine.getRuntimeABI();
-                Log.i(TAG, "subscribe: getRuntimeABI() " + runtimeABI);
-
-                long start = System.currentTimeMillis();
-                int activeCode = FaceEngine.activeOnline(getApplicationContext(), Config.APP_ID, Config.SDK_KEY);
-                Log.i(TAG, "subscribe cost: " + (System.currentTimeMillis() - start));
-                emitter.onNext(activeCode);
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Integer>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(Integer activeCode) {
-                        if (activeCode == ErrorInfo.MOK) {
-                            showMsg(getString(R.string.active_success));
-                        } else if (activeCode == ErrorInfo.MERR_ASF_ALREADY_ACTIVATED) {
-                            showMsg(getString(R.string.already_activated));
-                        } else {
-                            showMsg(getString(R.string.active_failed, activeCode));
-                        }
-                        // 激活文件信息
-                        ActiveFileInfo activeFileInfo = new ActiveFileInfo();
-                        int res = FaceEngine.getActiveFileInfo(getApplicationContext(), activeFileInfo);
-                        if (res == ErrorInfo.MOK) {
-                            Log.i(TAG, activeFileInfo.toString());
-                            Logger.e("激活时间剩余：" + activeFileInfo.getEndTime());
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
 
     /**
      * 检查能否找到动态链接库，如果找不到，请修改工程配置

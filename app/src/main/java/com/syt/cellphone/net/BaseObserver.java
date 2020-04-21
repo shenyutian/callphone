@@ -19,19 +19,19 @@ public abstract class BaseObserver<T> extends DisposableObserver<T> {
     /**
      * 解析数据失败
      */
-    public static final int PARSE_ERROR = 1001;
+    private static final int PARSE_ERROR = 1001;
     /**
      * 网络问题
      */
-    public static final int BAD_NETWORK = 1002;
+    private static final int BAD_NETWORK = 1002;
     /**
      * 连接错误
      */
-    public static final int CONNECT_ERROR = 1003;
+    private static final int CONNECT_ERROR = 1003;
     /**
      * 连接超时
      */
-    public static final int CONNECT_TIMEOUT = 1004;
+    private static final int CONNECT_TIMEOUT = 1004;
 
     /**
      * 状态码 message
@@ -39,7 +39,7 @@ public abstract class BaseObserver<T> extends DisposableObserver<T> {
     public static String message;
 
 
-    public BaseObserver(BaseView view) {
+    protected BaseObserver(BaseView view) {
         this.view = view;
     }
 

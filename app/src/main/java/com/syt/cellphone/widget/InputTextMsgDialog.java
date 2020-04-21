@@ -214,6 +214,8 @@ public class InputTextMsgDialog extends AppCompatDialog {
     @Override
     public void dismiss() {
         super.dismiss();
+        // 清除EditText焦点
+        messageTextView.clearFocus();
         // dismiss之前 重置mLastDiff值避免下次无法打开
         mLastDiff = 0;
     }

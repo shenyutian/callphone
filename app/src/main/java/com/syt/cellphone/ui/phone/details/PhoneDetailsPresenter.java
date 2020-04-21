@@ -37,7 +37,7 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
     private int phoneId;
     private Estimate newEstimate;
 
-    public PhoneDetailsPresenter(PhoneDetailsView baseView) {
+    PhoneDetailsPresenter(PhoneDetailsView baseView) {
         super(baseView);
     }
 
