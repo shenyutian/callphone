@@ -14,13 +14,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="这是soc名称  这是soc名称这是soc名称这是soc名称这是soc名称  这是soc名称"
-        android:lines="1"
-
-        app:layout_constraintHorizontal_chainStyle="packed"
+        android:lines="2"
+        android:ellipsize="end"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/soc_text_trademark"
+        app:layout_constraintWidth_percent="0.45"
         />
 
     <TextView
@@ -28,13 +29,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="这是soc的品牌序列  这是soc的品牌序列这是soc的品牌序列  这是soc的品牌序列这是soc的品牌序列"
-        android:lines="1"
-
-        app:layout_constraintHorizontal_chainStyle="packed"
+        android:lines="2"
+        android:ellipsize="end"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/soc_text_name"/>
+        app:layout_constraintStart_toEndOf="@id/soc_text_name"
+        app:layout_constraintWidth_percent="0.45"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
