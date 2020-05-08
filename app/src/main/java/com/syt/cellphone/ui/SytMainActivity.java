@@ -27,6 +27,7 @@ import com.orhanobut.logger.Logger;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseActivity;
 import com.syt.cellphone.base.Config;
+import com.syt.cellphone.ui.admin.AdminActivity;
 import com.syt.cellphone.ui.brank.BrandFragment;
 import com.syt.cellphone.ui.phone.PhoneFragment;
 import com.syt.cellphone.ui.setting.SettingFragment;
@@ -149,7 +150,8 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
             startActivity(intent);
         } else {
             // todo 临时跳转管理员界面
-
+            Intent intent = new Intent(this, AdminActivity.class);
+            startActivity(intent);
         }
 
         Log.e(TAG, "onCreate: " + currentFragment.getClass().getName());

@@ -32,6 +32,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
+ * 注册活动
  * @author syt
  */
 public class RegisteredActivity extends BaseActivity<RegisterPresenter> implements RegisteredView {

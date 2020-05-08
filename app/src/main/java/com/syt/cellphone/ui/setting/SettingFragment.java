@@ -206,15 +206,19 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
             case R.id.constraintLayout_setting_update:
                 // 更新点击
                 Beta.checkUpgrade(true, false);
+                Toast.makeText(context, "已经是最新版本了", Toast.LENGTH_LONG).show();
                 break;
             case R.id.constraintLayout_setting_help:
                 // 帮助反馈点击
+
                 break;
             case R.id.constraintLayout_setting_about:
+                Toast.makeText(context, "作者：syt", Toast.LENGTH_SHORT).show();
                 // 关于
                 break;
             case R.id.constraintLayout_setting_introduce:
                 // 使用帮助
+                Toast.makeText(context, "请点击反馈", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
