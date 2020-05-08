@@ -117,12 +117,12 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
 
         } else {
             Logger.e("添加评价失败 " + msg.toJSONString());
-            Toast.makeText(getBaseView().getContext().getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseView().getContext().getApplicationContext(), msg.get("msg").toString(), Toast.LENGTH_LONG).show();
             //重启activity, 设置第4个fragment
-            Config.setBottomMenu(4);
-            Intent intent = new Intent(context, SytMainActivity.class);
-            intent.putExtra("param", 4);
-            getBaseView().getContext().getApplicationContext().startActivity(intent);
+//            Config.setBottomMenu(4);
+//            Intent intent = new Intent(context, SytMainActivity.class);
+//            intent.putExtra("param", 4);
+//            getBaseView().getContext().getApplicationContext().startActivity(intent);
         }
     }
 
