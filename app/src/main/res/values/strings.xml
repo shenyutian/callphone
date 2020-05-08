@@ -121,7 +121,7 @@
     <!--管理员底部名称-->
     <string name="admin_recommend">推荐</string>
     <string name="admin_phone">手机</string>
-    <string name="admin_soc">soc</string>
+    <string name="admin_soc">处理器</string>
     <string name="admin_user">用户</string>
 
     <!--启动介绍页-->

@@ -1,6 +1,5 @@
 package com.syt.cellphone.ui.admin;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,14 +86,6 @@ public class AdminActivity extends BaseActivity<AdminPresenter> implements Admin
                 item = position;
             }
 
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-//                Log.d(TAG, "onPageScrolled: position = " + position);
-//                Log.d(TAG, "onPageScrolled: positionOffset = " + positionOffset);
-//                Log.d(TAG, "onPageScrolled: positionOffsetPixels = " + positionOffsetPixels);
-//            }
-
             @Override
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
@@ -164,43 +154,6 @@ public class AdminActivity extends BaseActivity<AdminPresenter> implements Admin
         fragments.add(recommendAdminFragment4);
 
         return fragments;
-    }
-
-    /**
-     * 在线激活所需的权限
-     */
-    private static final String[] NEEDED_PERMISSIONS = new String[]{
-            Manifest.permission.READ_PHONE_STATE
-    };
-
-    /**
-     * 检查能否找到动态链接库，如果找不到，请修改工程配置
-     *
-     * @return 动态库是否存在
-     */
-    private boolean checkSoFile() {
-        String[] libraries = new String[]{
-                // 人脸相关
-                "libarcsoft_face_engine.so",
-                "libarcsoft_face.so",
-                // 图像库相关
-                "libarcsoft_image_util.so",
-        };
-
-        File dir = new File(getApplicationInfo().nativeLibraryDir);
-        File[] files = dir.listFiles();
-        if (files == null || files.length == 0) {
-            return false;
-        }
-        List<String> libraryNameList = new ArrayList<>();
-        for (File file : files) {
-            libraryNameList.add(file.getName());
-        }
-        boolean exists = true;
-        for (String library : libraries) {
-            exists &= libraryNameList.contains(library);
-        }
-        return exists;
     }
 
     /**
