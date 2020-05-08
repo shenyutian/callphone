@@ -124,4 +124,10 @@
     <string name="admin_soc">soc</string>
     <string name="admin_user">用户</string>
 
+    <!--启动介绍页-->
+    <string name="beautiful_home_page">精美首页</string>
+    <string name="the_original_night">黑夜模式</string>
+    <string name="details_are_introduced">详情介绍</string>
+    <string name="happy_login">愉快登录</string>
+
 </resources>

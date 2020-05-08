@@ -7,10 +7,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -20,6 +22,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.luck.picture.lib.tools.SPUtils;
 import com.orhanobut.logger.Logger;
 import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseActivity;
@@ -28,6 +31,7 @@ import com.syt.cellphone.ui.brank.BrandFragment;
 import com.syt.cellphone.ui.phone.PhoneFragment;
 import com.syt.cellphone.ui.setting.SettingFragment;
 import com.syt.cellphone.ui.soc.SocFragment;
+import com.syt.cellphone.ui.started.MyStartedActivity;
 import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.ToastUtil;
 
@@ -85,10 +89,15 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
      * CURRENT_FRAGMENT 当前显示的fragment 的索引
      * currentIndex     当前选择的碎片
      */
-    private Fragment currentFragment = PhoneFragment.newInstance();
-    private List<Fragment> fragments = new ArrayList<>();
-    private static final String CURRENT_FRAGMENT = "STATE_FRAGMENT_SHOW";
-    private int currentIndex = Config.getBottomMenu();
+    private Fragment            currentFragment     = PhoneFragment.newInstance();
+    private List<Fragment>      fragments           = new ArrayList<>();
+    private static final String CURRENT_FRAGMENT    = "STATE_FRAGMENT_SHOW";
+    private int                 currentIndex         = Config.getBottomMenu();
+
+    /**
+     * 退出应用时，记录上一次按返回按钮的时间
+     */
+    private long countDown;
 
     private static final String TAG = "MainActivity";
 
@@ -131,6 +140,17 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 判定是否第一次开启应用
+        boolean isFirstOpen = SPUtils.getInstance().getBoolean("first_open", false);
+        if (!isFirstOpen) {
+            // 第一次启动 介绍应用
+            Intent intent = new Intent(this, MyStartedActivity.class);
+            startActivity(intent);
+        } else {
+            // todo 临时跳转管理员界面
+
+        }
 
         Log.e(TAG, "onCreate: " + currentFragment.getClass().getName());
 
@@ -355,5 +375,25 @@ public class SytMainActivity extends BaseActivity<SytMainPresenter> implements S
             default:
                 break;
         }
+    }
+
+    /**
+     * 监听按键键
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // 2次按返回的时间差
+            int countDownTime = 2000;
+            if (System.currentTimeMillis() - countDown > countDownTime) {
+                Toast.makeText(this, "再按一次退出程序！", Toast.LENGTH_LONG).show();
+                countDown = System.currentTimeMillis();
+            } else {
+                //退出
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

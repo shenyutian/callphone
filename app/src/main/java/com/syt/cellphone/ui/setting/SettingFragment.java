@@ -273,12 +273,6 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
             SharedConfigUtil.saveNightOnOff(false);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        //重启activity, 设置第4个fragment
-        // todo 下面是新注释
-//        Config.setBottomMenu(4);
-//        Intent intent = new Intent(context, SytMainActivity.class);
-//        intent.putExtra("param", 4);
-//        startActivity(intent);
     }
 
     /**

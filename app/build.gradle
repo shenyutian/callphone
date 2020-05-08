@@ -103,6 +103,8 @@ dependencies {
     implementation 'com.orhanobut:logger:2.2.0'
     // 图片选择器
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.4.9'
+    // 导航页
+    implementation 'com.github.AppIntro:AppIntro:6.0.0'
 }
 
 greendao {
