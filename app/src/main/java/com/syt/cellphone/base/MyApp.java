@@ -2,6 +2,7 @@ package com.syt.cellphone.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -54,9 +55,18 @@ public class MyApp extends Application {
                 .tag("syt")
                 .build();
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
-        // 设置主题  改成原生的深色模式
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
+        // 主题初始化
+        initTheme();
+    }
+
+    /**
+     * 判定是否开启黑夜模式
+     * @return 是否开启
+     */
+    public static boolean getDarkModeStatus() {
+        int mode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return mode == Configuration.UI_MODE_NIGHT_YES;
     }
 
     /**
@@ -217,4 +227,27 @@ public class MyApp extends Application {
         return daoSession;
     }
 
+    /**
+     * 主题初始化
+     */
+    private void initTheme() {
+        // 记录系统的主题设置  改成原生的深色模式
+        if (SharedConfigUtil.getNightOnOff() == -1) {
+            if (getDarkModeStatus()) {
+                SharedConfigUtil.saveNightOnOff(2);
+            } else {
+                SharedConfigUtil.saveNightOnOff(1);
+            }
+        }
+        // 没有设置就执行系统主题
+        if (SharedConfigUtil.getNightOnOff() == -1) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        } else if (SharedConfigUtil.getNightOnOff() == 1) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else if (SharedConfigUtil.getNightOnOff() == 2) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+    }
 }

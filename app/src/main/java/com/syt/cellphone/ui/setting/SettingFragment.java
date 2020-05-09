@@ -229,7 +229,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
      * 查询夜间模式开关，来确定视图
      */
     private void switchNightOnOff() {
-        if (SharedConfigUtil.getNightOnOff()) {
+        if (SharedConfigUtil.getNightOnOff() == 2) {
             //夜间
             ivSettingNightSwitch.setImageResource(R.mipmap.ic_setting_open);
         } else {
@@ -268,14 +268,14 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
      * 点击黑夜or白天事件
      */
     private void handSettingNight() {
-        if (!SharedConfigUtil.getNightOnOff()) {
-            //日间 切换 夜间
-            SharedConfigUtil.saveNightOnOff(true);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
+        if (SharedConfigUtil.getNightOnOff() == 2) {
             //夜间 切换 日间
-            SharedConfigUtil.saveNightOnOff(false);
+            SharedConfigUtil.saveNightOnOff(1);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            //日间 切换 夜间
+            SharedConfigUtil.saveNightOnOff(2);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
     }
 

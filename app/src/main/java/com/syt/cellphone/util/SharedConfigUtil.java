@@ -28,22 +28,22 @@ public class SharedConfigUtil {
     /**
      * 保存 是否开启夜间模式
      */
-    public static void saveNightOnOff(boolean onOff) {
+    public static void saveNightOnOff(int onOff) {
         if (editor != null) {
-            editor.putBoolean("nightOnOff", onOff);
+            editor.putInt("nightOnOff", onOff);
             editor.commit();
         }
     }
 
     /**
      * 夜间模式 开关
-     * @return 开关 true 开启 flase 关闭
+     * @return 开关 -1 没有设置 2 开启 1 关闭
      */
-    public static boolean getNightOnOff() {
+    public static int getNightOnOff() {
         if (preferences != null) {
-            return preferences.getBoolean("nightOnOff", false);
+            return preferences.getInt("nightOnOff", -1);
         }
-        return false;
+        return -1;
     }
 
     /**
