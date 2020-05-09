@@ -18,4 +18,9 @@ public interface SearchView extends BaseView {
      * 没有数据了，加载底部提示
      */
     void resettoBottom();
+
+    /**
+     * 显示搜索结果为空
+     */
+    void resetHideNoData();
 }

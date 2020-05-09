@@ -242,6 +242,12 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
     }
 
     @Override
+    public void resetHideNoData() {
+        Toast.makeText(this, "搜索结果为空", Toast.LENGTH_SHORT).show();
+        showRecommend();
+    }
+
+    @Override
     public Context getContext() {
         return getApplicationContext();
     }
@@ -272,7 +278,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         if (content.isEmpty()) {
             // 搜索内容为空
             showRecommend();
-            Toast.makeText(getApplicationContext(), "搜索结果为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "搜索内容为空", Toast.LENGTH_SHORT).show();
         } else {
             showSearch();
             // 光标移至末尾

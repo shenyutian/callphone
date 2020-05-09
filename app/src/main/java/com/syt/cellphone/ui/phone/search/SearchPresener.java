@@ -33,7 +33,7 @@ public class SearchPresener extends BasePresenter<SearchView> {
      *  searchRecommend         搜索推荐集合
      *  searchHistoryList       搜索历史集合
      */
-    private String              searchInput         =   null;
+    private String              searchInput         =   "";
     private AtomicInteger       pageNum             =   new AtomicInteger(0);
     private List<PhoneBase>     searchResult        =   Collections.synchronizedList(new ArrayList<>());
     private SearchHistoryDao    searchHistoryDao    =   MyApp.getDaoSession().getSearchHistoryDao();
@@ -81,6 +81,12 @@ public class SearchPresener extends BasePresenter<SearchView> {
      * @param searchInput 输入的内容
      */
     public void handleSearchResult(String searchInput) {
+        // 两次搜索内容不一样  页码置空
+        if (searchInput != null) {
+            if (this.searchInput.equals(searchInput)) {
+                pageNum.set(0);
+            }
+        }
         this.searchInput = searchInput;
 
         addDisposable(apiServer.getClassifyPhone(pageNum.get(), searchInput), new BaseObserver<PhoneBasePageList>(baseView) {
@@ -89,15 +95,20 @@ public class SearchPresener extends BasePresenter<SearchView> {
                 searchResult.addAll(o.getList());
                 // 原子+1
                 pageNum.incrementAndGet();
-                if (pageNum.get() >= o.getPageSize()) {
-                    baseView.resettoBottom();
-//                    return;
-                    // 超过了就重新加载，省的没有内容难看
-//                    pageNum.set(0);
-                }
                 // 数据库保存搜索历史
                 SearchHistory searchHistory = new SearchHistory(null, searchInput, System.currentTimeMillis());
                 searchHistoryDao.insertOrReplace(searchHistory);
+                if (o.getTotal() == 0) {
+                    // 搜索结果为空
+                    baseView.resetHideNoData();
+                    return;
+                }
+                if (pageNum.get() >= o.getPageNum()) {
+                    baseView.resettoBottom();
+                    return;
+                    // 超过了就重新加载，省的没有内容难看
+//                    pageNum.set(0);
+                }
                 //刷新页面
                 baseView.resetSearchRv();
             }
