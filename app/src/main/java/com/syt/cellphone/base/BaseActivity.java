@@ -1,12 +1,12 @@
 package com.syt.cellphone.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.ToastUtil;
 
 import butterknife.ButterKnife;
@@ -36,10 +36,15 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
      */
     protected abstract void initData();
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+
+        // 关闭屏幕旋转 锁定
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         unbinder = ButterKnife.bind(this);
         context = this;
         presenter = createPresenter();
@@ -71,19 +76,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     /**
-     * 启动
-     * 消息传递
-     * @param object 目标对象
-     * @param data 内容1
+     * 关闭屏幕旋转
      */
-    public void actionStart(Class<?> object, String data) {
-        Intent intent = new Intent(context, object);
-        intent.putExtra("param", data);
-        try {
-            context.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-            LogUtil.d("intent错误");
-        }
-    }
+
 }

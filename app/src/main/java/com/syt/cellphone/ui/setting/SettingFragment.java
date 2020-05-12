@@ -32,6 +32,7 @@ import com.syt.cellphone.R;
 import com.syt.cellphone.base.BaseBean;
 import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.pojo.PhoneUser;
+import com.syt.cellphone.ui.setting.feedback.FeedbackActivity;
 import com.syt.cellphone.ui.user.RegisteredActivity;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
@@ -210,7 +211,8 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
                 break;
             case R.id.constraintLayout_setting_help:
                 // 帮助反馈点击
-
+                Intent intent = new Intent(context, FeedbackActivity.class);
+                startActivity(intent);
                 break;
             case R.id.constraintLayout_setting_about:
                 Toast.makeText(context, "作者：syt", Toast.LENGTH_SHORT).show();

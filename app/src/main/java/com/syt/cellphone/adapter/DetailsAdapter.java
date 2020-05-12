@@ -150,8 +150,8 @@ public class DetailsAdapter extends BaseNodeAdapter {
         public RootNode(List<BaseNode> childNode, String title) {
             this.childNode = childNode;
             this.title = title;
-            // 设置默认不展开
-            setExpanded(false);
+            // 设置默认展开
+            setExpanded(true);
         }
 
         public String getTitle() {

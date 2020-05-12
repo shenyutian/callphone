@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,36 +7,58 @@
     android:layout_height="match_parent"
     tools:context=".ui.phone.search.SearchActivity">
 
-    <!--主列表 放置基本所有手机信息-->
-    <com.syt.cellphone.widget.SytToolBar
-        android:id="@+id/bar_details_top"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bar_height"
-        app:layout_constraintTop_toTopOf="parent"
-        app:left_tv_text="返回"
-        app:left_tv_visible="true"
-        app:title_text="配置详情"
-        app:title_visible="true"
-        app:right_tv_text="首页"
-        app:right_tv_visible="true"
-        />
+        android:layout_height="@dimen/bar_height">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_details_data"
+        <com.syt.cellphone.widget.SytToolBar
+            android:id="@+id/bar_details_top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bar_height"
+            app:layout_constraintTop_toTopOf="parent"
+            app:left_tv_text="返回"
+            app:left_tv_visible="true"
+            app:title_text="配置详情"
+            app:title_visible="true"
+            app:right_tv_text="首页"
+            app:right_tv_visible="true"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/bar_height"
-        android:paddingBottom="@dimen/bar_height"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--主列表 放置基本所有手机信息-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_details_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_phone_details_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/white_c"
+        android:layout_gravity="bottom"
+        app:layout_behavior="com.syt.cellphone.widget.MyFabBehavior"
         >
 
+        <!--评价框-->
         <com.syt.cellphone.widget.EditTextClickOn
             android:id="@+id/et_details_estimate_input"
             android:layout_width="match_parent"
@@ -85,37 +107,5 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/constraintLayout_details_title_estimate"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/rv_details_data">-->
 
-<!--        <TextView-->
-<!--            android:id="@+id/tv_details_all_estimate"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="24dp"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            android:text="全部评价"-->
-<!--            android:textSize="@dimen/title_size"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tv_details_title_sort"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            android:layout_marginEnd="24dp"-->
-<!--            android:text="倒序"-->
-<!--            android:textSize="@dimen/title_size"-->
-<!--            android:drawableRight="@drawable/ic_details_sort"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
