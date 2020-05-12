@@ -2,6 +2,20 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('../key/shenyutian.jks')
+            storePassword '12345678'
+            keyAlias = 'sytkey'
+            keyPassword '12345678'
+        }
+        release {
+            storeFile file('../key/shenyutian.jks')
+            storePassword '12345678'
+            keyAlias = 'sytkey'
+            keyPassword '12345678'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion '29.0.2'
     defaultConfig {
