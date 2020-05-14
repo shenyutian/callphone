@@ -48,6 +48,7 @@ public class RegisterPresenter extends BasePresenter<RegisteredView> {
      */
     public void handRegister(PhoneUser user) {
 
+
         addDisposable(apiServer.setRegistered(user), new BaseObserver<Registered>(baseView) {
             @Override
             public void onSuccess(Registered o) {

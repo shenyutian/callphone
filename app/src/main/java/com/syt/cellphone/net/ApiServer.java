@@ -9,8 +9,8 @@ import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.pojo.Registered;
 import com.syt.cellphone.pojo.Soc;
 import com.syt.cellphone.pojo.SocList;
-import com.syt.cellphone.pojo.UnloadFile;
-import com.syt.cellphone.pojo.UnloadFiles;
+import com.syt.cellphone.pojo.UploadFile;
+import com.syt.cellphone.pojo.UploadFiles;
 
 import java.util.List;
 
@@ -133,7 +133,7 @@ public interface ApiServer {
      */
     @POST("/api/upload")
     @Multipart
-    Observable<UnloadFile> unload(@Part MultipartBody.Part file);
+    Observable<UploadFile> upload(@Part MultipartBody.Part file);
 
     /**
      * 上传多文件接口
@@ -142,13 +142,13 @@ public interface ApiServer {
      * {
      *     "code": 0,
      *     "data": [
-     *         "http://47.115.43.73:8001/cw.png"
+     *         "http://47.115.43.73:8111/wti13x1589450328502.jpg"
      *     ],
      *     "error": []
      * }
      */
     @POST("/api/uploadFiles")
-    Observable<UnloadFiles> unloadFiles(@Body RequestBody body);
+    Observable<UploadFiles> uploadFiles(@Body RequestBody body);
 
     /**
      * 上传用户头像

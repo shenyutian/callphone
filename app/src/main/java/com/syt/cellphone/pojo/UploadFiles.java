@@ -7,7 +7,7 @@ import java.util.List;
  * @data 2020/5/8 6:45 PM
  * 功能 上传多个文件的承接
  */
-public class UnloadFiles {
+public class UploadFiles {
 
     /**
      * code : 0

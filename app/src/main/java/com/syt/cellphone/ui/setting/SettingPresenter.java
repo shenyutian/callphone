@@ -7,7 +7,7 @@ import com.orhanobut.logger.Logger;
 import com.syt.cellphone.base.BasePresenter;
 import com.syt.cellphone.net.BaseObserver;
 import com.syt.cellphone.pojo.PhoneUser;
-import com.syt.cellphone.pojo.UnloadFile;
+import com.syt.cellphone.pojo.UploadFile;
 import com.syt.cellphone.util.SharedConfigUtil;
 
 import java.io.File;
@@ -52,9 +52,9 @@ public class SettingPresenter extends BasePresenter<SettingView> {
     public void uploadProtrait(File imgFile) {
         RequestBody requestBody = RequestBody.create(imgFile, MediaType.parse("multipart/form-data"));
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", imgFile.getName(), requestBody);
-        addDisposable(apiServer.unload(body), new BaseObserver<UnloadFile>(baseView) {
+        addDisposable(apiServer.upload(body), new BaseObserver<UploadFile>(baseView) {
             @Override
-            public void onSuccess(UnloadFile o) {
+            public void onSuccess(UploadFile o) {
                 if (o.getCode() == 0) {
                     // 头像路径
                     String portraitSrc = o.getData().getSrc();

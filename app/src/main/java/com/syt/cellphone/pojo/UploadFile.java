@@ -5,7 +5,7 @@ package com.syt.cellphone.pojo;
  * @data 2020/3/18 9:48 AM
  * 功能 上传文件返回承接
  */
-public class UnloadFile {
+public class UploadFile {
 
 
     /**

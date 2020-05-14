@@ -119,6 +119,8 @@ dependencies {
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.4.9'
     // 导航页
     implementation 'com.github.AppIntro:AppIntro:6.0.0'
+    // 工具类包
+    implementation 'cn.hutool:hutool-all:5.3.4'
 }
 
 greendao {
