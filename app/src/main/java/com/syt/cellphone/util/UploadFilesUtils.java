@@ -3,17 +3,13 @@ package com.syt.cellphone.util;
 import com.syt.cellphone.net.ApiServer;
 import com.syt.cellphone.pojo.UploadFiles;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
-import okio.BufferedSink;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -37,18 +33,13 @@ public class UploadFilesUtils {
      */
     public static UploadFiles uploadFiles(File[] files) {
 
-        RequestBody body = new RequestBody() {
-            @Nullable
-            @Override
-            public MediaType contentType() {
-                return null;
-            }
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        for (File file : files) {
+            RequestBody body = RequestBody.create(MediaType.parse("image/png"), file);
+            builder.addFormDataPart("files", file.getName(), body);
+        }
+        RequestBody body = builder.build();
 
-            @Override
-            public void writeTo(@NotNull BufferedSink bufferedSink) throws IOException {
-
-            }
-        };
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -66,8 +57,16 @@ public class UploadFilesUtils {
 
         ApiServer apiServer = retrofit.create(ApiServer.class);
 
-        apiServer.uploadFiles(body);
+//        apiServer.uploadFiles(body).subscribeOn(Schedulers.io())
+//                .subscribe()new Observable<ResponseBody>() {
+//
+//            @Override
+//            protected void subscribeActual(Observer<? super ResponseBody> observer) {
+//
+//            }
+//        });
 
+        return null;
     }
 
 }
