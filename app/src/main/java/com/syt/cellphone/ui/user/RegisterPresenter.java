@@ -5,6 +5,7 @@ import com.syt.cellphone.base.BasePresenter;
 import com.syt.cellphone.net.BaseObserver;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.pojo.Registered;
+import com.syt.cellphone.util.DialogUtils;
 
 /**
  * @author shenyutian
@@ -48,7 +49,7 @@ public class RegisterPresenter extends BasePresenter<RegisteredView> {
      */
     public void handRegister(PhoneUser user) {
 
-
+        DialogUtils.showLoadingDialog(context, "注册中");
         addDisposable(apiServer.setRegistered(user), new BaseObserver<Registered>(baseView) {
             @Override
             public void onSuccess(Registered o) {
@@ -58,11 +59,13 @@ public class RegisterPresenter extends BasePresenter<RegisteredView> {
                 } else {
                     baseView.registeredError(o);
                 }
+                DialogUtils.dismissLoadingDialog();
             }
 
             @Override
             public void onError(String msg) {
                 baseView.emailError(msg);
+                DialogUtils.dismissLoadingDialog();
             }
         }, 0);
     }

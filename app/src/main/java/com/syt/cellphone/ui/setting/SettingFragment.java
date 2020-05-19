@@ -3,6 +3,7 @@ package com.syt.cellphone.ui.setting;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import com.syt.cellphone.base.BaseFragment;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.ui.setting.feedback.FeedbackActivity;
 import com.syt.cellphone.ui.user.RegisteredActivity;
+import com.syt.cellphone.util.AnimatorScrollUtil;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
 import com.syt.cellphone.widget.GlideEngine;
@@ -348,6 +350,32 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
 
             fpresenter.handleUserLogin(user);
         }));
+
+        // 视图覆盖监听
+        loginView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect loginRect = new Rect();
+            loginView.getWindowVisibleDisplayFrame(loginRect);
+
+            int[] leftTop = new int[2];
+            btSubmit.getLocationOnScreen(leftTop);
+
+            // 被遮挡的高度
+            int scrheight = loginView.getRootView().getHeight() - loginRect.bottom;
+
+            // 键盘弹出
+            if (scrheight > 140) {
+                scrheight += 10;
+                if (loginView.getScaleY() != scrheight && scrheight > 0) {
+                    AnimatorScrollUtil.scrollTo(loginView, 0, scrheight);
+                }
+
+            } else {
+                // 视图偏移修正
+                if (loginView.getScaleY() != 0) {
+                    AnimatorScrollUtil.scrollTo(loginView, 0, 0);
+                }
+            }
+        });
 
         btRequest.setOnClickListener(v -> {
             // 跳转到注册界面

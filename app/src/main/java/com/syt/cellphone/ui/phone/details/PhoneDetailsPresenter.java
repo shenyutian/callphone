@@ -1,18 +1,16 @@
 package com.syt.cellphone.ui.phone.details;
 
-import android.content.Intent;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.syt.cellphone.base.BasePresenter;
-import com.syt.cellphone.base.Config;
 import com.syt.cellphone.net.BaseObserver;
 import com.syt.cellphone.pojo.Estimate;
 import com.syt.cellphone.pojo.PhoneDetails;
 import com.syt.cellphone.pojo.PhoneUser;
-import com.syt.cellphone.ui.SytMainActivity;
+import com.syt.cellphone.util.DialogUtils;
 import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.SharedConfigUtil;
 
@@ -77,6 +75,9 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
             Logger.e("评价不能为空");
             return;
         }
+
+        DialogUtils.showLoadingDialog(context, "增加评价中");
+
         // 还需要一个请求头，来发送token。
         RequestBody body = FormBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(estimate));
 
@@ -85,6 +86,8 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
             @Override
             public void onSuccess(JSONObject o) {
                 handleEstimate(o);
+
+                DialogUtils.dismissLoadingDialog();
             }
 
             @Override
@@ -93,14 +96,16 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
 //                LogUtil.d("Thread : " + Thread.currentThread().getName());
 //                handleEstimate(msg);
                 // 请登录
-                Toast.makeText(getBaseView().getContext().getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseView().getContext().getApplicationContext(), "网络异常", Toast.LENGTH_LONG).show();
+
+                DialogUtils.dismissLoadingDialog();
                 //重启activity, 设置第4个fragment
-                Config.setBottomMenu(4);
-                Intent intent = new Intent(context, SytMainActivity.class);
-                intent.putExtra("param", 4);
-                // 去除context 跳转限制
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+//                Config.setBottomMenu(4);
+//                Intent intent = new Intent(context, SytMainActivity.class);
+//                intent.putExtra("param", 4);
+//                // 去除context 跳转限制
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                context.startActivity(intent);
             }
         }, 0);
     }

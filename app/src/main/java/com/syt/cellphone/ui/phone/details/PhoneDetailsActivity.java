@@ -3,6 +3,7 @@ package com.syt.cellphone.ui.phone.details;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import com.syt.cellphone.pojo.PhoneShow;
 import com.syt.cellphone.pojo.PhoneUser;
 import com.syt.cellphone.pojo.PhotoBean;
 import com.syt.cellphone.ui.user.RegisteredActivity;
+import com.syt.cellphone.util.AnimatorScrollUtil;
 import com.syt.cellphone.util.LogUtil;
 import com.syt.cellphone.util.SharedConfigUtil;
 import com.syt.cellphone.util.ToastUtil;
@@ -155,6 +157,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
     @Override
     public void resetPhoneDetails() {
 
+//        if (presenter.getData())
         LogUtil.d(presenter.getData().getBase().getBaseName());
         // 判定图集是否大于1
         if (presenter.getData().getPhoto().size() > 1) {
@@ -172,36 +175,52 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         detailsAdapter.addData(titleNode);
 
         // 配置信息
-        DetailsAdapter.RootNode config = handleConfig(presenter.getData().getConfig());
-        if (config != null) {
-            detailsAdapter.addData(config);
+        if (presenter.getData().getConfig() != null) {
+            DetailsAdapter.RootNode config = handleConfig(presenter.getData().getConfig());
+            if (config != null) {
+                detailsAdapter.addData(config);
+            }
+        } else {
+            // 无配置内容
         }
 
-        // 屏幕数据 参数列表  二元列表
-        DetailsAdapter.RootNode showNode = handleShow(presenter.getData().getShow());
-        if (showNode != null) {
-            detailsAdapter.addData(showNode);
-        }
-        // 外观信息
-        DetailsAdapter.RootNode facade = handleFacade(presenter.getData().getFacade());
-        if (facade != null) {
-            detailsAdapter.addData(facade);
+
+        if (presenter.getData().getShow() != null) {
+            // 屏幕数据 参数列表  二元列表
+            DetailsAdapter.RootNode showNode = handleShow(presenter.getData().getShow());
+            if (showNode != null) {
+                detailsAdapter.addData(showNode);
+            }
         }
 
-        // 相机参数
-        DetailsAdapter.RootNode camera1 = handleCamera(presenter.getData().getCamera());
-        if (camera1 != null) {
-            detailsAdapter.addData(camera1);
+        if (presenter.getData().getFacade() != null) {
+            // 外观信息
+            DetailsAdapter.RootNode facade = handleFacade(presenter.getData().getFacade());
+            if (facade != null) {
+                detailsAdapter.addData(facade);
+            }
         }
 
-        // 续航能力 = 电池 + 充电
-        DetailsAdapter.RootNode battery = handleBattery(presenter.getData().getBattery());
-        if (battery != null) {
-            detailsAdapter.addData(battery);
+        if (presenter.getData().getCamera() != null) {
+            // 相机参数
+            DetailsAdapter.RootNode camera1 = handleCamera(presenter.getData().getCamera());
+            if (camera1 != null) {
+                detailsAdapter.addData(camera1);
+            }
         }
 
+        if (presenter.getData().getBattery() != null) {
+            // 续航能力 = 电池 + 充电
+            DetailsAdapter.RootNode battery = handleBattery(presenter.getData().getBattery());
+            if (battery != null) {
+                detailsAdapter.addData(battery);
+            }
+        }
+
+//        if (presenter.getData().getEstimate() != null) {
         // 用户评价列表
         handleEstimate(presenter.getData().getEstimate());
+//        }
 
     }
 
@@ -607,10 +626,15 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
 //        for (int i = 0; i < estimateNodeList.size(); i++) {
 //            detailsAdapter.remove(estimateNodeList.get(i));
 //        }
-        // 获取最上面的节点
-        int item = detailsAdapter.getItemPosition(estimateNodeList.get(0));
-        // 然后重新填入
-        detailsAdapter.addData(item, new DetailsAdapter.EstimateNode(presenter.getNewEstimate()));
+        // 如果是第一条评价 直接插入
+        if (estimateNodeList.size() != 0) {
+            // 获取最上面的节点
+            int item = detailsAdapter.getItemPosition(estimateNodeList.get(0));
+            // 然后重新填入
+            detailsAdapter.addData(item, new DetailsAdapter.EstimateNode(presenter.getNewEstimate()));
+        } else {
+            detailsAdapter.addData(new DetailsAdapter.EstimateNode(presenter.getNewEstimate()));
+        }
 
         // 填入节点表中
 //        estimateNodeList.add(0, new DetailsAdapter.EstimateNode(presenter.getNewEstimate()));
@@ -662,7 +686,7 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         final EditText etPass = loginView.findViewById(R.id.et_user_login_pass);
         final Button btSubmit = loginView.findViewById(R.id.bt_user_login_submit);
         final TextView btRequest = loginView.findViewById(R.id.tv_user_login_request);
-//         历史账号上去
+        // 历史账号上去
         etName.setText(SharedConfigUtil.getUserName());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
@@ -721,9 +745,35 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
             presenter.handleUserLogin(user);
         }));
 
+        // 跳转到注册界面
         btRequest.setOnClickListener(v -> {
-            // 跳转到注册界面
             startActivity(new Intent(this, RegisteredActivity.class));
+        });
+
+        // 视图覆盖监听
+        loginView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect loginRect = new Rect();
+            loginView.getWindowVisibleDisplayFrame(loginRect);
+
+            int[] leftTop = new int[2];
+            btSubmit.getLocationOnScreen(leftTop);
+
+            // 被遮挡的高度
+            int scrheight = loginView.getRootView().getHeight() - loginRect.bottom;
+
+            // 键盘弹出
+            if (scrheight > 140) {
+                scrheight += 10;
+                if (loginView.getScaleY() != scrheight && scrheight > 0) {
+                    AnimatorScrollUtil.scrollTo(loginView, 0, scrheight);
+                }
+
+            } else {
+                // 视图偏移修正
+                if (loginView.getScaleY() != 0) {
+                    AnimatorScrollUtil.scrollTo(loginView, 0, 0);
+                }
+            }
         });
     }
 

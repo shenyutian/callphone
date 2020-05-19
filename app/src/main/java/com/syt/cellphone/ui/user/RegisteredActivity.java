@@ -1,10 +1,13 @@
 package com.syt.cellphone.ui.user;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -33,6 +36,7 @@ import butterknife.OnClick;
 
 /**
  * 注册活动
+ *
  * @author syt
  */
 public class RegisteredActivity extends BaseActivity<RegisterPresenter> implements RegisteredView {
@@ -68,6 +72,8 @@ public class RegisteredActivity extends BaseActivity<RegisterPresenter> implemen
     TextInputLayout textInputLayoutetRegisteredInputVerification;
     @BindView(R.id.pb_registered_loading)
     ProgressBar pbRegisteredLoading;
+    @BindView(R.id.con_registered_layout)
+    ConstraintLayout conRegisteredLayout;
 
     /**
      * ------------------- 参数介绍 ---------------
@@ -112,6 +118,60 @@ public class RegisteredActivity extends BaseActivity<RegisterPresenter> implemen
 
         };
 
+        // 键盘弹出处理
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams. SOFT_INPUT_ADJUST_PAN);
+        conRegisteredLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            // 最底部控件的 left top
+            private int[] sc;
+            // 滑动高度 -> 界面上移高度
+            private int scrollHeight;
+
+            @Override
+            public void onGlobalLayout() {
+
+                Rect r = new Rect();
+                // 屏幕被覆盖区域
+                conRegisteredLayout.getWindowVisibleDisplayFrame(r);
+                if (sc == null) {
+                    sc = new int[2];
+                    //数组里面两个值sc[0],sc[1]分别是对应控件在xy两轴的距离
+                    btRegisteredSubmit.getLocationOnScreen(sc);
+                }
+
+                // 布局的高度
+                int screenHeight = conRegisteredLayout.getRootView().getHeight();
+                // 底部高度
+                int softHeight = screenHeight - r.bottom;
+
+                // 当输入法大于140时，判定打开。
+                if (softHeight > 140) {
+                    // 底部多加10dp  =  最下面的提交按钮bottom -  布局高度  +   输入法高度  + 10
+                    scrollHeight = sc[1] + btRegisteredSubmit.getHeight() - (screenHeight - softHeight) + 10;
+                    if (conRegisteredLayout.getScrollY() != scrollHeight && scrollHeight > 0) {
+                        scrollToPos(0, scrollHeight);
+                    }
+                } else {
+                    if (conRegisteredLayout.getScrollY() != 0) {
+                        // 否则 输入法隐藏
+                        scrollToPos(scrollHeight, 0);
+                    }
+                }
+            }
+        });
+    }
+
+    // 视图偏移操作
+    private void scrollToPos(int start, int end) {
+        ValueAnimator animator = ValueAnimator.ofInt(start, end);
+        animator.setDuration(250);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                conRegisteredLayout.scrollTo(0, (Integer) valueAnimator.getAnimatedValue());
+            }
+        });
+        animator.start();
     }
 
     @Override
@@ -310,6 +370,5 @@ public class RegisteredActivity extends BaseActivity<RegisterPresenter> implemen
     public void emailSuccess() {
         pbRegisteredLoading.setVisibility(View.GONE);
     }
-
 
 }
