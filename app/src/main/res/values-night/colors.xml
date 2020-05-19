@@ -23,6 +23,10 @@
     <color name="text_bg">#0b0b0b</color>
     <!--设置页图标颜色-->
     <color name="ic_setting_color">#ffffff</color>
+    <!--增加评价按钮开始颜色-->
+    <color name="bt_no_color">#1874CD</color>
+    <!--提交按钮过渡结束颜色-->
+    <color name="bt_yes_color">#00a8f0</color>
 
     <!-- 白色 -->
     <color name="ivory">#FFFFF0</color>

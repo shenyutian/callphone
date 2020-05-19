@@ -6,7 +6,7 @@
             <!-- rectangle表示为矩形 -->
 
             <!-- 填充的颜色-->
-            <solid android:color="@color/select_underline" />
+            <solid android:color="@color/bt_no_color" />
             
             <!-- android:radius 圆角的半径 -->
             <corners android:radius="16dp" />
