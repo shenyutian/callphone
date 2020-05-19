@@ -117,6 +117,8 @@ public class PhoneDetailsPresenter extends BasePresenter<PhoneDetailsView> {
         if (msg.get("msg").equals("0")) {
 
             newEstimate = msg.getObject("estimate", Estimate.class);
+            // 插入本地头像地址
+            newEstimate.setUserPortrait(SharedConfigUtil.getPortrait());
 
             baseView.refresh();
 

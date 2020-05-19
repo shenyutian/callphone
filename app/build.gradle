@@ -71,7 +71,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     // 第三方库BaseRecyclerViewAdapterHelper 上拉加载更多的功能使用的
 //    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.49'
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta11'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
     // NavigationUI 等布局 导入
     implementation 'com.google.android.material:material:1.1.0'
     //http

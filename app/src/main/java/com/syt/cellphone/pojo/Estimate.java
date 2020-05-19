@@ -17,6 +17,8 @@ public class Estimate {
      * estimateObjectto : null
      * estimateTime : 1583717182858
      * model : null
+     * userPortrait : "http:xxx.xxx.xyz.png"
+     * userPermissions : 1
      */
 
     private int estimateId;
@@ -28,6 +30,8 @@ public class Estimate {
     private int estimateObjectto;
     private long estimateTime;
     private String model;
+    private String userPortrait;
+    private String userPermissions;
 
     public int getEstimateId() {
         return estimateId;
@@ -101,6 +105,22 @@ public class Estimate {
         this.model = model;
     }
 
+    public String getUserPortrait() {
+        return userPortrait;
+    }
+
+    public void setUserPortrait(String userPortrait) {
+        this.userPortrait = userPortrait;
+    }
+
+    public String getUserPermissions() {
+        return userPermissions;
+    }
+
+    public void setUserPermissions(String userPermissions) {
+        this.userPermissions = userPermissions;
+    }
+
     @Override
     public String toString() {
         return "Estimate{" +
@@ -112,7 +132,9 @@ public class Estimate {
                 ", estimateLike=" + estimateLike +
                 ", estimateObjectto=" + estimateObjectto +
                 ", estimateTime=" + estimateTime +
-                ", model=" + model +
+                ", model='" + model + '\'' +
+                ", userPortrait='" + userPortrait + '\'' +
+                ", userPermissions='" + userPermissions + '\'' +
                 '}';
     }
 }

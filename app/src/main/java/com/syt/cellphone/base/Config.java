@@ -25,7 +25,7 @@ public class Config {
      */
     public  static String url =
         BuildConfig.DEBUG ?
-                "http://47.115.43.73:8001/" : "https://shenyutian.xyz";
+                "http://47.115.43.73:8001/" : "https://shenyutian.xyz/";
 
     /**
      * 虹软人脸 key + id

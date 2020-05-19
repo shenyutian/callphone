@@ -1,9 +1,11 @@
 package com.syt.cellphone.adapter;
 
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseNodeAdapter;
 import com.chad.library.adapter.base.entity.node.BaseExpandNode;
 import com.chad.library.adapter.base.entity.node.BaseNode;
@@ -244,6 +246,10 @@ public class DetailsAdapter extends BaseNodeAdapter {
             baseViewHolder.setText(R.id.tv_item_estimate_content, estimate.getEstimateComment());
             baseViewHolder.setText(R.id.tv_item_estimate_time, estimate.getEstimateTime());
             baseViewHolder.setText(R.id.tv_item_estimate_model, estimate.getModel());
+            if (estimate.getUserPortrait() != null) {
+                Glide.with(getContext()).load(estimate.getUserPortrait()).into(
+                        (ImageView) baseViewHolder.getView(R.id.iv_item_estimate_head));
+            }
         }
     }
 
@@ -268,6 +274,10 @@ public class DetailsAdapter extends BaseNodeAdapter {
 
         public String getModel() {
             return estimate.getModel();
+        }
+
+        public String getUserPortrait() {
+            return estimate.getUserPortrait();
         }
 
         @org.jetbrains.annotations.Nullable
