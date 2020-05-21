@@ -2,9 +2,9 @@ package com.syt.cellphone.ui.phone.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -17,14 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.syt.cellphone.R;
 import com.syt.cellphone.adapter.PhoneBaseAdapter;
 import com.syt.cellphone.adapter.SearchAdapter;
 import com.syt.cellphone.base.BaseActivity;
 import com.syt.cellphone.ui.phone.details.PhoneDetailsActivity;
 import com.syt.cellphone.util.ToastUtil;
-
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -70,16 +69,21 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
     TextView tvSearchHistory;
     @BindView(R.id.tv_search_history_clean)
     TextView getTvSearchHistoryClean;
+    @BindView(R.id.refreshLayout_search_view)
+    SmartRefreshLayout refreshLayoutSearchView;
 
     /**
      * --------------------参数结束-----------------------
      * searchResultAdapter      搜索结果适配器
      * searchRecommendAdapter   搜索推荐适配器
      * searchLocalAdapter       搜索历史适配器
+     * pageindex                搜索的页码
      */
     private PhoneBaseAdapter searchResultAdapter;
     private SearchAdapter searchLocalAdapter;
     private SearchAdapter searchRecommendAdapter;
+    private int     pageindex = 1;
+    private String TAG = "SearchActivity";
 
     @Override
     protected SearchPresener createPresenter() {
@@ -103,11 +107,11 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
             tvClassifyName.setText(content);
             tvClassifyName.setVisibility(View.VISIBLE);
             etSearchInput.setVisibility(View.GONE);
-            presenter.handleSearchResult(getIntent().getStringExtra("content"));
+            presenter.handleSearchResult(getIntent().getStringExtra("content"), pageindex);
         } else {
             // 弹出键盘
-            etSearchInput.requestFocus();
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//            etSearchInput.requestFocus();
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
             // 监听键盘事件
             etSearchInput.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
@@ -175,6 +179,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
                     startSearch(etSearchInput.getText().toString().trim());
                 });
         rvSearchHistory.setAdapter(searchLocalAdapter);
+        searchLocalAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -185,21 +190,36 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         // 搜索适配器
         rvSearchResponse.setLayoutManager(new LinearLayoutManager(getContext()));
         searchResultAdapter = new PhoneBaseAdapter(R.layout.item_phone, presenter.getSearchResult());
-        // 底部的加载事件
-        searchResultAdapter.getLoadMoreModule().setOnLoadMoreListener(
-                () -> {
-                    if (etSearchInput.getText() == null
-                            || etSearchInput.getText().toString().isEmpty()) {
-                        // 显示暂无搜索
-                        searchResultAdapter.addHeaderView(new TextView(context));
-                    } else {
-                        // 底部加载搜索
-                        presenter.handleSearchResult(etSearchInput.getText().toString().trim());
-                    }
-                }
-        );
-//        presenter.loadingSearchResult(etSearchInput.getText().toString())
+        // 下拉刷新加载事件
+        refreshLayoutSearchView.setOnRefreshListener(refreshLayout -> {
+            if (etSearchInput.getText() == null
+                    || etSearchInput.getText().toString().isEmpty()) {
+                // 显示暂无搜索
+                searchResultAdapter.addHeaderView(new TextView(context));
+                refreshLayout.finishRefresh(false);
 
+            } else {
+                // 底部加载搜索
+                pageindex = 1;
+                presenter.handleSearchResult(etSearchInput.getText().toString().trim(), pageindex);
+                refreshLayout.finishRefresh(2000);
+            }
+        });
+        // 上拉刷新事件
+        refreshLayoutSearchView.setOnLoadMoreListener(refreshLayout -> {
+            if (etSearchInput.getText() == null
+                    || etSearchInput.getText().toString().isEmpty()) {
+                // 显示暂无搜索
+                searchResultAdapter.addHeaderView(new TextView(context));
+                refreshLayout.finishRefresh(false);
+            } else {
+                // 底部加载搜索
+                pageindex++;
+                presenter.handleSearchResult(etSearchInput.getText().toString().trim(), pageindex);
+                refreshLayout.finishRefresh(2000);
+            }
+            Log.e(TAG, "initResultRv: ");
+        });
         // 点击事件
         searchResultAdapter.setOnItemClickListener(
                 (adapter, view, position) -> {
@@ -215,6 +235,9 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         rvSearchResponse.setAdapter(searchResultAdapter);
     }
 
+    /**
+     * 刷新搜索结果
+     */
     @Override
     public void resetSearchRv() {
         // 隐藏搜索提示布局，显示搜索结果
@@ -222,8 +245,9 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         clSearchNoData.setVisibility(View.GONE);
         // 刷新界面
         searchResultAdapter.notifyDataSetChanged();
-        // 关闭下面的刷新
-        Objects.requireNonNull(searchResultAdapter.getLoadMoreModule()).loadMoreComplete();
+        // 关闭的提醒刷新
+        refreshLayoutSearchView.finishRefresh();
+        refreshLayoutSearchView.finishLoadMore();
     }
 
     @Override
@@ -239,11 +263,14 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         searchResultAdapter.getLoadMoreModule().loadMoreComplete();
         //关闭刷新
         searchResultAdapter.getLoadMoreModule().loadMoreEnd();
+        // 关闭的提醒刷新
+        refreshLayoutSearchView.finishRefresh();
     }
 
     @Override
     public void resetHideNoData() {
         Toast.makeText(this, "搜索结果为空", Toast.LENGTH_SHORT).show();
+        refreshLayoutSearchView.finishRefresh();
         showRecommend();
     }
 
@@ -258,7 +285,8 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
     public void showSearch() {
         clSearchNoData.setVisibility(View.GONE);
 
-        rvSearchResponse.setVisibility(View.VISIBLE);
+        // 关闭的提醒刷新
+        refreshLayoutSearchView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -272,6 +300,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
 
     /**
      * 执行搜索操作
+     *
      * @param content 搜索内容
      */
     public void startSearch(String content) {
@@ -285,7 +314,18 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
             etSearchInput.setSelection(content.length());
             presenter.getSearchResult().clear();
             // 执行搜索
-            presenter.handleSearchResult(etSearchInput.getText().toString().trim());
+            presenter.handleSearchResult(etSearchInput.getText().toString().trim(), pageindex);
         }
+    }
+
+    @Override
+    public void endLoad() {
+        refreshLayoutSearchView.finishLoadMoreWithNoMoreData();
+    }
+
+    @Override
+    public void cleanHistory() {
+        // 数据刷新
+        searchLocalAdapter.notifyDataSetChanged();
     }
 }

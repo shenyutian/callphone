@@ -121,6 +121,9 @@ dependencies {
     implementation 'com.github.AppIntro:AppIntro:6.0.0'
     // 工具类包
     implementation 'cn.hutool:hutool-all:5.3.4'
+    // 智能刷新框架
+    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.0'      //核心必须依赖
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.0'    //经典刷新头
 }
 
 greendao {

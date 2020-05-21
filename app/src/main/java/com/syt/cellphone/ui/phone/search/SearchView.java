@@ -23,4 +23,14 @@ public interface SearchView extends BaseView {
      * 显示搜索结果为空
      */
     void resetHideNoData();
+
+    /**
+     * 清空搜索历史记录
+     */
+    void cleanHistory();
+
+    /**
+     * 加载到底了
+     */
+    void endLoad();
 }

@@ -14,7 +14,6 @@ import com.syt.cellphone.util.ToastUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author shenyutian
@@ -26,7 +25,6 @@ public class SearchPresener extends BasePresenter<SearchView> {
     /**
      * -------------------参数说明----------------
      *  searchInput             搜索参数
-     *  pageNum                 页数
      *  searchResult            搜索结果集,加入同步代码块，来保证线程安全
      *  recommendDao            推荐搜索dao操作类
      *  searchHistoryDao        搜索历史的dao操作类
@@ -34,7 +32,6 @@ public class SearchPresener extends BasePresenter<SearchView> {
      *  searchHistoryList       搜索历史集合
      */
     private String              searchInput         =   "";
-    private AtomicInteger       pageNum             =   new AtomicInteger(0);
     private List<PhoneBase>     searchResult        =   Collections.synchronizedList(new ArrayList<>());
     private SearchHistoryDao    searchHistoryDao    =   MyApp.getDaoSession().getSearchHistoryDao();
     private PhoneRecommendDao   recommendDao        =   MyApp.getDaoSession().getPhoneRecommendDao();
@@ -73,6 +70,8 @@ public class SearchPresener extends BasePresenter<SearchView> {
      */
     public List<SearchHistory> getSearchHistoryList() {
         searchHistoryList = searchHistoryDao.loadAll();
+        // 倒置List
+        Collections.reverse(searchHistoryList);
         return searchHistoryList;
     }
 
@@ -80,21 +79,24 @@ public class SearchPresener extends BasePresenter<SearchView> {
      * 搜索结果 处理
      * @param searchInput 输入的内容
      */
-    public void handleSearchResult(String searchInput) {
-        // 两次搜索内容不一样  页码置空
+    public void handleSearchResult(String searchInput, int pageNum) {
+        // 两次搜索内容不一样  数据清空
         if (searchInput != null) {
-            if (this.searchInput.equals(searchInput)) {
-                pageNum.set(0);
+            if (!this.searchInput.equals(searchInput)) {
+                searchResult.clear();
             }
         }
+        // 如果页码为1  清空列表
+        if (pageNum == 1) {
+            searchResult.clear();
+        }
+
+        // 保存搜索记录
         this.searchInput = searchInput;
 
-        addDisposable(apiServer.getClassifyPhone(pageNum.get(), searchInput), new BaseObserver<PhoneBasePageList>(baseView) {
+        addDisposable(apiServer.getClassifyPhone(pageNum, searchInput), new BaseObserver<PhoneBasePageList>(baseView) {
             @Override
             public void onSuccess(PhoneBasePageList o) {
-                searchResult.addAll(o.getList());
-                // 原子+1
-                pageNum.incrementAndGet();
                 // 数据库保存搜索历史
                 SearchHistory searchHistory = new SearchHistory(null, searchInput, System.currentTimeMillis());
                 searchHistoryDao.insertOrReplace(searchHistory);
@@ -103,19 +105,23 @@ public class SearchPresener extends BasePresenter<SearchView> {
                     baseView.resetHideNoData();
                     return;
                 }
-                if (pageNum.get() >= o.getPageNum()) {
-                    baseView.resettoBottom();
+                if (pageNum > o.getPageSize()) {
+                    // 加载到底了
+//                    baseView.resettoBottom();
+                    baseView.endLoad();
                     return;
                     // 超过了就重新加载，省的没有内容难看
 //                    pageNum.set(0);
                 }
-                //刷新页面
+                searchResult.addAll(o.getList());
+                //正常的刷新页面
                 baseView.resetSearchRv();
             }
 
             @Override
             public void onError(String msg) {
                 ToastUtil.makeText("搜索数据加载失败");
+                baseView.resetHideNoData();
             }
         }, 0);
     }
@@ -123,7 +129,8 @@ public class SearchPresener extends BasePresenter<SearchView> {
     public void handCleanHistory() {
         // 清空历史
         searchHistoryDao.deleteAll();
+        searchHistoryList.clear();
         // 刷新页面
-        baseView.resetSearchRv();
+        baseView.cleanHistory();
     }
 }
