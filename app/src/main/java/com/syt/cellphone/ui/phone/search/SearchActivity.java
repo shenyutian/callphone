@@ -101,13 +101,16 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         // 判定是否有传来的分类结果
         if (content != null && !content.isEmpty()) {
             // 隐藏搜索提示布局，显示搜索结果
-            rvSearchResponse.setVisibility(View.VISIBLE);
+            refreshLayoutSearchView.setVisibility(View.VISIBLE);
             clSearchNoData.setVisibility(View.GONE);
             ivSearchIc.setVisibility(View.GONE);
             tvClassifyName.setText(content);
             tvClassifyName.setVisibility(View.VISIBLE);
             etSearchInput.setVisibility(View.GONE);
-            presenter.handleSearchResult(getIntent().getStringExtra("content"), pageindex);
+            // 分类数据
+            String content1 = getIntent().getStringExtra("content");
+            etSearchInput.setText(content1);
+            presenter.handleSearchResult(content1, pageindex);
         } else {
             // 弹出键盘
 //            etSearchInput.requestFocus();
@@ -120,12 +123,13 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
                 }
                 return false;
             });
+            // 加载历史记录
+            initSearchLocalRv();
+            // 搜索推荐
+            initSearchRecommendRv();
         }
+        // 加载更新phone 列表视图
         initResultRv();
-        // 加载历史记录
-        initSearchLocalRv();
-        // 搜索推荐
-        initSearchRecommendRv();
     }
 
 
@@ -188,14 +192,14 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
     private void initResultRv() {
 
         // 搜索适配器
-        rvSearchResponse.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvSearchResponse.setLayoutManager(new LinearLayoutManager(this));
         searchResultAdapter = new PhoneBaseAdapter(R.layout.item_phone, presenter.getSearchResult());
         // 下拉刷新加载事件
         refreshLayoutSearchView.setOnRefreshListener(refreshLayout -> {
             if (etSearchInput.getText() == null
                     || etSearchInput.getText().toString().isEmpty()) {
                 // 显示暂无搜索
-                searchResultAdapter.addHeaderView(new TextView(context));
+                searchResultAdapter.addHeaderView(new TextView(this));
                 refreshLayout.finishRefresh(false);
 
             } else {
@@ -210,7 +214,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
             if (etSearchInput.getText() == null
                     || etSearchInput.getText().toString().isEmpty()) {
                 // 显示暂无搜索
-                searchResultAdapter.addHeaderView(new TextView(context));
+                searchResultAdapter.addHeaderView(new TextView(this));
                 refreshLayout.finishRefresh(false);
             } else {
                 // 底部加载搜索
@@ -225,7 +229,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
                 (adapter, view, position) -> {
                     ToastUtil.makeText(Integer.toString(position));
                     // 进行跳转
-                    Intent startPhoneDetails = new Intent(context, PhoneDetailsActivity.class);
+                    Intent startPhoneDetails = new Intent(this, PhoneDetailsActivity.class);
                     // 设备id
                     startPhoneDetails.putExtra("phoneId", presenter.getSearchResult().get(position).getBaseId());
                     context.startActivity(startPhoneDetails);
@@ -255,7 +259,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         if (searchResultAdapter.getFooterLayoutCount() > 0) {
             return;
         }
-        TextView tvBottom = new TextView(context);
+        TextView tvBottom = new TextView(this);
         tvBottom.setText("我也是有底线的");
         //刷新界面
         searchResultAdapter.notifyDataSetChanged();
@@ -276,7 +280,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
 
     @Override
     public Context getContext() {
-        return getApplicationContext();
+        return this;
     }
 
     /**
@@ -307,7 +311,7 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
         if (content.isEmpty()) {
             // 搜索内容为空
             showRecommend();
-            Toast.makeText(getApplicationContext(), "搜索内容为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "搜索内容为空", Toast.LENGTH_SHORT).show();
         } else {
             showSearch();
             // 光标移至末尾
@@ -327,5 +331,11 @@ public class SearchActivity extends BaseActivity<SearchPresener> implements Sear
     public void cleanHistory() {
         // 数据刷新
         searchLocalAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 清空
+        super.onDestroy();
     }
 }
