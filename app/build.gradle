@@ -6,13 +6,13 @@ android {
         debug {
             storeFile file('../key/shenyutian.jks')
             storePassword '12345678'
-            keyAlias = 'sytkey'
+            keyAlias 'sytkey'
             keyPassword '12345678'
         }
         release {
             storeFile file('../key/shenyutian.jks')
             storePassword '12345678'
-            keyAlias = 'sytkey'
+            keyAlias 'sytkey'
             keyPassword '12345678'
         }
     }
@@ -22,8 +22,8 @@ android {
         applicationId "com.syt.cellphone"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // 设置支持的SO库架构
@@ -34,6 +34,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable = false
+            signingConfig signingConfigs.release
+        }
+        debug {
+
         }
     }
     compileOptions {

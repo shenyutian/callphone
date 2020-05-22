@@ -149,9 +149,13 @@ public class PhoneDetailsActivity extends BaseActivity<PhoneDetailsPresenter> im
         // 关闭输出框
         if (inputTextMsgDialog != null) {
             inputTextMsgDialog.dismiss();
+            inputTextMsgDialog = null;
         }
-        alertDialog.cancel();
-        alertDialog = null;
+        if (alertDialog != null) {
+            alertDialog.cancel();
+            alertDialog = null;
+        }
+
     }
 
     @Override
