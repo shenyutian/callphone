@@ -38,6 +38,7 @@ public class MyApp extends Application {
     private static          DaoSession      daoSession;
     private static final    String          APP_ID      =       "7d74b6a586";
     private static final    String          TAG         =       "MyApp";
+    public  static          boolean         isStart     =       false;
 
     @Override
     public void onCreate() {
