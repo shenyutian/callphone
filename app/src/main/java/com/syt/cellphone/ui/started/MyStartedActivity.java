@@ -48,25 +48,25 @@ public class MyStartedActivity extends AppIntro {
         sliderPage = new SliderPage();
         sliderPage.setTitle(getString(R.string.beautiful_home_page));
         // 设置精美首页
-//        sliderPage.setBackgroundDrawable();
+        sliderPage.setBackgroundDrawable(R.drawable.start_one);
         sliderPages.add(sliderPage);
 
         sliderPage = new SliderPage();
         sliderPage.setTitle(getString(R.string.the_original_night));
         // 设置黑夜模式
-//        sliderPage.setBackgroundDrawable();
+        sliderPage.setBackgroundDrawable(R.drawable.start_two);
         sliderPages.add(sliderPage);
 
         sliderPage = new SliderPage();
         sliderPage.setTitle(getString(R.string.details_are_introduced));
         // 设置详情介绍
-//        sliderPage.setBackgroundDrawable();
+        sliderPage.setBackgroundDrawable(R.drawable.start_three);
         sliderPages.add(sliderPage);
 
         sliderPage = new SliderPage();
         sliderPage.setTitle(getString(R.string.happy_login));
         // 设置愉快登录
-//        sliderPage.setBackgroundDrawable();
+        sliderPage.setBackgroundDrawable(R.drawable.start_four);
         sliderPages.add(sliderPage);
 
 
