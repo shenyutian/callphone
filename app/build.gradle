@@ -106,7 +106,7 @@ dependencies {
     //banner框架 轮播图
     implementation 'com.youth.banner:banner:1.4.10'
     // material:material
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
     // 腾讯bugle
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
