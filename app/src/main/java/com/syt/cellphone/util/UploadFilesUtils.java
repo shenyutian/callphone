@@ -1,11 +1,18 @@
 package com.syt.cellphone.util;
 
+import com.orhanobut.logger.Logger;
+import com.syt.cellphone.base.Config;
 import com.syt.cellphone.net.ApiServer;
 import com.syt.cellphone.pojo.UploadFiles;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -22,24 +29,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class UploadFilesUtils {
 
     /**
-     * 文件上传路径
-     */
-    private static final String UPLOAD_URL = "http://47.115.43.73:8111/";
-
-    /**
-     * 上传文件工具类
+     * 上传多个文件
      * @param files 文件集
      * @return 结果
      */
-    public static UploadFiles uploadFiles(File[] files) {
+    public static void uploadFiles(File[] files, UploadCallback callback) {
 
         MultipartBody.Builder builder = new MultipartBody.Builder();
         for (File file : files) {
-            RequestBody body = RequestBody.create(MediaType.parse("image/png"), file);
+            RequestBody body = RequestBody.create(file, MediaType.parse("image/png"));
             builder.addFormDataPart("files", file.getName(), body);
         }
         RequestBody body = builder.build();
-
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -49,7 +50,7 @@ public class UploadFilesUtils {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UPLOAD_URL)
+                .baseUrl(Config.fileUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -57,16 +58,40 @@ public class UploadFilesUtils {
 
         ApiServer apiServer = retrofit.create(ApiServer.class);
 
-//        apiServer.uploadFiles(body).subscribeOn(Schedulers.io())
-//                .subscribe()new Observable<ResponseBody>() {
-//
-//            @Override
-//            protected void subscribeActual(Observer<? super ResponseBody> observer) {
-//
-//            }
-//        });
+        Observable<UploadFiles> filesObservable = apiServer.uploadFiles(body);
 
-        return null;
+        filesObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UploadFiles>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(UploadFiles uploadFiles) {
+                        Logger.d("上传文件成功");
+                        callback.success(uploadFiles);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e("上传文件失败\t" + e.getMessage());
+                        callback.error(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public interface UploadCallback {
+
+        void success(UploadFiles uploadFiles);
+
+        void error(String msg);
     }
 
 }

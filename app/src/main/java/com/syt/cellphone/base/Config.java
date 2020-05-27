@@ -23,9 +23,13 @@ public class Config {
     /**
      * https 正式的时候上线，暂时不上。
      */
-    public  static String url =
-        BuildConfig.DEBUG ?
-                "http://47.115.43.73:8001/" : "https://shenyutian.xyz/";
+    public  static String url = BuildConfig.DEBUG ?
+                "http://47.115.43.73:8001/" : "https://shenyutian.xyz:8001/";
+
+    /**
+     * 文件上传的url
+     */
+    public  static String fileUrl = "http://47.115.43.73:8111";
 
     /**
      * 虹软人脸 key + id

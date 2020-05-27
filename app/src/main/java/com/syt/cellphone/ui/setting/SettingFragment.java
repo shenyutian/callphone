@@ -258,6 +258,12 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements S
         ivSettingUserPortrait.setVisibility(View.VISIBLE);
         // 显示退出登录按钮
         tvSettingQuitLogin.setVisibility(View.VISIBLE);
+        // 有图片就显示头像
+        if (!SharedConfigUtil.getPortrait().isEmpty()) {
+            Glide.with(context)
+                    .load(SharedConfigUtil.getPortrait())
+                    .into(ivSettingUserPortrait);
+        }
     }
 
     @Override

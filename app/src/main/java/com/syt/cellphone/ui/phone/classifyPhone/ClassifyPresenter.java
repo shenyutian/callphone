@@ -58,7 +58,7 @@ public class ClassifyPresenter extends BasePresenter<ClassifyView> {
                 break;
             case "首页":
                 // 轮播图
-                getNetBanner();
+                getHomePhone();
                 // todo 推荐数据
                 getUpdatePhone();
                 break;
@@ -66,6 +66,25 @@ public class ClassifyPresenter extends BasePresenter<ClassifyView> {
                 getNetClassifyPhone();
                 break;
         }
+    }
+
+    /**
+     * 获得最近更新的数据
+     */
+    private void getHomePhone() {
+        addDisposable(apiServer.getBasePhone(pageNum.get() + 5), new BaseObserver<PhoneBasePageList>(baseView) {
+
+            @Override
+            public void onSuccess(PhoneBasePageList o) {
+                toDealWithData(o);
+            }
+
+            @Override
+            public void onError(String msg) {
+                baseView.refreshRv();
+                ToastUtil.makeText(msg);
+            }
+        }, 0);
     }
 
     /**

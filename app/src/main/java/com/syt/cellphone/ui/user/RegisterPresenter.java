@@ -49,7 +49,7 @@ public class RegisterPresenter extends BasePresenter<RegisteredView> {
      */
     public void handRegister(PhoneUser user) {
 
-        DialogUtils.showLoadingDialog(context, "注册中");
+//        DialogUtils.showLoadingDialog(context, "注册中");
         addDisposable(apiServer.setRegistered(user), new BaseObserver<Registered>(baseView) {
             @Override
             public void onSuccess(Registered o) {

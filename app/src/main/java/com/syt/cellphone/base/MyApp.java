@@ -20,6 +20,7 @@ import com.syt.cellphone.util.SharedConfigUtil;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.upgrade.UpgradeStateListener;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
 
@@ -182,6 +183,8 @@ public class MyApp extends Application {
          * 3参数 debug 开关 建议在测试阶段建议设置成true，发布时设置为false。
          */
         Bugly.init(getApplicationContext(), APP_ID, true);
+
+        CrashReport.setUserId(this, SharedConfigUtil.getUserName());
     }
 
     /**

@@ -10,9 +10,14 @@ import java.util.List;
 public class UploadFiles {
 
     /**
-     * code : 0
-     * data : ["http://47.115.43.738001/cw.png"]
-     * error : []
+     * {
+     *     "code": 0,
+     *     "data": [
+     *         "http://47.115.43.73:8001/测试17.jpg",
+     *         "http://47.115.43.73:8001/测试18.jpg"
+     *     ],
+     *     "error": []
+     * }
      */
 
     private int code;
