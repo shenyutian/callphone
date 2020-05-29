@@ -16,7 +16,7 @@
         android:name=".base.MyApp"
         android:allowBackup="true"
         android:colorMode="wideColorGamut"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_bottom_phone"
         android:label="手机信息大全"
         android:networkSecurityConfig="@xml/network_security_config"
         android:resizeableActivity="true"

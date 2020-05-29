@@ -58,9 +58,9 @@ public class ClassifyPresenter extends BasePresenter<ClassifyView> {
                 break;
             case "首页":
                 // 轮播图
+                getNetBanner();
+                // 首页数据
                 getHomePhone();
-                // todo 推荐数据
-                getUpdatePhone();
                 break;
             default:
                 getNetClassifyPhone();
